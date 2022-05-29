@@ -38,7 +38,7 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    private void KillObsticaleChildren(){
+    private void KillObstacleChildren(){
         foreach (Transform child in _obstaclesContainer.transform)
         {
             GameObject.Destroy(child.gameObject);
@@ -49,7 +49,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         offsetX = Random.Range(0f, 9999f);
         offsetY = Random.Range(0f, 9999f);
-        KillObsticaleChildren();
+        KillObstacleChildren();
 
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);

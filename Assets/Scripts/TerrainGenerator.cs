@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int width = 100; //x-axis of the terrain
-    public int height = 100; //z-axis
+    public int width = 128; //x-axis of the terrain
+    public int length = 128; //z-axis
 
     public int depth = 10; //y-axis
 
@@ -22,6 +22,8 @@ public class TerrainGenerator : MonoBehaviour
     private float _threshold = 0.9f;
     [SerializeField]
     private float _scaleObstacle = 10f;
+    [SerializeField]
+    private WalkTargetScript _target;
 
     private void Start()
     {
@@ -35,7 +37,25 @@ public class TerrainGenerator : MonoBehaviour
 
         if(Input.GetKeyDown(KeyCode.Space)){
             RegenerateTerrain();
+            if(_target != null){
+                //RegenerateTerrain muss fertig sein, bevor das Target neu gesetzt wird.
+                //Ansonsten kann es passieren, das der Cube durch den Boden fällt.
+                _target.PlaceTargetCubeRandomly();
+            }
         }
+    }
+
+    public int GetArenaWidth(){
+        return width;
+    }
+
+    public int GetArenaLength(){
+        return length;
+    }
+
+    public float GetTerrainHeight(int x, int y){
+        Terrain terrain = GetComponent<Terrain>();
+        return terrain.terrainData.GetHeight(x, y);
     }
 
     private void KillObstacleChildren(){
@@ -53,18 +73,19 @@ public class TerrainGenerator : MonoBehaviour
 
         Terrain terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+
     }
 
     TerrainData GenerateTerrain (TerrainData terrainData)
     {
         terrainData.heightmapResolution = width + 1;
-        terrainData.size = new Vector3(width, depth, height);
+        terrainData.size = new Vector3(width, depth, length);
 
         terrainData.SetHeights(0, 0, GenerateHeights());
 
         for(int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < length; y++)
             {
                 if(PlaceObstacleOnPos(x,y)){
                     GameObject newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
@@ -77,10 +98,10 @@ public class TerrainGenerator : MonoBehaviour
 
     float[,] GenerateHeights()
     {
-        float[,] heights = new float[width, height];
+        float[,] heights = new float[width, length];
         for(int x = 0; x < width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < length; y++)
             {
                 heights[x, y] = CalculateHeight(x, y);
                 //if(PlaceObstacleOnPos(x,y)){
@@ -94,7 +115,7 @@ public class TerrainGenerator : MonoBehaviour
 
     bool PlaceObstacleOnPos(int x, int y){
         float xCoord = ((float)x + offsetX) / width * _scaleObstacle;
-        float yCoord = ((float)y + offsetY) / height * _scaleObstacle + offsetY;
+        float yCoord = ((float)y + offsetY) / length * _scaleObstacle + offsetY;
 
        
         return Mathf.PerlinNoise(xCoord, yCoord) > _threshold;
@@ -103,7 +124,7 @@ public class TerrainGenerator : MonoBehaviour
     float CalculateHeight (int x, int y)
     {
         float xCoord = (float)x / width * scale + offsetX;
-        float yCoord = (float)y / height * scale + offsetY;
+        float yCoord = (float)y / length * scale + offsetY;
 
         return Mathf.PerlinNoise(xCoord, yCoord);
     }

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -671,6 +671,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 667782545}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -1766,6 +1774,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 2022595136}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -2846,6 +2862,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 1780188602}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3126,6 +3150,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 494646888}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -3440,6 +3472,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 861024675}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -4067,6 +4107,14 @@ PrefabInstance:
       propertyPath: _arenaTerrain
       value: 
       objectReference: {fileID: 1438603205}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _isMovingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumping_target
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2

@@ -1191,7 +1191,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 609177067}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.7
   _scaleObstacle: 10
   _target: {fileID: 1795974483}
 --- !u!154 &494646891
@@ -1459,7 +1459,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 640811914}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64, y: 11.37, z: 128}
+  m_LocalPosition: {x: 64, y: 11.37, z: 126}
   m_LocalScale: {x: 128, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1715,7 +1715,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 667334188}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.7
   _scaleObstacle: 10
   _target: {fileID: 367954300}
 --- !u!154 &667782548
@@ -2019,7 +2019,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 576600501}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.7
   _scaleObstacle: 10
   _target: {fileID: 2082429091}
 --- !u!154 &861024678
@@ -2094,7 +2094,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 989663792}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 11.37, z: 64}
+  m_LocalPosition: {x: 2, y: 11.37, z: 64}
   m_LocalScale: {x: 128, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2482,7 +2482,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1231196633}
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 128, y: 11.37, z: 64}
+  m_LocalPosition: {x: 126, y: 11.37, z: 64}
   m_LocalScale: {x: 128, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2769,7 +2769,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 4336313422536832684}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.6
   _scaleObstacle: 10
   _target: {fileID: 823835495}
 --- !u!154 &1438603208
@@ -2963,7 +2963,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1695648256}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 64, y: 11.37, z: 0}
+  m_LocalPosition: {x: 64, y: 11.37, z: 2}
   m_LocalScale: {x: 128, y: 20, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3091,7 +3091,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 1383693069}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.7
   _scaleObstacle: 10
   _target: {fileID: 1594493799}
 --- !u!154 &1780188605
@@ -3413,7 +3413,7 @@ MonoBehaviour:
   offsetY: 100
   _obstaclesContainer: {fileID: 1307994197}
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.9
+  _threshold: 0.7
   _scaleObstacle: 10
   _target: {fileID: 776402376}
 --- !u!154 &2022595139
@@ -4108,6 +4108,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1438603205}
     - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+      propertyPath: _jumpingTarget
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: _isMovingTarget
       value: 1
       objectReference: {fileID: 0}
@@ -4121,7 +4125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 35.9
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4129,7 +4133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 42
+      value: 64
       objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_LocalRotation.w

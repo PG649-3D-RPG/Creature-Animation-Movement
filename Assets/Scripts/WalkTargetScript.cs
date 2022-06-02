@@ -1,6 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using Random = System.Random;
 
 public class WalkTargetScript : MonoBehaviour
 {
@@ -11,69 +12,112 @@ public class WalkTargetScript : MonoBehaviour
     [SerializeField]
     private bool _isMovingTarget = true;
     [SerializeField]
-    private double _movement_speed = 0.1;
+    private float _movementSpeed = 0.1f;
     [SerializeField]
-    private bool _jumping_target = false;
+    private bool _jumpingTarget = false;
+    [SerializeField]
+    private float _jumpingHeight = 0.1f;
+    [SerializeField] private int _targetMaxSecondsInOneDirection = 10;
 
-    private System.Random _random;
+    private Random _random;
 
-    private double _xDirection;
+    private Vector3 _targetDirection;
 
-    private double _zDirection;
+    private Rigidbody _thisRigidbody;
 
     private TerrainGenerator _terrainGenerator;
-    // Start is called before the first frame update
+    
+    /// <summary>
+    /// Start is called before the first frame update
+    /// </summary>
+    /// <returns></returns>
     void Start()
     {
-        _random = new System.Random();
+        _random = new Random();
         _terrainGenerator = _arenaTerrain.GetComponent<TerrainGenerator>();
         _arenaWidth = _terrainGenerator.GetArenaWidth();
         _arenaLength = _terrainGenerator.GetArenaLength();
+        _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
-
         StartCoroutine("ChangeDirection");
+        if(_jumpingTarget) StartCoroutine("Jump");
     }
 
-    // Update is called once per frame
-    void Update()
+    /// <summary>
+    /// Run update at a fixed rate
+    /// </summary>
+    /// <returns></returns>
+    public void FixedUpdate()
     {
+        // Move the target randomly
         if (_isMovingTarget)
         {
             MoveTargetRandomlyPerTick();
         }
-        if (Input.GetKeyDown(KeyCode.F1)){
-            MoveTargetRandomlyPerTick();
-        }
-        if(transform.localPosition.y < -5f){//The TargetCube fell through the floor
+        // Safeguard if target is outside of arena
+        if (transform.localPosition.y < -5f || transform.localPosition.y > 40 || transform.localPosition.x < -1 || transform.localPosition.x > 129 || transform.localPosition.z < -1 || transform.localPosition.z > 129) 
+        {
             PlaceTargetCubeRandomly();
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        int x = Random.Range(0 , _arenaWidth);
-        int z = Random.Range(0, _arenaLength);
-        float y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
-        this.transform.localPosition = new Vector3(x, y, z);
+        var x = UnityEngine.Random.Range(0 , _arenaWidth);
+        var z = UnityEngine.Random.Range(0, _arenaLength);
+        var y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
+        transform.localPosition = new Vector3(x, y, z);
     }
 
+    /// <summary>
+    /// Move the rigidbody of the target to a random position
+    /// </summary>
+    /// <returns></returns>
     public void MoveTargetRandomlyPerTick()
     {
-        var rndXMovement = (float) ((_random.NextDouble() * _xDirection)*  _movement_speed);
-        var rndYMovement = _jumping_target ? (float) (_random.NextDouble() *  _movement_speed) : 0;
-        var rndZMovement = (float) ((_random.NextDouble() * _zDirection) * _movement_speed);
-
-        transform.Translate(rndXMovement, 0, rndZMovement);
+        _thisRigidbody.MovePosition(transform.position + (_targetDirection *  _movementSpeed * Time.deltaTime));
     }
 
+    /// <summary>
+    /// Change direction randomly every x seconds
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ChangeDirection()
     {
         while (true)
         {
-            _xDirection = _random.NextDouble() * 2 - 1;
-            _zDirection = _random.NextDouble() * 2 - 1;
-            yield return new WaitForSeconds(Random.Range(1,10));
+            _targetDirection = Vector3.Normalize(new Vector3((float)(_random.NextDouble() * 2) - 1, 0, (float)(_random.NextDouble() * 2) - 1));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(1, _targetMaxSecondsInOneDirection));
         }
-        
     }
 
+    /// <summary>
+    /// Jump randomly every x seconds
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Jump()
+    {
+        while (true)
+        {
+            _thisRigidbody.MovePosition(transform.position +
+                                        ((_targetDirection + Vector3.up) * _jumpingHeight *
+                                         Time.deltaTime));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(1, 15));
+        }
+    }
+
+    /// <summary>
+    /// Move to random direction if target collided with walls or
+    /// </summary>
+    /// <returns></returns>
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.name != "Terrain")
+        {
+            _targetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(20,300), Vector3.up) * _targetDirection;
+        }
+    }
 }

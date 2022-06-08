@@ -39,8 +39,8 @@ public class WalkTargetScript : MonoBehaviour
         _arenaLength = _terrainGenerator.GetArenaLength();
         _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
-        StartCoroutine("ChangeDirection");
-        if(_jumpingTarget) StartCoroutine("Jump");
+        _ = StartCoroutine(nameof(ChangeDirection));
+        if (_jumpingTarget) _ = StartCoroutine(nameof(Jump));
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public class WalkTargetScript : MonoBehaviour
             MoveTargetRandomlyPerTick();
         }
         // Safeguard if target is outside of arena
-        if (transform.localPosition.y < -5f || transform.localPosition.y > 40 || transform.localPosition.x < -1 || transform.localPosition.x > 129 || transform.localPosition.z < -1 || transform.localPosition.z > 129) 
+        if (transform.localPosition.y is < -5f or > 40 || transform.localPosition.x is < -1 or > 129 || transform.localPosition.z is < -1 or > 129) 
         {
             PlaceTargetCubeRandomly();
         }
@@ -68,7 +68,7 @@ public class WalkTargetScript : MonoBehaviour
     public void PlaceTargetCubeRandomly(){
         var x = UnityEngine.Random.Range(0 , _arenaWidth);
         var z = UnityEngine.Random.Range(0, _arenaLength);
-        var y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
+        var y = _terrainGenerator?.GetTerrainHeight(x, z) + 1f ?? 0f;
         transform.localPosition = new Vector3(x, y, z);
     }
 
@@ -78,10 +78,10 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     public void MoveTargetRandomlyPerTick()
     {
-        _thisRigidbody.MovePosition(transform.position + (_targetDirection *  _movementSpeed * Time.deltaTime));
+        _thisRigidbody?.MovePosition(transform.position + (_movementSpeed * Time.deltaTime * _targetDirection));
     }
 
-    /// <summary>
+    /// <summary> 
     /// Change direction randomly every x seconds
     /// </summary>
     /// <returns></returns>
@@ -102,9 +102,7 @@ public class WalkTargetScript : MonoBehaviour
     {
         while (true)
         {
-            _thisRigidbody.MovePosition(transform.position +
-                                        ((_targetDirection + Vector3.up) * _jumpingHeight *
-                                         Time.deltaTime));
+            _thisRigidbody?.MovePosition(transform.position + ((_targetDirection + Vector3.up) * _jumpingHeight * Time.deltaTime));
             yield return new WaitForSeconds(UnityEngine.Random.Range(1, 15));
         }
     }
@@ -117,7 +115,7 @@ public class WalkTargetScript : MonoBehaviour
     {
         if (collision.gameObject.name != "Terrain")
         {
-            _targetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(20,300), Vector3.up) * _targetDirection;
+            _targetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * _targetDirection;
         }
     }
 }

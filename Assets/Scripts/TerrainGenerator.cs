@@ -54,7 +54,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     public float GetTerrainHeight(int x, int y){
-        Terrain terrain = GetComponent<Terrain>();
+        var terrain = GetComponent<Terrain>();
         return terrain.terrainData.GetHeight(x, y);
     }
 
@@ -71,7 +71,7 @@ public class TerrainGenerator : MonoBehaviour
         offsetY = Random.Range(0f, 9999f);
         KillObstacleChildren();
 
-        Terrain terrain = GetComponent<Terrain>();
+        var terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
 
     }
@@ -83,9 +83,9 @@ public class TerrainGenerator : MonoBehaviour
 
         terrainData.SetHeights(0, 0, GenerateHeights());
 
-        for(int x = 0; x < width; x++)
+        for(var x = 0; x < width; x++)
         {
-            for (int y = 0; y < length; y++)
+            for (var y = 0; y < length; y++)
             {
                 if(PlaceObstacleOnPos(x,y)){
                     GameObject newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
@@ -98,10 +98,10 @@ public class TerrainGenerator : MonoBehaviour
 
     float[,] GenerateHeights()
     {
-        float[,] heights = new float[width, length];
-        for(int x = 0; x < width; x++)
+        var heights = new float[width, length];
+        for(var x = 0; x < width; x++)
         {
-            for (int y = 0; y < length; y++)
+            for (var y = 0; y < length; y++)
             {
                 heights[x, y] = CalculateHeight(x, y);
                 //if(PlaceObstacleOnPos(x,y)){
@@ -114,8 +114,8 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     bool PlaceObstacleOnPos(int x, int y){
-        float xCoord = ((float)x + offsetX) / width * _scaleObstacle;
-        float yCoord = ((float)y + offsetY) / length * _scaleObstacle + offsetY;
+        var xCoord = ((float)x + offsetX) / width * _scaleObstacle;
+        var yCoord = ((float)y + offsetY) / length * _scaleObstacle + offsetY;
 
        
         return Mathf.PerlinNoise(xCoord, yCoord) > _threshold;
@@ -123,8 +123,8 @@ public class TerrainGenerator : MonoBehaviour
 
     float CalculateHeight (int x, int y)
     {
-        float xCoord = (float)x / width * scale + offsetX;
-        float yCoord = (float)y / length * scale + offsetY;
+        var xCoord = (float)x / width * scale + offsetX;
+        var yCoord = (float)y / length * scale + offsetY;
 
         return Mathf.PerlinNoise(xCoord, yCoord);
     }

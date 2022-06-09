@@ -68,7 +68,7 @@ public class WalkTargetScript : MonoBehaviour
     public void PlaceTargetCubeRandomly(){
         var x = UnityEngine.Random.Range(0 , _arenaWidth);
         var z = UnityEngine.Random.Range(0, _arenaLength);
-        var y = _terrainGenerator?.GetTerrainHeight(x, z) + 1f ?? 0f;
+        var y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
         transform.localPosition = new Vector3(x, y, z);
     }
 
@@ -78,7 +78,7 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     public void MoveTargetRandomlyPerTick()
     {
-        _thisRigidbody?.MovePosition(transform.position + (_movementSpeed * Time.deltaTime * _targetDirection));
+        _thisRigidbody.MovePosition(transform.position + (_movementSpeed * Time.deltaTime * _targetDirection));
     }
 
     /// <summary> 
@@ -102,7 +102,7 @@ public class WalkTargetScript : MonoBehaviour
     {
         while (true)
         {
-            _thisRigidbody?.MovePosition(transform.position + ((_targetDirection + Vector3.up) * _jumpingHeight * Time.deltaTime));
+            _thisRigidbody.MovePosition(transform.position + (_jumpingHeight * Time.deltaTime * (_targetDirection + Vector3.up)));
             yield return new WaitForSeconds(UnityEngine.Random.Range(1, 15));
         }
     }

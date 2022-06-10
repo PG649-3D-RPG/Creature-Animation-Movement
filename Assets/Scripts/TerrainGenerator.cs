@@ -17,6 +17,8 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField]
     private GameObject _obstaclesContainer;
     [SerializeField]
+    private bool _generateObstacles;
+    [SerializeField]
     private GameObject _obstaclesPrefab;
     [SerializeField]
     private float _threshold = 0.9f;
@@ -83,16 +85,17 @@ public class TerrainGenerator : MonoBehaviour
 
         terrainData.SetHeights(0, 0, GenerateHeights());
 
-        for(var x = 0; x < width; x++)
+        if (!_generateObstacles) return terrainData;
+        for (var x = 0; x < width; x++)
         {
             for (var y = 0; y < length; y++)
             {
-                if(PlaceObstacleOnPos(x,y)){
-                    GameObject newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
-                    newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x,y) + 2f , y);
-                }
+                if (!PlaceObstacleOnPos(x, y)) continue;
+                var newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
+                newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
             }
         }
+
         return terrainData;
     }
 

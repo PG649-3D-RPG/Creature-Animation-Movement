@@ -573,4 +573,4 @@ FodyWeavers.xsd
 .vsconfig
 
 
-*.cs.meta
+#*.cs.meta

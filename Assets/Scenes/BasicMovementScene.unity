@@ -869,7 +869,7 @@ PrefabInstance:
       objectReference: {fileID: 667782545}
     - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: _isMovingTarget
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: _jumping_target
@@ -1444,7 +1444,7 @@ GameObject:
   - component: {fileID: 494646890}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -1970,7 +1970,7 @@ GameObject:
   - component: {fileID: 667782547}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -2275,7 +2275,7 @@ GameObject:
   - component: {fileID: 861024677}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -3625,7 +3625,7 @@ GameObject:
   - component: {fileID: 1780188604}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
@@ -3965,7 +3965,7 @@ GameObject:
   - component: {fileID: 2022595138}
   m_Layer: 0
   m_Name: Terrain
-  m_TagString: Untagged
+  m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647

@@ -94,11 +94,7 @@ public class WalkerAgent : Agent
         }
 
         //Random start rotation to help generalize
-        var rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
-        foreach (var part in bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Hip))
-        {
-            part.rotation = rotation;
-        }
+        otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
 
         UpdateOrientationObjects();
 
@@ -106,6 +102,7 @@ public class WalkerAgent : Agent
         MTargetWalkingSpeed =
             randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
 
+        // TODO Currently empty
         SetResetParameters();
     }
 
@@ -123,9 +120,10 @@ public class WalkerAgent : Agent
         sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
         //Get position relative to hips in the context of our orientation cube's space
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - hips.position));
+        // TODO Why do we do this?
+        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - otherTransform.position));
 
-        if (bp.rb.transform != hips && bp.rb.transform != handL && bp.rb.transform != handR)
+        if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
         {
             sensor.AddObservation(bp.rb.transform.localRotation);
             sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
@@ -152,8 +150,7 @@ public class WalkerAgent : Agent
         sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(velGoal));
 
         //rotation deltas
-        sensor.AddObservation(Quaternion.FromToRotation(hips.forward, cubeForward));
-        sensor.AddObservation(Quaternion.FromToRotation(head.forward, cubeForward));
+        sensor.AddObservation(Quaternion.FromToRotation(otherTransform.forward, cubeForward));
 
         //Position of target position relative to cube
         sensor.AddObservation(m_OrientationCube.transform.InverseTransformPoint(target.transform.position));
@@ -161,46 +158,25 @@ public class WalkerAgent : Agent
         foreach (var bodyPart in m_JdController.bodyPartsList)
         {
             CollectObservationBodyPart(bodyPart, sensor);
+            //rotation deltas for the head
+            if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
+
         }
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
 
     {
-        var bpDict = m_JdController.bodyPartsDict;
+        var bpList = m_JdController.bodyPartsList;
         var i = -1;
 
         var continuousActions = actionBuffers.ContinuousActions;
-        bpDict[chest].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
-        bpDict[spine].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
-
-        bpDict[thighL].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], 0);
-        bpDict[thighR].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], 0);
-        bpDict[shinL].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[shinR].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[footR].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
-        bpDict[footL].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
-
-        bpDict[armL].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], 0);
-        bpDict[armR].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], 0);
-        bpDict[forearmL].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[forearmR].SetJointTargetRotation(continuousActions[++i], 0, 0);
-        bpDict[head].SetJointTargetRotation(continuousActions[++i], continuousActions[++i], 0);
-
-        //update joint strength settings
-        bpDict[chest].SetJointStrength(continuousActions[++i]);
-        bpDict[spine].SetJointStrength(continuousActions[++i]);
-        bpDict[head].SetJointStrength(continuousActions[++i]);
-        bpDict[thighL].SetJointStrength(continuousActions[++i]);
-        bpDict[shinL].SetJointStrength(continuousActions[++i]);
-        bpDict[footL].SetJointStrength(continuousActions[++i]);
-        bpDict[thighR].SetJointStrength(continuousActions[++i]);
-        bpDict[shinR].SetJointStrength(continuousActions[++i]);
-        bpDict[footR].SetJointStrength(continuousActions[++i]);
-        bpDict[armL].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmL].SetJointStrength(continuousActions[++i]);
-        bpDict[armR].SetJointStrength(continuousActions[++i]);
-        bpDict[forearmR].SetJointStrength(continuousActions[++i]);
+        foreach (var parts in bpList)
+        {
+            parts.SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
+            parts.SetJointStrength(continuousActions[++i]);
+        }
+        
     }
 
     //Update OrientationCube and DirectionIndicator
@@ -231,24 +207,24 @@ public class WalkerAgent : Agent
             throw new ArgumentException(
                 "NaN in moveTowardsTargetReward.\n" +
                 $" cubeForward: {cubeForward}\n" +
-                $" hips.velocity: {m_JdController.bodyPartsDict[hips].rb.velocity}\n" +
+                $" hips.velocity: {otherTransform.GetComponent<Rigidbody>().velocity}\n" +
                 $" maximumWalkingSpeed: {m_maxWalkingSpeed}"
             );
         }
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, head.forward) + 1) * .5F;
+        var lookAtTargetReward = bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Head).Sum(part => (Vector3.Dot(cubeForward, part.forward) + 1) * .5F);
 
         //Check for NaNs
-        if (float.IsNaN(lookAtTargetReward))
-        {
-            throw new ArgumentException(
-                "NaN in lookAtTargetReward.\n" +
-                $" cubeForward: {cubeForward}\n" +
-                $" head.forward: {head.forward}"
-            );
-        }
+        //if (float.IsNaN(lookAtTargetReward))
+        //{
+        //    throw new ArgumentException(
+        //        "NaN in lookAtTargetReward.\n" +
+        //        $" cubeForward: {cubeForward}\n" +
+        //        $" head.forward: {head.forward}"
+        //    );
+        //}
 
         AddReward(matchSpeedReward * lookAtTargetReward);
     }
@@ -293,9 +269,10 @@ public class WalkerAgent : Agent
 
     public void SetTorsoMass()
     {
-        m_JdController.bodyPartsDict[chest].rb.mass = m_ResetParams.GetWithDefault("chest_mass", 8);
-        m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
-        m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
+        // TODO Do we need this?
+        //m_JdController.bodyPartsDict[chest].rb.mass = m_ResetParams.GetWithDefault("chest_mass", 8);
+        //m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
+        //m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
     }
 
     public void SetResetParameters()

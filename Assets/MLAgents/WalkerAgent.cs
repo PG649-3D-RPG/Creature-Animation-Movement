@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
+using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
 using Unity.VisualScripting;

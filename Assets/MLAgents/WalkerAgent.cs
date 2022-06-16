@@ -46,11 +46,14 @@ public class WalkerAgent : Agent
 
     //The indicator graphic gameobject that points towards the target
     DirectionIndicator m_DirectionIndicator;
-    JointDriveController m_JdController;
+    public JointDriveController m_JdController;
     EnvironmentParameters m_ResetParams;
+
+    public List<BoneCategory> notAllowedToTouchGround = new();
 
     public override void Initialize()
     {
+        notAllowedToTouchGround.AddRange(new [] {BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso});
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
 
@@ -62,14 +65,18 @@ public class WalkerAgent : Agent
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (!boneScript && boneScript.category is not BoneCategory.Other)
+            if (boneScript != null && boneScript.category is not BoneCategory.Other)
             {
                 bodyParts.Add(trans);
-                trans.AddComponent<GroundContact>();
+                var groundContact = trans.AddComponent<GroundContact>();
                 // TODO Config Ground Contact
+                if(notAllowedToTouchGround.Contains(boneScript.category))
+                {
+                    groundContact.agentDoneOnGroundContact = true;
+                }
                 m_JdController.SetupBodyPart(trans);
             }
-            else if(boneScript.category is BoneCategory.Other)
+            else if(boneScript != null && boneScript.category is BoneCategory.Other)
             {
                 otherTransform = trans;
             }
@@ -95,7 +102,7 @@ public class WalkerAgent : Agent
         }
 
         //Random start rotation to help generalize
-        otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
+        //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
 
         UpdateOrientationObjects();
 
@@ -168,6 +175,7 @@ public class WalkerAgent : Agent
     public override void OnActionReceived(ActionBuffers actionBuffers)
 
     {
+        AddReward(1f);
         var bpList = m_JdController.bodyPartsList;
         var i = -1;
 

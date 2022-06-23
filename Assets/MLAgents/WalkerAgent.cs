@@ -83,8 +83,7 @@ public class WalkerAgent : Agent
         }
 
 
-        m_JdController = GetComponent<JointDriveController>();
-
+        //m_JdController = GetComponent<JointDriveController>();
         m_ResetParams = Academy.Instance.EnvironmentParameters;
 
         SetResetParameters();
@@ -183,6 +182,9 @@ public class WalkerAgent : Agent
         foreach (var parts in bpList)
         {
             parts.SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
+        }
+        foreach (var parts in bpList)
+        {
             parts.SetJointStrength(continuousActions[++i]);
         }
         

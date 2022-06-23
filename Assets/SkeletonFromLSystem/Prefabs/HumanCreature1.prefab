@@ -72,7 +72,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -84,22 +84,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: -13.335111
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 25.921082
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 5
+    limit: 17.272522
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 5
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -121,7 +121,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -227,7 +227,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 577689044154076069}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -423,7 +423,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 878445480910710285}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -537,13 +537,13 @@ ConfigurableJoint:
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_SecondaryAxis: {x: 0, y: 0, z: -1}
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -559,18 +559,18 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 145
+    limit: 127.54413
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -592,7 +592,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -711,7 +711,7 @@ ConfigurableJoint:
   m_ConnectedBody: {fileID: 6568806048206810040}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: -0.12499999, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: -90, z: 480}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
@@ -721,7 +721,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -733,22 +733,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: 5.731764
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 121.76879
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 67.91135
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -770,7 +770,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -889,17 +889,17 @@ ConfigurableJoint:
   m_ConnectedBody: {fileID: 1465273451496822610}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: -0.12499999, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_SecondaryAxis: {x: 0, y: 1, z: 1}
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -911,22 +911,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: -55.922707
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 90.94319
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -948,7 +948,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -1055,7 +1055,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 2217019449453439280}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -1176,7 +1176,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -1188,22 +1188,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -15
+    limit: 44.238487
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 15
+    limit: 128.78305
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 36.345097
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -1225,7 +1225,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -1332,7 +1332,7 @@ SphereCollider:
   m_GameObject: {fileID: 3222553249581886120}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -1429,7 +1429,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 3551831525116954145}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -1646,7 +1646,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 3783708857945724590}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -1766,7 +1766,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -1778,22 +1778,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: 64.65059
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 145
+    limit: 120.353424
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 15
+    limit: 31.297789
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -1815,7 +1815,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -1922,7 +1922,7 @@ SphereCollider:
   m_GameObject: {fileID: 4088718756446707253}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
@@ -2019,7 +2019,7 @@ BoxCollider:
   m_GameObject: {fileID: 4440714287434415678}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2135,9 +2135,9 @@ ConfigurableJoint:
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularXMotion: 0
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2186,7 +2186,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -2304,7 +2304,7 @@ ConfigurableJoint:
   m_ConnectedBody: {fileID: 6568806048206810040}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: -0.12499999, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: -90, z: 480}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
@@ -2314,7 +2314,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2326,22 +2326,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: 32.378323
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 177
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 70.62222
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -2363,7 +2363,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -2470,7 +2470,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 4986921213366631615}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -2589,7 +2589,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2601,22 +2601,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: 82.06743
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 121.72772
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 5
+    limit: 14.302962
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 5
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -2638,7 +2638,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -2763,9 +2763,9 @@ ConfigurableJoint:
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
-  m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularXMotion: 0
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2814,7 +2814,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -2941,7 +2941,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -2953,22 +2953,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: 80.136826
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 112.99911
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 24.219488
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -2990,7 +2990,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -3124,17 +3124,17 @@ ConfigurableJoint:
   m_ConnectedBody: {fileID: 5637877713083905211}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: -0.12499999, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
+  m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_SecondaryAxis: {x: 0, y: 0, z: 1}
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3146,22 +3146,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -45
+    limit: -90
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 45
+    limit: 75.29462
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 45
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -3183,7 +3183,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -3275,7 +3275,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 6968974228750445857}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -3395,7 +3395,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3407,22 +3407,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -5
+    limit: 80.91545
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 5
+    limit: 97.17289
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 5
+    limit: 12.894953
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 5
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -3444,7 +3444,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -3551,7 +3551,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7227148738338959523}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -3671,7 +3671,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3683,22 +3683,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: -5
+    limit: 77.88555
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 5
+    limit: 102.00943
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 5
+    limit: 13.308669
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 5
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -3720,7 +3720,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -3843,13 +3843,13 @@ ConfigurableJoint:
   m_AutoConfigureConnectedAnchor: 1
   m_ConnectedAnchor: {x: 0, y: 0, z: 0}
   serializedVersion: 2
-  m_SecondaryAxis: {x: 0, y: 1, z: 0}
+  m_SecondaryAxis: {x: 0, y: 0, z: -1}
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
   m_AngularXMotion: 1
-  m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularYMotion: 0
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -3865,18 +3865,18 @@ ConfigurableJoint:
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 145
+    limit: 130.36934
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -3898,7 +3898,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -4005,7 +4005,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7401638930679682055}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4103,7 +4103,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7773578291140790692}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4201,7 +4201,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 7875382607835643083}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4321,7 +4321,7 @@ ConfigurableJoint:
   m_ZMotion: 0
   m_AngularXMotion: 1
   m_AngularYMotion: 1
-  m_AngularZMotion: 1
+  m_AngularZMotion: 0
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -4333,22 +4333,22 @@ ConfigurableJoint:
     spring: 0
     damper: 0
   m_LowAngularXLimit:
-    limit: 0
+    limit: 62.011158
     bounciness: 0
     contactDistance: 0
   m_HighAngularXLimit:
-    limit: 145
+    limit: 127.16817
     bounciness: 0
     contactDistance: 0
   m_AngularYZLimitSpring:
     spring: 0
     damper: 0
   m_AngularYLimit:
-    limit: 15
+    limit: 33.24231
     bounciness: 0
     contactDistance: 0
   m_AngularZLimit:
-    limit: 15
+    limit: 0
     bounciness: 0
     contactDistance: 0
   m_TargetPosition: {x: 0, y: 0, z: 0}
@@ -4370,7 +4370,7 @@ ConfigurableJoint:
     maximumForce: 3.4028233e+38
   m_TargetRotation: {x: 0, y: 0, z: 0, w: 1}
   m_TargetAngularVelocity: {x: 0, y: 0, z: 0}
-  m_RotationDriveMode: 0
+  m_RotationDriveMode: 1
   m_AngularXDrive:
     serializedVersion: 3
     positionSpring: 0
@@ -4477,7 +4477,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 8694749203933645781}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4575,7 +4575,7 @@ CapsuleCollider:
   m_GameObject: {fileID: 8895012033066251520}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
@@ -4783,7 +4783,7 @@ BoxCollider:
   m_GameObject: {fileID: 9196641522190666627}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}

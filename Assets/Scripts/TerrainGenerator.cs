@@ -78,6 +78,12 @@ public class TerrainGenerator : MonoBehaviour
 
     }
 
+    public void ResetTerrain()
+    {
+        RegenerateTerrain();
+        _target.PlaceTargetCubeRandomly();
+    }
+
     TerrainData GenerateTerrain (TerrainData terrainData)
     {
         terrainData.heightmapResolution = width + 1;

@@ -49,11 +49,10 @@ public class WalkerAgent : Agent
     public JointDriveController m_JdController;
     EnvironmentParameters m_ResetParams;
 
-    public List<BoneCategory> notAllowedToTouchGround = new();
+    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso };
 
     public override void Initialize()
     {
-        notAllowedToTouchGround.AddRange(new [] {BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso});
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
 
@@ -95,6 +94,7 @@ public class WalkerAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
+        //ResetWalker();
         //Reset all of the body parts
         foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
         {
@@ -112,6 +112,28 @@ public class WalkerAgent : Agent
 
         // TODO Currently empty
         SetResetParameters();
+    }
+
+    /// <summary>
+    /// Set the walker on the terrain.
+    /// </summary>
+    public void SetWalkerOnGround()
+    {
+
+        Debug.Log("Set Called");
+        var terrain = Terrain.activeTerrains.First(x => x.transform.parent.GetComponentsInChildren<Transform>().Contains(otherTransform));
+        terrain.GetComponent<TerrainGenerator>();
+
+
+        var agent = otherTransform.parent;
+        var pos = agent.position;
+        pos.y = terrain.SampleHeight(agent.position) + 0.5f;
+        agent.position = pos;
+        agent.transform.position = pos;
+        otherTransform.GetComponent<Rigidbody>().position = pos;
+
+
+        Physics.SyncTransforms();
     }
 
     /// <summary>

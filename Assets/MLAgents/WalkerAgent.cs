@@ -126,6 +126,7 @@ public class WalkerAgent : Agent
     /// </summary>
     public void SetWalkerOnGround()
     {
+        return;
         var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         var terrain = Terrain.activeTerrains.First(x => x.transform.parent.GetComponentsInChildren<Transform>().Contains(otherTransform));
         var yHeight = terrain.SampleHeight(otherTransform.position);

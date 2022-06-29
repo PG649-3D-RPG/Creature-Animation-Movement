@@ -53,6 +53,7 @@ public class WalkerAgent : Agent
 
     public override void Initialize()
     {
+
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
 
@@ -79,6 +80,7 @@ public class WalkerAgent : Agent
             {
                 otherTransform = trans;
             }
+
         }
 
 
@@ -87,6 +89,8 @@ public class WalkerAgent : Agent
         m_ResetParams = Academy.Instance.EnvironmentParameters;
 
         SetResetParameters();
+        SetWalkerOnGround();
+
     }
 
     /// <summary>
@@ -100,6 +104,8 @@ public class WalkerAgent : Agent
         {
             bodyPart.Reset(bodyPart);
         }
+
+        SetWalkerOnGround();
 
         //Random start rotation to help generalize
         //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
@@ -115,25 +121,40 @@ public class WalkerAgent : Agent
     }
 
     /// <summary>
+    /// TODO Funktioniert nicht so
     /// Set the walker on the terrain.
     /// </summary>
     public void SetWalkerOnGround()
     {
-
-        Debug.Log("Set Called");
+        var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         var terrain = Terrain.activeTerrains.First(x => x.transform.parent.GetComponentsInChildren<Transform>().Contains(otherTransform));
-        terrain.GetComponent<TerrainGenerator>();
+        var yHeight = terrain.SampleHeight(otherTransform.position);
 
+        otherTransform.GetComponent<Rigidbody>().isKinematic = true;
+        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().isKinematic = true);
+        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().constraints == RigidbodyConstraints.FreezeAll);
 
-        var agent = otherTransform.parent;
-        var pos = agent.position;
-        pos.y = terrain.SampleHeight(agent.position) + 0.5f;
-        agent.position = pos;
-        agent.transform.position = pos;
-        otherTransform.GetComponent<Rigidbody>().position = pos;
+        var minY = otherTransform.GetComponentsInChildren<Transform>().Min(x => x.position.y);
+        otherTransform.position = new Vector3(otherTransform.position.x, yHeight +  (otherTransform.position.y - minY), otherTransform.position.z);
+        transform.position = new Vector3(otherTransform.position.x, yHeight + (otherTransform.position.y - minY), otherTransform.position.z);
 
+        otherTransform.GetComponent<Rigidbody>().isKinematic = false;
+        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().isKinematic = false);
+        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().constraints == RigidbodyConstraints.None);
 
         Physics.SyncTransforms();
+    }
+
+
+    /// <summary>
+    /// Safeguard if the walker leaves the playable area
+    /// </summary>
+    public void CheckWalkerOutOfBound()
+    {
+        if (otherTransform.position.y is < -10 or > 40)
+        {
+            SetWalkerOnGround();
+        }
     }
 
     /// <summary>
@@ -223,6 +244,7 @@ public class WalkerAgent : Agent
 
     void FixedUpdate()
     {
+        CheckWalkerOutOfBound();
         UpdateOrientationObjects();
 
         var cubeForward = m_OrientationCube.transform.forward;

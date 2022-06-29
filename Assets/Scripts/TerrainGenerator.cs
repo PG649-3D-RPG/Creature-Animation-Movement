@@ -55,9 +55,9 @@ public class TerrainGenerator : MonoBehaviour
         return length;
     }
 
-    public float GetTerrainHeight(int x, int y){
+    public float GetTerrainHeight(int x, int z){
         var terrain = GetComponent<Terrain>();
-        return terrain.terrainData.GetHeight(x, y);
+        return terrain.terrainData.GetHeight(x, z);
     }
 
     private void KillObstacleChildren(){

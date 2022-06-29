@@ -225,10 +225,14 @@ public class WalkerAgent : Agent
         var continuousActions = actionBuffers.ContinuousActions;
         foreach (var parts in bpList)
         {
-            parts.SetJointTargetRotation(continuousActions[++i], continuousActions[++i], continuousActions[++i]);
+            float x_target = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            float y_target = parts.joint.angularYMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            float z_target = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            parts.SetJointTargetRotation(x_target, y_target, z_target);
             parts.SetJointStrength(continuousActions[++i]);
         }
-        
+
+        Debug.Log(i);
     }
 
     //Update OrientationCube and DirectionIndicator

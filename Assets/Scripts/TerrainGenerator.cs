@@ -89,7 +89,7 @@ public class TerrainGenerator : MonoBehaviour
         terrainData.heightmapResolution = width + 1;
         terrainData.size = new Vector3(width, depth, length);
 
-        terrainData.SetHeights(0, 0, GenerateHeights());
+       // terrainData.SetHeights(0, 0, GenerateHeights());
 
         if (!_generateObstacles) return terrainData;
         for (var x = 0; x < width; x++)

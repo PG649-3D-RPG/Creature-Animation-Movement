@@ -53,7 +53,7 @@ public class WalkerAgent : Agent
 
     public override void Initialize()
     {
-        notAllowedToTouchGround.AddRange(new [] {BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso});
+        notAllowedToTouchGround.AddRange(new [] {BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso, BoneCategory.Arm});
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
 

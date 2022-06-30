@@ -51,6 +51,13 @@ public class WalkerAgent : Agent
 
     public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso };
 
+
+    public void Awake()
+    {
+        var bpScript = GetComponent<BehaviorParameters>();
+        bpScript.BrainParameters.VectorObservationSize = 123;
+    }
+
     public override void Initialize()
     {
 

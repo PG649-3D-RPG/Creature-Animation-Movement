@@ -36,6 +36,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         offsetX = Random.Range(0f, 9999f);
         offsetY = Random.Range(0f, 9999f);
+        RegenerateTerrain();
     }
 
     private void Update() {
@@ -72,11 +73,6 @@ public class TerrainGenerator : MonoBehaviour
 
     }
 
-    public void ResetTerrain()
-    {
-        RegenerateTerrain();
-        _target.PlaceTargetCubeRandomly();
-    }
 
     TerrainData GenerateTerrain (TerrainData terrainData)
     {
@@ -103,7 +99,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    float[,] GetHeightArray()
+    private float[,] GetHeightArray()
     {
         var heights = new float[width, length];
         for(var x = 0; x < width; x++)
@@ -117,7 +113,7 @@ public class TerrainGenerator : MonoBehaviour
     }
 
 
-    bool PlaceObstacleOnPos(int x, int y){
+    private bool PlaceObstacleOnPos(int x, int y){
         var xCoord = ((float)x + offsetX) / width * _scaleObstacle;
         var yCoord = ((float)y + offsetY) / length * _scaleObstacle + offsetY;
 

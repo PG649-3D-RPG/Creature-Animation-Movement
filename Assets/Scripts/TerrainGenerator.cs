@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
@@ -49,31 +52,20 @@ public class TerrainGenerator : MonoBehaviour
         }
     }
 
-    public int GetArenaWidth(){
-        return width;
-    }
-
-    public int GetArenaLength(){
-        return length;
-    }
-
     public float GetTerrainHeight(int x, int z){
         var terrain = GetComponent<Terrain>();
         return terrain.terrainData.GetHeight(x, z);
-    }
-
-    private void KillObstacleChildren(){
-        foreach (Transform child in _obstaclesContainer.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
     }
 
     public void RegenerateTerrain()
     {
         offsetX = Random.Range(0f, 9999f);
         offsetY = Random.Range(0f, 9999f);
-        KillObstacleChildren();
+
+        foreach (Transform child in _obstaclesContainer.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
 
         var terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
@@ -92,15 +84,15 @@ public class TerrainGenerator : MonoBehaviour
         terrainData.size = new Vector3(width, depth, length);
 
         if (!_generateHeights) return terrainData; // Do not generate terrain with heights
-        terrainData.SetHeights(0, 0, GenerateHeights());
+        terrainData.SetHeights(0, 0, GetHeightArray());
 
         if (!_generateObstacles) return terrainData; // Do not generate obstacles
 
-
-        for (var x = 0; x < width; x++)
+        for (var x = 1; x < width -1; x++)
         {
-            for (var y = 0; y < length; y++)
+            for (var y = 1; y < length -1; y++)
             {
+
                 if (!PlaceObstacleOnPos(x, y)) continue;
                 var newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
                 newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
@@ -110,19 +102,20 @@ public class TerrainGenerator : MonoBehaviour
         return terrainData;
     }
 
-    float[,] GenerateHeights()
+
+    float[,] GetHeightArray()
     {
         var heights = new float[width, length];
         for(var x = 0; x < width; x++)
         {
             for (var y = 0; y < length; y++)
             {
-                heights[x, y] = CalculateHeight(x, y);
+                heights[x, y] = Mathf.PerlinNoise((float)x / width * scale + offsetX, (float)y / length * scale + offsetY);
             }
         }
-
         return heights;
     }
+
 
     bool PlaceObstacleOnPos(int x, int y){
         var xCoord = ((float)x + offsetX) / width * _scaleObstacle;
@@ -132,11 +125,4 @@ public class TerrainGenerator : MonoBehaviour
         return Mathf.PerlinNoise(xCoord, yCoord) > _threshold;
     }
 
-    float CalculateHeight (int x, int y)
-    {
-        var xCoord = (float)x / width * scale + offsetX;
-        var yCoord = (float)y / length * scale + offsetY;
-
-        return Mathf.PerlinNoise(xCoord, yCoord);
-    }
 }

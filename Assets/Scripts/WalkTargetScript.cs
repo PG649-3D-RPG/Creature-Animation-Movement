@@ -35,8 +35,8 @@ public class WalkTargetScript : MonoBehaviour
     {
         _random = new Random();
         _terrainGenerator = _arenaTerrain.GetComponent<TerrainGenerator>();
-        _arenaWidth = _terrainGenerator.GetArenaWidth();
-        _arenaLength = _terrainGenerator.GetArenaLength();
+        _arenaWidth = _terrainGenerator.width;
+        _arenaLength = _terrainGenerator.length;
         _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));

@@ -26,6 +26,8 @@ public class TerrainGenerator : MonoBehaviour
     private float _scaleObstacle = 10f;
     [SerializeField]
     private WalkTargetScript _target;
+    [SerializeField]
+    private bool _generateHeights;
 
     private void Start()
     {
@@ -89,9 +91,12 @@ public class TerrainGenerator : MonoBehaviour
         terrainData.heightmapResolution = width + 1;
         terrainData.size = new Vector3(width, depth, length);
 
-       // terrainData.SetHeights(0, 0, GenerateHeights());
+        if (!_generateHeights) return terrainData; // Do not generate terrain with heights
+        terrainData.SetHeights(0, 0, GenerateHeights());
 
-        if (!_generateObstacles) return terrainData;
+        if (!_generateObstacles) return terrainData; // Do not generate obstacles
+
+
         for (var x = 0; x < width; x++)
         {
             for (var y = 0; y < length; y++)
@@ -113,9 +118,6 @@ public class TerrainGenerator : MonoBehaviour
             for (var y = 0; y < length; y++)
             {
                 heights[x, y] = CalculateHeight(x, y);
-                //if(PlaceObstacleOnPos(x,y)){
-                //    GameObject.Instantiate(_obstaclesPrefab, new Vector3(x, heights[x,y] , y), Quaternion.identity, _obstaclesContainer.transform);
-                //}
             }
         }
 

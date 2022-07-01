@@ -239,8 +239,6 @@ public class WalkerAgent : Agent
             parts.SetJointTargetRotation(x_target, y_target, z_target);
             parts.SetJointStrength(continuousActions[++i]);
         }
-
-        Debug.Log(i);
     }
 
     //Update OrientationCube and DirectionIndicator

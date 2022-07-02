@@ -60,9 +60,17 @@ public class TerrainGenerator : MonoBehaviour
         return terrain.terrainData.GetHeight(x, z);
     }
 
-    
 
-   
+    public void RegenerateTerrain()
+    {
+        offsetX = Random.Range(0f, 9999f);
+        offsetY = Random.Range(0f, 9999f);
+        KillObstacleChildren();
+
+        var terrain = GetComponent<Terrain>();
+        terrain.terrainData = GenerateTerrain(terrain.terrainData);
+    }
+
     public float GetTerrainHeight(Vector3 position)
     {
         Terrain terrain = GetComponent<Terrain>();

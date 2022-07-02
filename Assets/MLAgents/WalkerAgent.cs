@@ -58,11 +58,11 @@ public class WalkerAgent : Agent
     public float yheightOffset = 0.05f;
 
 
-    public void Awake()
-    {
-        var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.VectorObservationSize = 123;
-    }
+    //public void Awake()
+    //{
+    //    var bpScript = GetComponent<BehaviorParameters>();
+    //    bpScript.BrainParameters.VectorObservationSize = 123;
+    //}
 
     public override void Initialize()
     {
@@ -115,8 +115,8 @@ public class WalkerAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
+
         SetWalkerOnGround();
-        //ResetWalker();
 
         //Random start rotation to help generalize
         //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);

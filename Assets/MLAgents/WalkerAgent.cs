@@ -105,9 +105,7 @@ public class WalkerAgent : Agent
 
         m_ResetParams = Academy.Instance.EnvironmentParameters;
 
-        SetResetParameters();
         SetWalkerOnGround();
-
     }
 
     /// <summary>
@@ -115,7 +113,6 @@ public class WalkerAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-
         SetWalkerOnGround();
 
         //Random start rotation to help generalize
@@ -126,9 +123,6 @@ public class WalkerAgent : Agent
         //Set our goal walking speed
         MTargetWalkingSpeed =
             randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
-
-        // TODO Currently empty
-        SetResetParameters();
     }
 
 
@@ -329,18 +323,5 @@ public class WalkerAgent : Agent
     public void TouchedTarget()
     {
         AddReward(1f);
-    }
-
-    public void SetTorsoMass()
-    {
-        // TODO Do we need this?
-        //m_JdController.bodyPartsDict[chest].rb.mass = m_ResetParams.GetWithDefault("chest_mass", 8);
-        //m_JdController.bodyPartsDict[spine].rb.mass = m_ResetParams.GetWithDefault("spine_mass", 8);
-        //m_JdController.bodyPartsDict[hips].rb.mass = m_ResetParams.GetWithDefault("hip_mass", 8);
-    }
-
-    public void SetResetParameters()
-    {
-        SetTorsoMass();
     }
 }

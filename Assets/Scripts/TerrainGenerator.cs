@@ -60,11 +60,17 @@ public class TerrainGenerator : MonoBehaviour
         return terrain.terrainData.GetHeight(x, z);
     }
 
-    public void RegenerateTerrain()
-    {
-        offsetX = Random.Range(0f, 9999f);
-        offsetY = Random.Range(0f, 9999f);
+    
 
+   
+    public float GetTerrainHeight(Vector3 position)
+    {
+        Terrain terrain = GetComponent<Terrain>();
+        return terrain.SampleHeight(position);
+    }
+
+    private void KillObstacleChildren()
+    {
         foreach (Transform child in _obstaclesContainer.transform)
         {
             GameObject.Destroy(child.gameObject);
@@ -77,7 +83,6 @@ public class TerrainGenerator : MonoBehaviour
         NavMeshBuilder.BuildNavMeshAsync();
 
     }
-
 
     TerrainData GenerateTerrain (TerrainData terrainData)
     {

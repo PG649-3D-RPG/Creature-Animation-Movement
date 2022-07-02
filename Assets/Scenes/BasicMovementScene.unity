@@ -365,12 +365,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 67514063}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[0]
@@ -383,6 +387,26 @@ PrefabInstance:
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[2]
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -563,12 +587,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 136913060}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[0]
@@ -581,6 +609,26 @@ PrefabInstance:
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[2]
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -1260,12 +1308,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 393780378}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[0]
@@ -1278,6 +1330,26 @@ PrefabInstance:
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[2]
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -1499,9 +1571,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 609177067}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -2027,9 +2099,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 667334188}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -2334,9 +2406,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 576600501}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -2887,12 +2959,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1267100347}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[0]
@@ -2905,6 +2981,26 @@ PrefabInstance:
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.data[2]
       value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -3188,9 +3284,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 4336313422536832684}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -3256,8 +3352,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1927653738}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGround.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGround.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -3441,8 +3569,40 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 823835494}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: fastResetLength
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
       value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGround.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGround.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[0]
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[1]
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[2]
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: notAllowedToTouchGroundInFastPhase.Array.data[3]
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
@@ -3653,9 +3813,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 1383693069}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -3995,9 +4155,9 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 1307994197}
-  _generateObstacles: 1
-  _generateHeights: 1
-  _bakeNavMesh: 1
+  _generateObstacles: 0
+  _generateHeights: 0
+  _bakeNavMesh: 0
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10

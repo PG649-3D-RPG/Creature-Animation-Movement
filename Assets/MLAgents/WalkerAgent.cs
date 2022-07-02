@@ -56,11 +56,10 @@ public class WalkerAgent : Agent
     DirectionIndicator m_DirectionIndicator;
     public JointDriveController m_JdController;
 
-    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso };
-
+    
     public float yheightOffset = 0.05f;
 
-    [Header("Learning Settings")]
+    [Header("Enviorment Settings")]
     [SerializeField]
     public bool regenerateTerrain = true;
 
@@ -72,6 +71,18 @@ public class WalkerAgent : Agent
 
     [SerializeField]
     public int placeTargetCubeRandomlyAfterXSteps = 1;
+
+    [SerializeField]
+    public bool fastResetForTheFirstEpisodes = true;
+
+    [SerializeField]
+    public int fastResetLength = 10000000;
+
+    [SerializeField]
+    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head };
+
+    [SerializeField]
+    public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
 
     private long episodeCounter = 0;
 
@@ -89,6 +100,9 @@ public class WalkerAgent : Agent
 
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
+
+        if (fastResetForTheFirstEpisodes) notAllowedToTouchGround.AddRange(notAllowedToTouchGroundInFastPhase);
+
 
         //Get Body Parts
         //and setup each body part
@@ -128,20 +142,32 @@ public class WalkerAgent : Agent
 
 
     /// <summary>
+    /// Is called on episode beginn.
     /// Loop over body parts and reset them to initial conditions.
+    /// Regenerate terrain and place target cube randomly 
     /// </summary>
     public override void OnEpisodeBegin()
     {
         episodeCounter++;
 
-        if(regenerateTerrain && episodeCounter % regenerateTerrainAfterXSteps == 0)
+        if (regenerateTerrain && episodeCounter % regenerateTerrainAfterXSteps == 0)
         {
             _terrainGenerator.RegenerateTerrain();
         }
 
-        if(placeTargetCubeRandomly && episodeCounter % placeTargetCubeRandomlyAfterXSteps == 0)
+        if (placeTargetCubeRandomly && episodeCounter % placeTargetCubeRandomlyAfterXSteps == 0)
         {
             _walkTargetScript.PlaceTargetCubeRandomly();
+        }
+
+        if (fastResetForTheFirstEpisodes && episodeCounter == fastResetLength)
+        {
+            notAllowedToTouchGround.RemoveAll(x => notAllowedToTouchGroundInFastPhase.Contains(x));
+
+            foreach (var bp in bodyParts)
+            {
+                bp.GetComponent<GroundContact>().agentDoneOnGroundContact = false;
+            }
         }
 
         SetWalkerOnGround();
@@ -245,7 +271,6 @@ public class WalkerAgent : Agent
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
-
         }
     }
 

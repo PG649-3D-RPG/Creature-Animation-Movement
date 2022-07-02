@@ -13,6 +13,8 @@ using Random = UnityEngine.Random;
 
 public class WalkerAgent : Agent
 {
+    private float _otherBodyPartHeight = 1f;
+
     [Header("Walk Speed")]
     [Range(0.1f, 10)]
     [SerializeField]
@@ -38,6 +40,8 @@ public class WalkerAgent : Agent
     [Header("Target To Walk Towards")] public Transform target; //Target the agent will walk towards during training.
 
     [Header("Body Parts")] public List<Transform> bodyParts = new();
+
+    private Quaternion _otherStartingRotation;
     public Transform otherTransform;
 
     //This will be used as a stabilized model space reference point for observations
@@ -51,12 +55,14 @@ public class WalkerAgent : Agent
 
     public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso };
 
+    public float yheightOffset = 0.05f;
 
-    public void Awake()
-    {
-        var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.VectorObservationSize = 123;
-    }
+
+    //public void Awake()
+    //{
+    //    var bpScript = GetComponent<BehaviorParameters>();
+    //    bpScript.BrainParameters.VectorObservationSize = 123;
+    //}
 
     public override void Initialize()
     {
@@ -81,14 +87,18 @@ public class WalkerAgent : Agent
                 {
                     groundContact.agentDoneOnGroundContact = true;
                 }
-                m_JdController.SetupBodyPart(trans);
+                float bodyPartHeight = trans.position.y - transform.position.y;
+                m_JdController.SetupBodyPart(trans, bodyPartHeight);
             }
             else if(boneScript != null && boneScript.category is BoneCategory.Other)
             {
                 otherTransform = trans;
+                _otherStartingRotation = trans.rotation;
             }
 
         }
+
+        _otherBodyPartHeight = otherTransform.position.y - transform.position.y;
 
 
         m_JdController = GetComponent<JointDriveController>();
@@ -105,12 +115,6 @@ public class WalkerAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        //ResetWalker();
-        //Reset all of the body parts
-        foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
-        {
-            bodyPart.Reset(bodyPart);
-        }
 
         SetWalkerOnGround();
 
@@ -127,30 +131,27 @@ public class WalkerAgent : Agent
         SetResetParameters();
     }
 
+
     /// <summary>
-    /// TODO Funktioniert nicht so
     /// Set the walker on the terrain.
     /// </summary>
     public void SetWalkerOnGround()
     {
-        return;
         var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
-        var terrain = Terrain.activeTerrains.First(x => x.transform.parent.GetComponentsInChildren<Transform>().Contains(otherTransform));
-        var yHeight = terrain.SampleHeight(otherTransform.position);
+        var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
 
-        otherTransform.GetComponent<Rigidbody>().isKinematic = true;
-        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().isKinematic = true);
-        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().constraints == RigidbodyConstraints.FreezeAll);
+        Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
+        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + _otherBodyPartHeight + yheightOffset, otherTransform.position.z);
+        otherTransform.rotation = _otherStartingRotation;
 
-        var minY = otherTransform.GetComponentsInChildren<Transform>().Min(x => x.position.y);
-        otherTransform.position = new Vector3(otherTransform.position.x, yHeight +  (otherTransform.position.y - minY), otherTransform.position.z);
-        transform.position = new Vector3(otherTransform.position.x, yHeight + (otherTransform.position.y - minY), otherTransform.position.z);
+        otherRigidbody.velocity = Vector3.zero;
+        otherRigidbody.angularVelocity = Vector3.zero;
 
-        otherTransform.GetComponent<Rigidbody>().isKinematic = false;
-        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().isKinematic = false);
-        _ = bodyParts.Select(x => x.GetComponent<Rigidbody>().constraints == RigidbodyConstraints.None);
-
-        Physics.SyncTransforms();
+        //Reset all of the body parts
+        foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+        {
+            bodyPart.Reset(bodyPart, terrainHeight, yheightOffset);
+        }
     }
 
 
@@ -239,8 +240,6 @@ public class WalkerAgent : Agent
             parts.SetJointTargetRotation(x_target, y_target, z_target);
             parts.SetJointStrength(continuousActions[++i]);
         }
-
-        Debug.Log(i);
     }
 
     //Update OrientationCube and DirectionIndicator

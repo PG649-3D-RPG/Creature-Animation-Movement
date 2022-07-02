@@ -35,8 +35,8 @@ public class WalkTargetScript : MonoBehaviour
     {
         _random = new Random();
         _terrainGenerator = _arenaTerrain.GetComponent<TerrainGenerator>();
-        _arenaWidth = _terrainGenerator.GetArenaWidth();
-        _arenaLength = _terrainGenerator.GetArenaLength();
+        _arenaWidth = _terrainGenerator.width;
+        _arenaLength = _terrainGenerator.length;
         _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
@@ -66,8 +66,8 @@ public class WalkTargetScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        var x = UnityEngine.Random.Range(0 , _arenaWidth);
-        var z = UnityEngine.Random.Range(0, _arenaLength);
+        var x = UnityEngine.Random.Range(4 , _arenaWidth-4);
+        var z = UnityEngine.Random.Range(4, _arenaLength-4);
         var y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
         transform.localPosition = new Vector3(x, y, z);
     }

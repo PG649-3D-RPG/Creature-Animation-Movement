@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: 2ac026b96c0342f4e9759b2452cc57eb, type: 2}
 --- !u!1 &37911551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1487,9 +1487,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 609177067}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.7
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 1795974483}
 --- !u!154 &494646891
@@ -2013,9 +2014,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 667334188}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.7
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 367954300}
 --- !u!154 &667782548
@@ -2318,9 +2320,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 576600501}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.7
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 2082429091}
 --- !u!154 &861024678
@@ -3166,9 +3169,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 4336313422536832684}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.6
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 823835495}
 --- !u!154 &1438603208
@@ -3621,9 +3625,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 1383693069}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.7
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 1594493799}
 --- !u!154 &1780188605
@@ -3961,9 +3966,10 @@ MonoBehaviour:
   offsetX: 100
   offsetY: 100
   _obstaclesContainer: {fileID: 1307994197}
-  _generateObstacles: 0
+  _generateObstacles: 1
+  _generateHeights: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  _threshold: 0.7
+  _obstacleThreshold: 0.9
   _scaleObstacle: 10
   _target: {fileID: 776402376}
 --- !u!154 &2022595139

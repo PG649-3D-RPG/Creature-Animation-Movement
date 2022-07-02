@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor.AI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -22,15 +23,16 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField]
     private bool _generateObstacles;
     [SerializeField]
+    private bool _generateHeights;
+    [SerializeField]
     private GameObject _obstaclesPrefab;
     [SerializeField]
-    private float _threshold = 0.9f;
+    private float _obstacleThreshold = 0.9f;
     [SerializeField]
     private float _scaleObstacle = 10f;
     [SerializeField]
     private WalkTargetScript _target;
-    [SerializeField]
-    private bool _generateHeights;
+    
 
     private void Start()
     {
@@ -70,6 +72,9 @@ public class TerrainGenerator : MonoBehaviour
 
         var terrain = GetComponent<Terrain>();
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        //NavMeshBuilder.ClearAllNavMeshes();
+        //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
+        NavMeshBuilder.BuildNavMeshAsync();
 
     }
 
@@ -91,10 +96,9 @@ public class TerrainGenerator : MonoBehaviour
 
                 if (!PlaceObstacleOnPos(x, y)) continue;
                 var newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
-                newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
+                newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y); 
             }
         }
-
         return terrainData;
     }
 
@@ -114,11 +118,24 @@ public class TerrainGenerator : MonoBehaviour
 
 
     private bool PlaceObstacleOnPos(int x, int y){
-        var xCoord = ((float)x + offsetX) / width * _scaleObstacle;
-        var yCoord = ((float)y + offsetY) / length * _scaleObstacle + offsetY;
+        var xCord = (x + offsetX) / width * _scaleObstacle;
+        var yCord = (y + offsetY) / length * _scaleObstacle + offsetY;
 
-       
-        return Mathf.PerlinNoise(xCoord, yCoord) > _threshold;
+        return Mathf.PerlinNoise(xCord, yCord) > _obstacleThreshold;
+    }
+
+    private int[,] GenObstaclePos()
+    {
+        var list = new List<List<int>>();
+        var heights = new int[width, length];
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < length; y++)
+            {
+                heights[x, y] = Mathf.PerlinNoise((x + offsetX) / width * _scaleObstacle, (y + offsetY) / length * _scaleObstacle + offsetY) > _obstacleThreshold ? 1 : 0; 
+            }
+        }
+        return heights;
     }
 
 }

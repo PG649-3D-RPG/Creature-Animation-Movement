@@ -314,32 +314,13 @@ public class WalkerAgent : Agent
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
         var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
 
-        //Check for NaNs
-        if (float.IsNaN(matchSpeedReward))
-        {
-            throw new ArgumentException(
-                "NaN in moveTowardsTargetReward.\n" +
-                $" cubeForward: {cubeForward}\n" +
-                $" hips.velocity: {otherTransform.GetComponent<Rigidbody>().velocity}\n" +
-                $" maximumWalkingSpeed: {m_maxWalkingSpeed}"
-            );
-        }
-
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
         var lookAtTargetReward = bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Head).Sum(part => (Vector3.Dot(cubeForward, part.forward) + 1) * .5F);
 
-        //Check for NaNs
-        //if (float.IsNaN(lookAtTargetReward))
-        //{
-        //    throw new ArgumentException(
-        //        "NaN in lookAtTargetReward.\n" +
-        //        $" cubeForward: {cubeForward}\n" +
-        //        $" head.forward: {head.forward}"
-        //    );
-        //}
+        if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
 
-        AddReward(matchSpeedReward * lookAtTargetReward);
+         AddReward(matchSpeedReward * lookAtTargetReward);
     }
 
     //Returns the average velocity of all of the body parts

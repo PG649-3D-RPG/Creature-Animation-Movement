@@ -55,7 +55,6 @@ public class WalkerAgent : Agent
     //The indicator graphic gameobject that points towards the target
     DirectionIndicator m_DirectionIndicator;
     public JointDriveController m_JdController;
-    EnvironmentParameters m_ResetParams;
 
     public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head, BoneCategory.Hand, BoneCategory.Torso };
 
@@ -123,8 +122,6 @@ public class WalkerAgent : Agent
 
 
         m_JdController = GetComponent<JointDriveController>();
-
-        m_ResetParams = Academy.Instance.EnvironmentParameters;
 
         SetWalkerOnGround();
     }

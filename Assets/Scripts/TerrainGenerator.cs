@@ -60,6 +60,12 @@ public class TerrainGenerator : MonoBehaviour
         return terrain.terrainData.GetHeight(x, z);
     }
 
+    public float GetTerrainHeight(Vector3 position)
+    {
+        Terrain terrain = GetComponent<Terrain>();
+        return terrain.SampleHeight(position);
+    }
+
     private void KillObstacleChildren(){
         foreach (Transform child in _obstaclesContainer.transform)
         {

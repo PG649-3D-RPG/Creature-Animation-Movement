@@ -17,6 +17,7 @@ namespace Unity.MLAgentsExamples
     [System.Serializable]
     public class BodyPart
     {
+        public float _bodyPartHeight {get; set;}
         [Header("Body Part Info")][Space(10)] public ConfigurableJoint joint;
         public Rigidbody rb;
         [HideInInspector] public Vector3 startingPos;
@@ -54,9 +55,12 @@ namespace Unity.MLAgentsExamples
         /// <summary>
         /// Reset body part to initial configuration.
         /// </summary>
-        public void Reset(BodyPart bp)
+        public void Reset(BodyPart bp, float terrainHeight, float yheightOffset = 0.05f)
         {
-            bp.rb.transform.position = bp.startingPos;
+            //This resets the walker at the starting position
+            bp.rb.transform.position = new Vector3(startingPos.x, terrainHeight + _bodyPartHeight + yheightOffset, startingPos.z);
+            //This will reset the walker at the current position
+            //bp.rb.transform.position = // new Vector3(bp.rb.transform.position.x, terrainHeight + _bodyPartHeight + yheightOffset, bp.rb.transform.position.z);
             bp.rb.transform.rotation = bp.startingRot;
             bp.rb.velocity = Vector3.zero;
             bp.rb.angularVelocity = Vector3.zero;
@@ -131,10 +135,11 @@ namespace Unity.MLAgentsExamples
         /// <summary>
         /// Create BodyPart object and add it to dictionary.
         /// </summary>
-        public void SetupBodyPart(Transform t)
+        public void SetupBodyPart(Transform t, float bodyPartHeight)
         {
             var bp = new BodyPart
             {
+                _bodyPartHeight = bodyPartHeight,
                 rb = t.GetComponent<Rigidbody>(),
                 joint = t.GetComponent<ConfigurableJoint>(),
                 startingPos = t.position,

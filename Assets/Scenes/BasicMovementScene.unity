@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -139,8 +139,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &37911552
 Transform:
@@ -365,6 +365,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 67514063}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -462,8 +466,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &122946924
 Transform:
@@ -558,6 +562,10 @@ PrefabInstance:
       propertyPath: m_JdController
       value: 
       objectReference: {fileID: 136913060}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
       value: 3
@@ -656,8 +664,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &143949048
 Transform:
@@ -950,8 +958,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &263779874
 Transform:
@@ -1047,8 +1055,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &264281190
 Transform:
@@ -1144,8 +1152,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &344745636
 Transform:
@@ -1252,6 +1260,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 393780378}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -1349,8 +1361,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &411731330
 Transform:
@@ -1447,7 +1459,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &494646889
 Transform:
@@ -1489,6 +1501,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 609177067}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -1620,8 +1633,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &600083453
 Transform:
@@ -1748,8 +1761,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &640811915
 Transform:
@@ -1845,8 +1858,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &659413389
 Transform:
@@ -1974,7 +1987,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &667782546
 Transform:
@@ -2016,6 +2029,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 667334188}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -2182,8 +2196,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &827613359
 Transform:
@@ -2280,7 +2294,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &861024676
 Transform:
@@ -2322,6 +2336,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 576600501}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -2387,8 +2402,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &989663793
 Transform:
@@ -2484,8 +2499,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1056272252
 Transform:
@@ -2581,8 +2596,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1196310629
 Transform:
@@ -2678,8 +2693,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1198603941
 Transform:
@@ -2775,8 +2790,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1231196634
 Transform:
@@ -2871,6 +2886,10 @@ PrefabInstance:
       propertyPath: m_JdController
       value: 
       objectReference: {fileID: 1267100347}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size
       value: 3
@@ -3000,8 +3019,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1363597816
 Transform:
@@ -3129,7 +3148,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1438603206
 Transform:
@@ -3171,6 +3190,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 4336313422536832684}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -3235,6 +3255,10 @@ PrefabInstance:
       propertyPath: m_JdController
       value: 
       objectReference: {fileID: 1927653738}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
       value: HumanCreature1
@@ -3416,6 +3440,10 @@ PrefabInstance:
       propertyPath: target
       value: 
       objectReference: {fileID: 823835494}
+    - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+      propertyPath: regenerateTerrainAfterXSteps
+      value: 1000
+      objectReference: {fileID: 0}
     - target: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: m_Name
       value: HumanCreature1
@@ -3487,8 +3515,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1695648257
 Transform:
@@ -3585,7 +3613,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &1780188603
 Transform:
@@ -3627,6 +3655,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 1383693069}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -3812,8 +3841,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &1887737801
 Transform:
@@ -3926,7 +3955,7 @@ GameObject:
   m_TagString: ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 2147483647
+  m_StaticEditorFlags: 95
   m_IsActive: 1
 --- !u!4 &2022595137
 Transform:
@@ -3968,6 +3997,7 @@ MonoBehaviour:
   _obstaclesContainer: {fileID: 1307994197}
   _generateObstacles: 1
   _generateHeights: 1
+  _bakeNavMesh: 1
   _obstaclesPrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   _obstacleThreshold: 0.9
   _scaleObstacle: 10
@@ -4118,8 +4148,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &2089295651
 Transform:
@@ -4215,8 +4245,8 @@ GameObject:
   m_Name: wall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4336313421508627073
 Transform:
@@ -4312,8 +4342,8 @@ GameObject:
   m_Name: wall (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4336313422245581146
 Transform:
@@ -4409,8 +4439,8 @@ GameObject:
   m_Name: wall (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4336313422533903115
 Transform:
@@ -4537,8 +4567,8 @@ GameObject:
   m_Name: wall (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_NavMeshLayer: 1
+  m_StaticEditorFlags: 8
   m_IsActive: 1
 --- !u!4 &4336313422991545009
 Transform:

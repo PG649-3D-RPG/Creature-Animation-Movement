@@ -15,6 +15,10 @@ public class WalkerAgent : Agent
 {
     private float _otherBodyPartHeight = 1f;
 
+    private TerrainGenerator _terrainGenerator;
+
+    private WalkTargetScript _walkTargetScript;
+
     [Header("Walk Speed")]
     [Range(0.1f, 10)]
     [SerializeField]
@@ -57,6 +61,21 @@ public class WalkerAgent : Agent
 
     public float yheightOffset = 0.05f;
 
+    [Header("Learning Settings")]
+    [SerializeField]
+    public bool regenerateTerrain = true;
+
+    [SerializeField]
+    public int regenerateTerrainAfterXSteps = 1;
+
+    [SerializeField]
+    public bool placeTargetCubeRandomly = true;
+
+    [SerializeField]
+    public int placeTargetCubeRandomlyAfterXSteps = 1;
+
+    private long episodeCounter = 0;
+
 
     //public void Awake()
     //{
@@ -66,6 +85,8 @@ public class WalkerAgent : Agent
 
     public override void Initialize()
     {
+        _terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
+        _walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
 
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
@@ -83,14 +104,14 @@ public class WalkerAgent : Agent
                 bodyParts.Add(trans);
                 var groundContact = trans.AddComponent<GroundContact>();
                 // TODO Config Ground Contact
-                if(notAllowedToTouchGround.Contains(boneScript.category))
+                if (notAllowedToTouchGround.Contains(boneScript.category))
                 {
                     groundContact.agentDoneOnGroundContact = true;
                 }
                 float bodyPartHeight = trans.position.y - transform.position.y;
                 m_JdController.SetupBodyPart(trans, bodyPartHeight);
             }
-            else if(boneScript != null && boneScript.category is BoneCategory.Other)
+            else if (boneScript != null && boneScript.category is BoneCategory.Other)
             {
                 otherTransform = trans;
                 _otherStartingRotation = trans.rotation;
@@ -108,11 +129,24 @@ public class WalkerAgent : Agent
         SetWalkerOnGround();
     }
 
+
     /// <summary>
     /// Loop over body parts and reset them to initial conditions.
     /// </summary>
     public override void OnEpisodeBegin()
     {
+        episodeCounter++;
+
+        if(regenerateTerrain && episodeCounter % regenerateTerrainAfterXSteps == 0)
+        {
+            _terrainGenerator.RegenerateTerrain();
+        }
+
+        if(placeTargetCubeRandomly && episodeCounter % placeTargetCubeRandomlyAfterXSteps == 0)
+        {
+            _walkTargetScript.PlaceTargetCubeRandomly();
+        }
+
         SetWalkerOnGround();
 
         //Random start rotation to help generalize
@@ -152,7 +186,7 @@ public class WalkerAgent : Agent
     /// <summary>
     /// Safeguard if the walker leaves the playable area
     /// </summary>
-    public void CheckWalkerOutOfBound()
+    private void CheckWalkerOutOfBound()
     {
         if (otherTransform.position.y is < -10 or > 40)
         {
@@ -219,7 +253,6 @@ public class WalkerAgent : Agent
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
-
     {
         AddReward(1f);
         var bpList = m_JdController.bodyPartsList;

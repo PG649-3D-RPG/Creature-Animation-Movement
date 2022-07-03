@@ -41,7 +41,6 @@ namespace Unity.MLAgentsExamples
 
                 if (penalizeGroundContact)
                 {                    
-                    // TODO: Myb AddReward?
                     agent.SetReward(groundContactPenalty);
                 }
 

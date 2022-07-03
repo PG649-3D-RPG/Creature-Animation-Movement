@@ -23,19 +23,19 @@ public class TerrainGenerator : MonoBehaviour
     [SerializeField]
     private GameObject _obstaclesContainer;
     [SerializeField]
-    private bool _generateObstacles = true;
+    public bool _generateObstacles = true;
     [SerializeField]
-    private bool _generateHeights = true;
+    public bool _generateHeights = true;
     [SerializeField]
-    private bool _bakeNavMesh = true;
+    public bool _bakeNavMesh = true;
     [SerializeField]
-    private GameObject _obstaclesPrefab;
+    public GameObject _obstaclesPrefab;
     [SerializeField]
-    private float _obstacleThreshold = 0.9f;
+    public float _obstacleThreshold = 0.9f;
     [SerializeField]
-    private float _scaleObstacle = 10f;
+    public float _scaleObstacle = 10f;
     [SerializeField]
-    private WalkTargetScript _target;
+    public WalkTargetScript _target;
 
     /// <summary>
     /// 
@@ -105,9 +105,7 @@ public class TerrainGenerator : MonoBehaviour
         terrainData.size = new Vector3(width, depth, length);
 
 
-        //
         // Generate terrain data
-        //
         if (!_generateHeights) return terrainData; // Do not generate terrain with heights
 
         var heights = new float[width, length];
@@ -121,9 +119,7 @@ public class TerrainGenerator : MonoBehaviour
 
         terrainData.SetHeights(0, 0, heights);
 
-        //
         // Generate obstacles
-        //
         if (!_generateObstacles) return terrainData; // Do not generate obstacles
 
         for (var x = 1; x < width - 1; x++)

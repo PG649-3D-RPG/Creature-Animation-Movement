@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UnityEngine;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -60,6 +61,8 @@ public class WalkerAgent : Agent
     public float yheightOffset = 0.05f;
 
     [Header("Enviorment Settings")]
+    private long episodeCounter = 0;
+
     [SerializeField]
     public bool regenerateTerrain = true;
 
@@ -84,7 +87,12 @@ public class WalkerAgent : Agent
     [SerializeField]
     public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
 
-    private long episodeCounter = 0;
+    [SerializeField] 
+    public bool penalizeGroundContact = true;
+
+    [SerializeField]
+    private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
+        {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
 
 
     //public void Awake()
@@ -121,7 +129,13 @@ public class WalkerAgent : Agent
                 {
                     groundContact.agentDoneOnGroundContact = true;
                 }
-                float bodyPartHeight = trans.position.y - transform.position.y;
+
+                if (penalizeGroundContact && penaltiesForBodyParts.ContainsKey(boneScript.category))
+                {
+                    groundContact.penalizeGroundContact = true;
+                    groundContact.groundContactPenalty = penaltiesForBodyParts.GetValueOrDefault(boneScript.category);
+                }
+                var bodyPartHeight = trans.position.y - transform.position.y;
                 m_JdController.SetupBodyPart(trans, bodyPartHeight);
             }
             else if (boneScript != null && boneScript.category is BoneCategory.Other)
@@ -163,7 +177,6 @@ public class WalkerAgent : Agent
         if (fastResetForTheFirstEpisodes && episodeCounter == fastResetLength)
         {
             notAllowedToTouchGround.RemoveAll(x => notAllowedToTouchGroundInFastPhase.Contains(x));
-
             foreach (var bp in bodyParts)
             {
                 bp.GetComponent<GroundContact>().agentDoneOnGroundContact = false;

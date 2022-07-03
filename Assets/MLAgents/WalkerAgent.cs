@@ -16,6 +16,8 @@ public class WalkerAgent : Agent
 {
     private float _otherBodyPartHeight = 1f;
 
+    private long episodeCounter = 0;
+
     private TerrainGenerator _terrainGenerator;
 
     private WalkTargetScript _walkTargetScript;
@@ -61,8 +63,6 @@ public class WalkerAgent : Agent
     public float yheightOffset = 0.05f;
 
     [Header("Enviorment Settings")]
-    private long episodeCounter = 0;
-
     [SerializeField]
     public bool regenerateTerrain = true;
 

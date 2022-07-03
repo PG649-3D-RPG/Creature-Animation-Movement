@@ -3570,11 +3570,11 @@ PrefabInstance:
       objectReference: {fileID: 823835494}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: fastResetLength
-      value: 5
+      value: 30000000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: regenerateTerrainAfterXSteps
-      value: 1000
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: 1666840327, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
       propertyPath: notAllowedToTouchGround.Array.size

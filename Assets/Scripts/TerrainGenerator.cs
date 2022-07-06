@@ -20,8 +20,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private Terrain terrain;
 
-    [SerializeField]
-    private GameObject _obstaclesContainer;
+    private GameObject _obstaclesContainer = new GameObject();
     [SerializeField]
     public bool _generateObstacles = true;
     [SerializeField]

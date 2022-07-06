@@ -8,6 +8,8 @@ using UnityEngine;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
+
+
     [SerializeField] public GameObject _wallPrefab;
 
     [SerializeField] public GameObject _creaturePrefab;

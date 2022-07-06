@@ -8,33 +8,26 @@ using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int width = 128; //x-axis of the terrain
-    public int length = 128; //z-axis
+    public int width { get; set; } = 128; //x-axis of the terrain
+    public int length { get; set; } = 128; //z-axis
 
-    public int depth = 10; //y-axis
+    public int depth { get; set; } = 10; //y-axis
 
-    public float scale = 2.5f;
+    public float scale { get; set; } = 2.5f;
 
-    public float offsetX = 100f;
-    public float offsetY = 100f;
+    public float offsetX { get; set; } = 100f;
+    public float offsetY { get; set; } = 100f;
 
-    private Terrain terrain;
+    private Terrain terrain { get; set; }
 
-    private GameObject _obstaclesContainer = new GameObject();
-    [SerializeField]
-    public bool _generateObstacles = true;
-    [SerializeField]
-    public bool _generateHeights = true;
-    [SerializeField]
-    public bool _bakeNavMesh = true;
-    [SerializeField]
-    public GameObject _obstaclesPrefab;
-    [SerializeField]
-    public float _obstacleThreshold = 0.9f;
-    [SerializeField]
-    public float _scaleObstacle = 10f;
-    [SerializeField]
-    public WalkTargetScript _target;
+    private GameObject _obstaclesContainer { get; set; } = new GameObject();
+
+    public bool _generateObstacles { get; set; }  = true;
+    public bool _generateHeights { get; set; } = true;
+    public bool _bakeNavMesh { get; set; } = true;
+    public GameObject  _obstaclesPrefab { get; set; } = new GameObject();
+    public float _obstacleThreshold { get; set; } = 0.9f;
+    public float _scaleObstacle { get; set; }  = 10f;
 
     /// <summary>
     /// 
@@ -67,7 +60,7 @@ public class TerrainGenerator : MonoBehaviour
         if (!_bakeNavMesh) return; // Skipp Nav Mesh generation
         //NavMeshBuilder.ClearAllNavMeshes();
         //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
-        NavMeshBuilder.BuildNavMeshAsync();
+        //NavMeshBuilder.BuildNavMeshAsync();
     }
 
     /// <summary>

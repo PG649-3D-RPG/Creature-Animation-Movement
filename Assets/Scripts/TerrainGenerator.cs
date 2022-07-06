@@ -2,7 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.AI;
+//using UnityEditor.AI;
+using UnityEngine.AI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -67,8 +68,9 @@ public class TerrainGenerator : MonoBehaviour
 
         if (!_bakeNavMesh) return; // Skipp Nav Mesh generation
         //NavMeshBuilder.ClearAllNavMeshes();
+        //Only works in the editor, not in runtime files
         //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
-        NavMeshBuilder.BuildNavMeshAsync();
+        //NavMeshBuilder.BuildNavMeshAsync();
     }
 
     /// <summary>

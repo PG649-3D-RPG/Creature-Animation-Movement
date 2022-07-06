@@ -70,9 +70,9 @@ ConfigurableJoint:
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
-  m_AngularXMotion: 0
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularXMotion: 1
+  m_AngularYMotion: 1
+  m_AngularZMotion: 1
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -311,7 +311,6 @@ Transform:
   - {fileID: 4998193172758060293}
   - {fileID: 1383653275916894247}
   - {fileID: 4484360999054687181}
-  - {fileID: 992798344426637011}
   m_Father: {fileID: 3698539245742030007}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1491,7 +1490,7 @@ GameObject:
   - component: {fileID: 1666840328}
   m_Layer: 0
   m_Name: HumanCreature1
-  m_TagString: Untagged
+  m_TagString: agent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1509,6 +1508,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5075484997133393124}
+  - {fileID: 992798344426637011}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1541,7 +1541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DecisionPeriod: 5
-  TakeActionsBetweenDecisions: 1
+  TakeActionsBetweenDecisions: 0
 --- !u!114 &1666840327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1564,8 +1564,16 @@ MonoBehaviour:
   bodyParts: []
   otherTransform: {fileID: 0}
   m_JdController: {fileID: 1666840325}
-  notAllowedToTouchGround: 030000000400000002000000
   yheightOffset: 0.075
+  regenerateTerrain: 1
+  regenerateTerrainAfterXSteps: 100000
+  placeTargetCubeRandomly: 0
+  placeTargetCubeRandomlyAfterXSteps: 1
+  fastResetForTheFirstEpisodes: 1
+  fastResetLength: 1000000
+  notAllowedToTouchGround: 03000000
+  notAllowedToTouchGroundInFastPhase: 040000000200000001000000
+  penalizeGroundContact: 1
 --- !u!114 &1666840328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1582,9 +1590,9 @@ MonoBehaviour:
     VectorObservationSize: 248
     NumStackedVectorObservations: 1
     m_ActionSpec:
-      m_NumContinuousActions: 32
+      m_NumContinuousActions: 38
       BranchSizes: 
-    VectorActionSize: 20000000
+    VectorActionSize: 26000000
     VectorActionDescriptions: []
     VectorActionSpaceType: 1
     hasUpgradedBrainParametersWithActionSpec: 1
@@ -2588,9 +2596,9 @@ ConfigurableJoint:
   m_XMotion: 0
   m_YMotion: 0
   m_ZMotion: 0
-  m_AngularXMotion: 0
-  m_AngularYMotion: 0
-  m_AngularZMotion: 0
+  m_AngularXMotion: 1
+  m_AngularYMotion: 1
+  m_AngularZMotion: 1
   m_LinearLimitSpring:
     spring: 0
     damper: 0
@@ -4650,13 +4658,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9124948302705547544}
-  m_LocalRotation: {x: -1, y: -0, z: -0, w: 0}
-  m_LocalPosition: {x: -0, y: 0.761, z: 0.063}
-  m_LocalScale: {x: 0.1, y: 0.1, z: 0.1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.006568206, y: 1.462189, z: 0.000641793}
+  m_LocalScale: {x: 0.10000002, y: 0.1, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5075484997133393124}
-  m_RootOrder: 5
+  m_Father: {fileID: 3698539245742030007}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7046462233445522601
 MeshFilter:

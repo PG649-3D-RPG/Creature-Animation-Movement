@@ -91,8 +91,8 @@ public class WalkerAgent : Agent
     public bool penalizeGroundContact = true;
 
     [SerializeField]
-    private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
-        {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
+    private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, -2}, {BoneCategory.Hand, -5},
+        {BoneCategory.Head, -10}, {BoneCategory.Hip, -5}, {BoneCategory.Leg, -1}, {BoneCategory.Shoulder, -5}};
 
 
     //public void Awake()
@@ -289,7 +289,7 @@ public class WalkerAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        AddReward(1f);
+        //AddReward(1f);
         var bpList = m_JdController.bodyPartsList;
         var i = -1;
 

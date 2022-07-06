@@ -113,9 +113,15 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)
     {
+        if(collision.gameObject.tag == "agent")
+        {
+            WalkerAgent agent = collision.gameObject.GetComponent<WalkerAgent>();
+            agent.TouchedTarget();
+            PlaceTargetCubeRandomly();
+        }
         if (collision.gameObject.name != "Terrain")
         {
             _targetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * _targetDirection;
-        }
+        } 
     }
 }

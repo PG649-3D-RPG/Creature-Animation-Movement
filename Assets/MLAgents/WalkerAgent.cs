@@ -49,6 +49,7 @@ public class WalkerAgent : Agent
     [Header("Body Parts")] public List<Transform> bodyParts = new();
 
     private Quaternion _otherStartingRotation;
+    private Vector3 _otherStartingPosition;
     public Transform otherTransform;
 
     //This will be used as a stabilized model space reference point for observations
@@ -142,6 +143,7 @@ public class WalkerAgent : Agent
             {
                 otherTransform = trans;
                 _otherStartingRotation = trans.rotation;
+                _otherStartingPosition = trans.position;
             }
 
         }
@@ -205,7 +207,7 @@ public class WalkerAgent : Agent
         var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
 
         Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
-        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + _otherBodyPartHeight + yheightOffset, otherTransform.position.z);
+        otherTransform.position = _otherStartingPosition;
         otherTransform.rotation = _otherStartingRotation;
 
         otherRigidbody.velocity = Vector3.zero;
@@ -317,7 +319,7 @@ public class WalkerAgent : Agent
 
     void FixedUpdate()
     {
-        CheckWalkerOutOfBound();
+        //CheckWalkerOutOfBound();
         UpdateOrientationObjects();
 
         var cubeForward = m_OrientationCube.transform.forward;

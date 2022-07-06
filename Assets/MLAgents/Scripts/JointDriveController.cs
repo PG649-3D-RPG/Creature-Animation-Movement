@@ -58,7 +58,7 @@ namespace Unity.MLAgentsExamples
         public void Reset(BodyPart bp, float terrainHeight, float yheightOffset = 0.05f)
         {
             //This resets the walker at the starting position
-            bp.rb.transform.position = new Vector3(startingPos.x, terrainHeight + _bodyPartHeight + yheightOffset, startingPos.z);
+            bp.rb.transform.position = new Vector3(startingPos.x, startingPos.y, startingPos.z);
             //This will reset the walker at the current position
             //bp.rb.transform.position = // new Vector3(bp.rb.transform.position.x, terrainHeight + _bodyPartHeight + yheightOffset, bp.rb.transform.position.z);
             bp.rb.transform.rotation = bp.startingRot;

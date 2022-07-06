@@ -20,23 +20,32 @@ public class TerrainGenerator : MonoBehaviour
 
     private Terrain terrain { get; set; }
 
-    private GameObject _obstaclesContainer { get; set; } = new GameObject();
+    private GameObject _obstaclesContainer { get; set; } 
 
     public bool _generateObstacles { get; set; }  = true;
     public bool _generateHeights { get; set; } = true;
     public bool _bakeNavMesh { get; set; } = true;
-    public GameObject  _obstaclesPrefab { get; set; } = new GameObject();
+    public GameObject  _obstaclesPrefab { get; set; }
     public float _obstacleThreshold { get; set; } = 0.9f;
     public float _scaleObstacle { get; set; }  = 10f;
 
     /// <summary>
     /// 
     /// </summary>
-    private void Start()
+    private void Awake()
+    {
+        _obstaclesContainer = new GameObject
+        {
+            name = "Obstacle Container",
+            transform = { parent = this.transform }
+        };
+    }
+
+    public void Start()
     {
         offsetX = Random.Range(0f, 9999f);
         offsetY = Random.Range(0f, 9999f);
-        terrain =  GetComponent<Terrain>();
+        terrain = GetComponent<Terrain>();
         RegenerateTerrain();
     }
 

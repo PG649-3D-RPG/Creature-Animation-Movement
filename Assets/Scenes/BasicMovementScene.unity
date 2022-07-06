@@ -329,7 +329,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &62712658
 Transform:
   m_ObjectHideFlags: 0
@@ -892,7 +892,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &203189385
 Transform:
   m_ObjectHideFlags: 0
@@ -1570,7 +1570,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 609177067}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -1638,7 +1637,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &512967636
 Transform:
   m_ObjectHideFlags: 0
@@ -2098,7 +2097,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 667334188}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -2405,7 +2403,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 576600501}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -2855,6 +2852,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1211399388}
+  - component: {fileID: 1211399389}
   m_Layer: 0
   m_Name: EnviormentCreator
   m_TagString: Untagged
@@ -2877,6 +2875,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1211399389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211399387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
+  _creaturePrefab: {fileID: 3698539245742029899, guid: 02b5c9d71196b7e41b8a1276978b9a20, type: 3}
+  _targetCubePrefab: {fileID: 0}
 --- !u!1 &1231196633
 GameObject:
   m_ObjectHideFlags: 0
@@ -3314,7 +3327,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 4336313422536832684}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -3483,7 +3495,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1566749565
 Transform:
   m_ObjectHideFlags: 0
@@ -3843,7 +3855,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 1383693069}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -3996,7 +4007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1837590639
 Transform:
   m_ObjectHideFlags: 0
@@ -4185,7 +4196,6 @@ MonoBehaviour:
   scale: 2.5
   offsetX: 100
   offsetY: 100
-  _obstaclesContainer: {fileID: 1307994197}
   _generateObstacles: 0
   _generateHeights: 0
   _bakeNavMesh: 0
@@ -4854,7 +4864,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4336313423236836361
 Transform:
   m_ObjectHideFlags: 0

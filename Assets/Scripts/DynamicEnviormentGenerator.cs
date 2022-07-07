@@ -24,7 +24,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public int ArenaCount = 100;
 
 
-    [Header("Settings for the terrain")]
+    [Header("Terrain settings")]
     [SerializeField] 
     public int TerrainSize = 128;
     [SerializeField]
@@ -42,8 +42,39 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public float ScaleObstacle { get; set; } = 10f;
 
+    [Header("Creature Settings")]
+    [SerializeField]
+    public bool regenerateTerrain = true;
 
+    [SerializeField]
+    public int regenerateTerrainAfterXSteps = 1;
+
+    [SerializeField]
+    public bool placeTargetCubeRandomly = true;
+
+    [SerializeField]
+    public int placeTargetCubeRandomlyAfterXSteps = 1;
+
+    [SerializeField]
+    public bool fastResetForTheFirstEpisodes = true;
+
+    [SerializeField]
+    public int fastResetLength = 10000000;
+
+    //[SerializeField]
+    //public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head };
+
+    //[SerializeField]
+    //public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
+
+    [SerializeField] 
+    public bool penalizeGroundContact = true;
+
+    //[SerializeField]
+    //private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
+    //    {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
     // Start is called before the first frame update
+    
     void Awake()
     {
          GenerateArena();

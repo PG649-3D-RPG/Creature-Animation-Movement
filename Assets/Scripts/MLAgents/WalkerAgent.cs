@@ -53,7 +53,7 @@ public class WalkerAgent : Agent
 
     //This will be used as a stabilized model space reference point for observations
     //Because ragdolls can move erratically during training, using a stabilized reference transform improves learning
-    OrientationCubeController m_OrientationCube;
+    public OrientationCubeController m_OrientationCube;
 
     //The indicator graphic gameobject that points towards the target
     DirectionIndicator m_DirectionIndicator;
@@ -95,11 +95,13 @@ public class WalkerAgent : Agent
         {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
 
 
-    //public void Awake()
-    //{
-    //    var bpScript = GetComponent<BehaviorParameters>();
-    //    bpScript.BrainParameters.VectorObservationSize = 123;
-    //}
+    public void Awake()
+    {
+        var bpScript = this.AddComponent<BehaviorParameters>();
+        m_JdController = this.AddComponent<JointDriveController>();
+        var decisionRequester = this.AddComponent<DecisionRequester>(); 
+        bpScript.BrainParameters.VectorObservationSize = 123;
+    }
 
     public override void Initialize()
     {

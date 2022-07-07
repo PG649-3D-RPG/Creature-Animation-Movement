@@ -102,6 +102,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         for (var i = 0; i < ArenaCount; i++, posXCounter++)
         {
             var arena = GenerateArena(i, posXCounter, posZCounter, posX, arenaContainer);
+            var target = AddTargetToArena(arena);
+            GenerateCreature(arena);
             if (posXCounter == posX - 1)
             {
                 posXCounter = -1;
@@ -164,20 +166,19 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         return arena;
     }
 
-    public void GenerateCreature(GameObject arena)
+    private void GenerateCreature(GameObject arena)
     {
-        
         var creature = Instantiate(CreaturePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         creature.name = "Creature";
-        //creature.AddComponent<WalkerAgent>();
-        //creature.AddComponent<DecisionRequester>();
-        //creature.AddComponent<JointDriveController>();
-        //creature.AddComponent<BehaviorParameters>();
+        creature.AddComponent<WalkerAgent>();
     }
 
-    private void AddTargetToArena(GameObject arena)
+    private GameObject AddTargetToArena(GameObject arena)
     {
         var target = GameObject.Instantiate(TargetCubePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         target.name = "Creature Target";
+        target.AddComponent<WalkTargetScript>();
+
+        return target;
     }
 }

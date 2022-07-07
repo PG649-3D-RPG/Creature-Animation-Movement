@@ -2727,7 +2727,7 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 7102182538700851678, guid: d5f144a367666f44fa0adb5e01ef55e3, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 16
+  ArenaCount: 120
   TerrainSize: 128
   Depth: 10
   Scale: 2.5
@@ -4337,10 +4337,8 @@ MonoBehaviour:
   regenerateTerrainAfterXSteps: 100000
   placeTargetCubeRandomly: 1
   placeTargetCubeRandomlyAfterXSteps: 1
-  fastResetForTheFirstEpisodes: 1
   fastResetLength: 30000000
   notAllowedToTouchGround: 03000000
-  notAllowedToTouchGroundInFastPhase: 040000000200000001000000
   penalizeGroundContact: 1
 --- !u!114 &1666840326
 MonoBehaviour:
@@ -5843,10 +5841,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 203189385}
     m_Modifications:
-    - target: {fileID: 7954681287697178744, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
-      propertyPath: _arenaTerrain
-      value: 
-      objectReference: {fileID: 1438603205}
     - target: {fileID: 7954681287697178745, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
       propertyPath: m_RootOrder
       value: 2

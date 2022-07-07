@@ -30,8 +30,8 @@ public class WalkerAgent : Agent
 
     public float MTargetWalkingSpeed // property
     {
-        get { return m_TargetWalkingSpeed; }
-        set { m_TargetWalkingSpeed = Mathf.Clamp(value, .1f, m_maxWalkingSpeed); }
+        get => m_TargetWalkingSpeed;
+        set => m_TargetWalkingSpeed = Mathf.Clamp(value, .1f, m_maxWalkingSpeed);
     }
 
     const float m_maxWalkingSpeed = 10; //The max walking speed
@@ -76,16 +76,10 @@ public class WalkerAgent : Agent
     public int placeTargetCubeRandomlyAfterXSteps = 1;
 
     [SerializeField]
-    public bool fastResetForTheFirstEpisodes = true;
-
-    [SerializeField]
     public int fastResetLength = 10000000;
 
     [SerializeField]
     public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head };
-
-    [SerializeField]
-    public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
 
     [SerializeField] 
     public bool penalizeGroundContact = true;
@@ -100,279 +94,278 @@ public class WalkerAgent : Agent
         var bpScript = this.AddComponent<BehaviorParameters>();
         m_JdController = this.AddComponent<JointDriveController>();
         var decisionRequester = this.AddComponent<DecisionRequester>(); 
-        bpScript.BrainParameters.VectorObservationSize = 123;
+        //bpScript.BrainParameters.VectorObservationSize = 123;
     }
 
-    public override void Initialize()
-    {
-        _terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
-        _walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
+    //public override void Initialize()
+    //{
+    //    Debug.LogWarning($"Init 1");
 
-        m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
-        m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
+    //    _terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
 
-        if (fastResetForTheFirstEpisodes) notAllowedToTouchGround.AddRange(notAllowedToTouchGroundInFastPhase);
+    //    Debug.LogWarning($"Init 2");
 
+    //    _walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
 
-        //Get Body Parts
-        //and setup each body part
-
-        var transforms = GetComponentsInChildren<Transform>();
-        foreach (var trans in transforms)
-        {
-            // Double check if categories change!
-            var boneScript = trans.GetComponent<Bone>();
-            if (boneScript != null && boneScript.category is not BoneCategory.Other)
-            {
-                bodyParts.Add(trans);
-                var groundContact = trans.AddComponent<GroundContact>();
-                // TODO Config Ground Contact
-                if (notAllowedToTouchGround.Contains(boneScript.category))
-                {
-                    groundContact.agentDoneOnGroundContact = true;
-                }
-
-                if (penalizeGroundContact && penaltiesForBodyParts.ContainsKey(boneScript.category))
-                {
-                    groundContact.penalizeGroundContact = true;
-                    groundContact.groundContactPenalty = penaltiesForBodyParts.GetValueOrDefault(boneScript.category);
-                }
-                var bodyPartHeight = trans.position.y - transform.position.y;
-                m_JdController.SetupBodyPart(trans, bodyPartHeight);
-            }
-            else if (boneScript != null && boneScript.category is BoneCategory.Other)
-            {
-                otherTransform = trans;
-                _otherStartingRotation = trans.rotation;
-            }
-
-        }
-
-        _otherBodyPartHeight = otherTransform.position.y - transform.position.y;
+    //    Debug.LogWarning($"Init 3");
 
 
-        m_JdController = GetComponent<JointDriveController>();
-
-        SetWalkerOnGround();
-    }
+    //    //m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
+    //    //m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
 
 
-    /// <summary>
-    /// Is called on episode beginn.
-    /// Loop over body parts and reset them to initial conditions.
-    /// Regenerate terrain and place target cube randomly 
-    /// </summary>
-    public override void OnEpisodeBegin()
-    {
-        episodeCounter++;
+    //    //Get Body Parts
+    //    //and setup each body part
 
-        if (regenerateTerrain && episodeCounter % regenerateTerrainAfterXSteps == 0)
-        {
-            _terrainGenerator.RegenerateTerrain();
-        }
+    //    var transforms = GetComponentsInChildren<Transform>();
+    //    Debug.LogWarning($"transforms count {transforms.Length}");
+    //    foreach (var trans in transforms)
+    //    {
+    //        // Double check if categories change!
+    //        var boneScript = trans.GetComponent<Bone>();
+    //        Debug.Log($"BoneScript");
+    //        if (boneScript != null && boneScript.category is not BoneCategory.Other)
+    //        {
+    //            bodyParts.Add(trans);
+    //            var groundContact = trans.AddComponent<GroundContact>();
+    //            // TODO Config Ground Contact
+    //            if (notAllowedToTouchGround.Contains(boneScript.category))
+    //            {
+    //                groundContact.agentDoneOnGroundContact = true;
+    //            }
 
-        if (placeTargetCubeRandomly && episodeCounter % placeTargetCubeRandomlyAfterXSteps == 0)
-        {
-            _walkTargetScript.PlaceTargetCubeRandomly();
-        }
+    //            if (penalizeGroundContact && penaltiesForBodyParts.ContainsKey(boneScript.category))
+    //            {
+    //                groundContact.penalizeGroundContact = true;
+    //                groundContact.groundContactPenalty = penaltiesForBodyParts.GetValueOrDefault(boneScript.category);
+    //            }
+    //            var bodyPartHeight = trans.position.y - transform.position.y;
+    //            m_JdController.SetupBodyPart(trans, bodyPartHeight);
+    //        }
+    //        else if (boneScript != null && boneScript.category is BoneCategory.Other)
+    //        {
+    //            otherTransform = trans;
+    //            _otherStartingRotation = trans.rotation;
+    //        }
 
-        if (fastResetForTheFirstEpisodes && episodeCounter == fastResetLength)
-        {
-            notAllowedToTouchGround.RemoveAll(x => notAllowedToTouchGroundInFastPhase.Contains(x));
-            foreach (var bp in bodyParts)
-            {
-                bp.GetComponent<GroundContact>().agentDoneOnGroundContact = false;
-            }
-        }
+    //    }
 
-        SetWalkerOnGround();
-
-        //Random start rotation to help generalize
-        //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
-
-        UpdateOrientationObjects();
-
-        //Set our goal walking speed
-        MTargetWalkingSpeed =
-            randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
-    }
+    //    _otherBodyPartHeight = otherTransform.position.y - transform.position.y;
 
 
-    /// <summary>
-    /// Set the walker on the terrain.
-    /// </summary>
-    public void SetWalkerOnGround()
-    {
-        var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
-        var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
+    //    m_JdController = GetComponent<JointDriveController>();
 
-        Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
-        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + _otherBodyPartHeight + yheightOffset, otherTransform.position.z);
-        otherTransform.rotation = _otherStartingRotation;
-
-        otherRigidbody.velocity = Vector3.zero;
-        otherRigidbody.angularVelocity = Vector3.zero;
-
-        //Reset all of the body parts
-        foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
-        {
-            bodyPart.Reset(bodyPart, terrainHeight, yheightOffset);
-        }
-    }
+    //    //SetWalkerOnGround();
+    //}
 
 
-    /// <summary>
-    /// Safeguard if the walker leaves the playable area
-    /// </summary>
-    private void CheckWalkerOutOfBound()
-    {
-        if (otherTransform.position.y is < -10 or > 40)
-        {
-            SetWalkerOnGround();
-        }
-    }
+    ///// <summary>
+    ///// Is called on episode beginn.
+    ///// Loop over body parts and reset them to initial conditions.
+    ///// Regenerate terrain and place target cube randomly 
+    ///// </summary>
+    //public override void OnEpisodeBegin()
+    //{
+    //    episodeCounter++;
 
-    /// <summary>
-    /// Add relevant information on each body part to observations.
-    /// </summary>
-    public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
-    {
-        //GROUND CHECK
-        sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
+    //    if (regenerateTerrain && episodeCounter % regenerateTerrainAfterXSteps == 0)
+    //    {
+    //        _terrainGenerator.RegenerateTerrain();
+    //    }
 
-        //Get velocities in the context of our orientation cube's space
-        //Note: You can get these velocities in world space as well but it may not train as well.
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
+    //    if (placeTargetCubeRandomly && episodeCounter % placeTargetCubeRandomlyAfterXSteps == 0)
+    //    {
+    //        _walkTargetScript.PlaceTargetCubeRandomly();
+    //    }
 
-        //Get position relative to hips in the context of our orientation cube's space
-        // TODO Why do we do this?
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - otherTransform.position));
+    //    SetWalkerOnGround();
 
-        if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
-        {
-            sensor.AddObservation(bp.rb.transform.localRotation);
-            sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
-        }
-    }
+    //    //Random start rotation to help generalize
+    //    //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
 
-    /// <summary>
-    /// Loop over body parts to add them to observation.
-    /// </summary>
-    public override void CollectObservations(VectorSensor sensor)
-    {
-        var cubeForward = m_OrientationCube.transform.forward;
+    //    UpdateOrientationObjects();
 
-        //velocity we want to match
-        var velGoal = cubeForward * MTargetWalkingSpeed;
-        //ragdoll's avg vel
-        var avgVel = GetAvgVelocity();
+    //    //Set our goal walking speed
+    //    MTargetWalkingSpeed =
+    //        randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, m_maxWalkingSpeed) : MTargetWalkingSpeed;
+    //}
 
-        //current ragdoll velocity. normalized
-        sensor.AddObservation(Vector3.Distance(velGoal, avgVel));
-        //avg body vel relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(avgVel));
-        //vel goal relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(velGoal));
 
-        //rotation deltas
-        sensor.AddObservation(Quaternion.FromToRotation(otherTransform.forward, cubeForward));
+    ///// <summary>
+    ///// Set the walker on the terrain.
+    ///// </summary>
+    //public void SetWalkerOnGround()
+    //{
+    //    var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
+    //    var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
 
-        //Position of target position relative to cube
-        sensor.AddObservation(m_OrientationCube.transform.InverseTransformPoint(target.transform.position));
+    //    Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
+    //    otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + _otherBodyPartHeight + yheightOffset, otherTransform.position.z);
+    //    otherTransform.rotation = _otherStartingRotation;
 
-        foreach (var bodyPart in m_JdController.bodyPartsList)
-        {
-            CollectObservationBodyPart(bodyPart, sensor);
-            //rotation deltas for the head
-            if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
-        }
-    }
+    //    otherRigidbody.velocity = Vector3.zero;
+    //    otherRigidbody.angularVelocity = Vector3.zero;
 
-    public override void OnActionReceived(ActionBuffers actionBuffers)
-    {
-        AddReward(1f);
-        var bpList = m_JdController.bodyPartsList;
-        var i = -1;
+    //    //Reset all of the body parts
+    //    foreach (var bodyPart in m_JdController.bodyPartsDict.Values)
+    //    {
+    //        bodyPart.Reset(bodyPart, terrainHeight, yheightOffset);
+    //    }
+    //}
 
-        var continuousActions = actionBuffers.ContinuousActions;
-        foreach (var parts in bpList)
-        {
-            float x_target = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            float y_target = parts.joint.angularYMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            float z_target = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            parts.SetJointTargetRotation(x_target, y_target, z_target);
-            parts.SetJointStrength(continuousActions[++i]);
-        }
-    }
 
-    //Update OrientationCube and DirectionIndicator
-    void UpdateOrientationObjects()
-    {
-        m_WorldDirToWalk = target.position - otherTransform.position;
-        m_OrientationCube.UpdateOrientation(otherTransform, target);
-        if (m_DirectionIndicator)
-        {
-            m_DirectionIndicator.MatchOrientation(m_OrientationCube.transform);
-        }
-    }
+    ///// <summary>
+    ///// Safeguard if the walker leaves the playable area
+    ///// </summary>
+    //private void CheckWalkerOutOfBound()
+    //{
+    //    if (otherTransform.position.y is < -10 or > 40)
+    //    {
+    //        SetWalkerOnGround();
+    //    }
+    //}
 
-    void FixedUpdate()
-    {
-        CheckWalkerOutOfBound();
-        UpdateOrientationObjects();
+    ///// <summary>
+    ///// Add relevant information on each body part to observations.
+    ///// </summary>
+    //public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
+    //{
+    //    //GROUND CHECK
+    //    sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
 
-        var cubeForward = m_OrientationCube.transform.forward;
+    //    //Get velocities in the context of our orientation cube's space
+    //    //Note: You can get these velocities in world space as well but it may not train as well.
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.velocity));
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
-        // Set reward for this step according to mixture of the following elements.
-        // a. Match target speed
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+    //    //Get position relative to hips in the context of our orientation cube's space
+    //    // TODO Why do we do this?
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(bp.rb.position - otherTransform.position));
 
-        // b. Rotation alignment with target direction.
-        //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Head).Sum(part => (Vector3.Dot(cubeForward, part.forward) + 1) * .5F);
+    //    if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
+    //    {
+    //        sensor.AddObservation(bp.rb.transform.localRotation);
+    //        sensor.AddObservation(bp.currentStrength / m_JdController.maxJointForceLimit);
+    //    }
+    //}
 
-        if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
+    ///// <summary>
+    ///// Loop over body parts to add them to observation.
+    ///// </summary>
+    //public override void CollectObservations(VectorSensor sensor)
+    //{
+    //    var cubeForward = m_OrientationCube.transform.forward;
 
-         AddReward(matchSpeedReward * lookAtTargetReward);
-    }
+    //    //velocity we want to match
+    //    var velGoal = cubeForward * MTargetWalkingSpeed;
+    //    //ragdoll's avg vel
+    //    var avgVel = GetAvgVelocity();
 
-    //Returns the average velocity of all of the body parts
-    //Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
-    //...using the average helps prevent this erratic movement
-    Vector3 GetAvgVelocity()
-    {
-        Vector3 velSum = Vector3.zero;
+    //    //current ragdoll velocity. normalized
+    //    sensor.AddObservation(Vector3.Distance(velGoal, avgVel));
+    //    //avg body vel relative to cube
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(avgVel));
+    //    //vel goal relative to cube
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformDirection(velGoal));
 
-        //ALL RBS
-        int numOfRb = 0;
-        foreach (var item in m_JdController.bodyPartsList)
-        {
-            numOfRb++;
-            velSum += item.rb.velocity;
-        }
+    //    //rotation deltas
+    //    sensor.AddObservation(Quaternion.FromToRotation(otherTransform.forward, cubeForward));
 
-        var avgVel = velSum / numOfRb;
-        return avgVel;
-    }
+    //    //Position of target position relative to cube
+    //    sensor.AddObservation(m_OrientationCube.transform.InverseTransformPoint(target.transform.position));
 
-    //normalized value of the difference in avg speed vs goal walking speed.
-    public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
-    {
-        //distance between our actual velocity and goal velocity
-        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
+    //    foreach (var bodyPart in m_JdController.bodyPartsList)
+    //    {
+    //        CollectObservationBodyPart(bodyPart, sensor);
+    //        //rotation deltas for the head
+    //        if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
+    //    }
+    //}
 
-        //return the value on a declining sigmoid shaped curve that decays from 1 to 0
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
-    }
+    //public override void OnActionReceived(ActionBuffers actionBuffers)
+    //{
+    //    AddReward(1f);
+    //    var bpList = m_JdController.bodyPartsList;
+    //    var i = -1;
 
-    /// <summary>
-    /// Agent touched the target
-    /// </summary>
-    public void TouchedTarget()
-    {
-        AddReward(1f);
-    }
+    //    var continuousActions = actionBuffers.ContinuousActions;
+    //    foreach (var parts in bpList)
+    //    {
+    //        float x_target = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+    //        float y_target = parts.joint.angularYMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+    //        float z_target = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+    //        parts.SetJointTargetRotation(x_target, y_target, z_target);
+    //        parts.SetJointStrength(continuousActions[++i]);
+    //    }
+    //}
+
+    ////Update OrientationCube and DirectionIndicator
+    //void UpdateOrientationObjects()
+    //{
+    //    m_WorldDirToWalk = target.position - otherTransform.position;
+    //    m_OrientationCube.UpdateOrientation(otherTransform, target);
+    //    if (m_DirectionIndicator)
+    //    {
+    //        m_DirectionIndicator.MatchOrientation(m_OrientationCube.transform);
+    //    }
+    //}
+
+    //void FixedUpdate()
+    //{
+    //    CheckWalkerOutOfBound();
+    //    UpdateOrientationObjects();
+
+    //    var cubeForward = m_OrientationCube.transform.forward;
+
+    //    // Set reward for this step according to mixture of the following elements.
+    //    // a. Match target speed
+    //    //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+    //    var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+
+    //    // b. Rotation alignment with target direction.
+    //    //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
+    //    var lookAtTargetReward = bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Head).Sum(part => (Vector3.Dot(cubeForward, part.forward) + 1) * .5F);
+
+    //    if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
+
+    //    AddReward(matchSpeedReward * lookAtTargetReward);
+    //}
+
+    ////Returns the average velocity of all of the body parts
+    ////Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
+    ////...using the average helps prevent this erratic movement
+    //Vector3 GetAvgVelocity()
+    //{
+    //    Vector3 velSum = Vector3.zero;
+
+    //    //ALL RBS
+    //    int numOfRb = 0;
+    //    foreach (var item in m_JdController.bodyPartsList)
+    //    {
+    //        numOfRb++;
+    //        velSum += item.rb.velocity;
+    //    }
+
+    //    var avgVel = velSum / numOfRb;
+    //    return avgVel;
+    //}
+
+    ////normalized value of the difference in avg speed vs goal walking speed.
+    //public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
+    //{
+    //    //distance between our actual velocity and goal velocity
+    //    var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
+
+    //    //return the value on a declining sigmoid shaped curve that decays from 1 to 0
+    //    //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+    //    return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+    //}
+
+    ///// <summary>
+    ///// Agent touched the target
+    ///// </summary>
+    //public void TouchedTarget()
+    //{
+    //    AddReward(1f);
+    //}
 }

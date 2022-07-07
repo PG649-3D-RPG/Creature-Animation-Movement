@@ -13,10 +13,6 @@ public class WalkTargetScript : MonoBehaviour
     private bool _isMovingTarget = true;
     [SerializeField]
     private float _movementSpeed = 0.1f;
-    [SerializeField]
-    private bool _jumpingTarget = false;
-    [SerializeField]
-    private float _jumpingHeight = 0.1f;
     [SerializeField] private int _targetMaxSecondsInOneDirection = 10;
 
     private Random _random;
@@ -40,7 +36,6 @@ public class WalkTargetScript : MonoBehaviour
         _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
-        if (_jumpingTarget) _ = StartCoroutine(nameof(Jump));
     }
 
     /// <summary>
@@ -94,18 +89,6 @@ public class WalkTargetScript : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Jump randomly every x seconds
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator Jump()
-    {
-        while (true)
-        {
-            _thisRigidbody.MovePosition(transform.position + (_jumpingHeight * Time.deltaTime * (_targetDirection + Vector3.up)));
-            yield return new WaitForSeconds(UnityEngine.Random.Range(1, 15));
-        }
-    }
 
     /// <summary>
     /// Move to random direction if target collided with walls or

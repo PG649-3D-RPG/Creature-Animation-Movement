@@ -41,6 +41,7 @@ public class WalkerAgent : Agent
 
     public void Awake()
     {
+        deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         jdController = this.AddComponent<JointDriveController>();
         decisionRequester = this.AddComponent<DecisionRequester>(); 
     }

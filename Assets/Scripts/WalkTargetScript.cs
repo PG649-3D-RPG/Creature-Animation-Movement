@@ -27,7 +27,7 @@ public class WalkTargetScript : MonoBehaviour
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
 
         Rng = new Random();
-        TerrainGenerator = transform.parent.GetComponent<TerrainGenerator>();
+        TerrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));

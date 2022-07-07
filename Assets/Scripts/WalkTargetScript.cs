@@ -15,7 +15,8 @@ public class WalkTargetScript : MonoBehaviour
 
     private TerrainGenerator TerrainGenerator { get; set; }
 
-    private DynamicEnviormentGenerator Deg => transform.GetComponentInParent<DynamicEnviormentGenerator>();
+    private DynamicEnviormentGenerator Deg => GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+
 
     /// <summary>
     /// Start is called before the first frame update

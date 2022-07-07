@@ -64,7 +64,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField] 
     public bool penalizeGroundContact = true;
     [SerializeField]
-    private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
+    public FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
         {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
 
 
@@ -75,6 +75,18 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float MovementSpeed = 0.1f;
     [SerializeField] 
     public int TargetMaxSecondsInOneDirection = 10;
+
+    [SerializeField]
+    public float targetWalkingSpeed = 10;
+    [SerializeField]
+    public float maxWalkingSpeed = 10;
+    //Should the agent sample a new goal velocity each episode?
+    //If true, walkSpeed will be randomly set between zero and m_maxWalkingSpeed in OnEpisodeBegin()
+    //If false, the goal velocity will be walkingSpeed
+    [SerializeField]
+    public bool randomizeWalkSpeedEachEpisode;
+    [SerializeField]
+    public float yheightOffset = 0.05f;
 
     // Start is called before the first frame update
     void Awake()

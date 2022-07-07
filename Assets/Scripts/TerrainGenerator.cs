@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    private DynamicEnviormentGenerator Deg => GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+    private  DynamicEnviormentGenerator Deg { get; set; }
 
     private GameObject ObstaclesContainer { get; set; }
 
@@ -24,6 +24,7 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         ObstaclesContainer = new GameObject
         {
             name = "Obstacle Container",

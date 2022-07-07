@@ -15,7 +15,7 @@ public class WalkTargetScript : MonoBehaviour
 
     private TerrainGenerator TerrainGenerator { get; set; }
 
-    private DynamicEnviormentGenerator Deg => GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+    private DynamicEnviormentGenerator Deg { get; set; }
 
 
     /// <summary>
@@ -24,6 +24,8 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     void Start()
     {
+        Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+
         Rng = new Random();
         TerrainGenerator = transform.parent.GetComponent<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();

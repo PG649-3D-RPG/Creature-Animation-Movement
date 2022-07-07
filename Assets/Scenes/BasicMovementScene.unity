@@ -460,6 +460,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: WalkerRagdoll
       objectReference: {fileID: 0}
+    - target: {fileID: 895268871377934297, guid: 5b0b7398ddb11d94bb50c8de9e907bbc, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: 7d99313c9aa149d438b0548506a452fc, type: 3}
     - target: {fileID: 895268871377934298, guid: 5b0b7398ddb11d94bb50c8de9e907bbc, type: 3}
       propertyPath: m_RootOrder
       value: 0

@@ -8,26 +8,16 @@ using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public int width { get; set; } = 128; //x-axis of the terrain
-    public int length { get; set; } = 128; //z-axis
+    public DynamicEnviormentGenerator Deg { get; set; }
 
-    public int depth { get; set; } = 10; //y-axis
-
-    public float scale { get; set; } = 2.5f;
-
-    public float offsetX { get; set; } = 100f;
-    public float offsetY { get; set; } = 100f;
+    private GameObject _obstaclesContainer { get; set; }
 
     private Terrain terrain { get; set; }
 
-    private GameObject _obstaclesContainer { get; set; } 
+    private float OffsetX { get; set; } = 100f;
+    
+    private float OffsetY { get; set; } = 100f;
 
-    public bool _generateObstacles { get; set; }  = true;
-    public bool _generateHeights { get; set; } = true;
-    public bool _bakeNavMesh { get; set; } = true;
-    public GameObject  _obstaclesPrefab { get; set; }
-    public float _obstacleThreshold { get; set; } = 0.9f;
-    public float _scaleObstacle { get; set; }  = 10f;
 
     /// <summary>
     /// 
@@ -43,8 +33,8 @@ public class TerrainGenerator : MonoBehaviour
 
     public void Start()
     {
-        offsetX = Random.Range(0f, 9999f);
-        offsetY = Random.Range(0f, 9999f);
+        OffsetX = Random.Range(0f, 9999f);
+        OffsetY = Random.Range(0f, 9999f);
         terrain = GetComponent<Terrain>();
         RegenerateTerrain();
     }
@@ -54,8 +44,8 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     public void RegenerateTerrain()
     {
-        offsetX = Random.Range(0f, 9999f);
-        offsetY = Random.Range(0f, 9999f);
+        OffsetX = Random.Range(0f, 9999f);
+        OffsetY = Random.Range(0f, 9999f);
 
         // Kill obstacles
         foreach (Transform child in _obstaclesContainer.transform)
@@ -66,7 +56,7 @@ public class TerrainGenerator : MonoBehaviour
         // Generate Terrain
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
 
-        if (!_bakeNavMesh) return; // Skipp Nav Mesh generation
+        if (!Deg.BakeNavMesh) return; // Skipp Nav Mesh generation
         //NavMeshBuilder.ClearAllNavMeshes();
         //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
         //NavMeshBuilder.BuildNavMeshAsync();
@@ -102,34 +92,34 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns></returns>
     private TerrainData GenerateTerrain(TerrainData terrainData)
     {
-        terrainData.heightmapResolution = width + 1;
-        terrainData.size = new Vector3(width, depth, length);
+        terrainData.heightmapResolution = Deg.TerrainSize + 1;
+        terrainData.size = new Vector3(Deg.TerrainSize, Deg.Depth, Deg.TerrainSize);
 
 
         // Generate terrain data
-        if (!_generateHeights) return terrainData; // Do not generate terrain with heights
+        if (!Deg.GenerateHeights) return terrainData; // Do not generate terrain with heights
 
-        var heights = new float[width, length];
-        for (var x = 0; x < width; x++)
+        var heights = new float[Deg.TerrainSize, Deg.TerrainSize];
+        for (var x = 0; x < Deg.TerrainSize; x++)
         {
-            for (var y = 0; y < length; y++)
+            for (var y = 0; y < Deg.TerrainSize; y++)
             {
-                heights[x, y] = Mathf.PerlinNoise((float)x / width * scale + offsetX, (float)y / length * scale + offsetY);
+                heights[x, y] = Mathf.PerlinNoise((float)x / Deg.TerrainSize * Deg.Scale + OffsetX, (float)y / Deg.TerrainSize * Deg.Scale + OffsetY);
             }
         }
 
         terrainData.SetHeights(0, 0, heights);
 
         // Generate obstacles
-        if (!_generateObstacles) return terrainData; // Do not generate obstacles
+        if (!Deg.GenerateObstacles) return terrainData; // Do not generate obstacles
 
-        for (var x = 1; x < width - 1; x++)
+        for (var x = 1; x < Deg.TerrainSize - 1; x++)
         {
-            for (var y = 1; y < length - 1; y++)
+            for (var y = 1; y < Deg.TerrainSize - 1; y++)
             {
 
-                if (!(Mathf.PerlinNoise((x + offsetX) / width * _scaleObstacle, (y + offsetY) / length * _scaleObstacle + offsetY) > _obstacleThreshold)) continue;
-                var newObstacle = GameObject.Instantiate(_obstaclesPrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
+                if (!(Mathf.PerlinNoise((x + OffsetX) / Deg.TerrainSize * Deg.ScaleObstacle, (y + OffsetY) / Deg.TerrainSize * Deg.ScaleObstacle + OffsetY) > Deg.ObstacleThreshold)) continue;
+                var newObstacle = GameObject.Instantiate(Deg.ObstaclePrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
                 newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
             }
         }

@@ -66,7 +66,16 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     private FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
         {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
-    
+
+
+    [Header("Target Settings")] 
+    [SerializeField]
+    public bool _isMovingTarget = true;
+    [SerializeField]
+    public float _movementSpeed = 0.1f;
+    [SerializeField] 
+    public int _targetMaxSecondsInOneDirection = 10;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -140,15 +149,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
         colliderObj.terrainData = terrain.terrainData;
-        terrainGenerator.width = TerrainSize;
-        terrainGenerator.length = TerrainSize;
-        terrainGenerator._bakeNavMesh = BakeNavMesh;
-        terrainGenerator._generateHeights = GenerateHeights;
-        terrainGenerator._generateObstacles = GenerateObstacles;
-        terrainGenerator._scaleObstacle = ScaleObstacle;
-        terrainGenerator.depth = Depth;
-        terrainGenerator.scale = Scale;
-        terrainGenerator._obstaclesPrefab = ObstaclePrefab;
+        terrainGenerator.Deg = this;
 
         var wall1 = Instantiate(WallPrefab, new Vector3(64, 12, 126), Quaternion.identity, terrain.transform);
         wall1.name = "Wall North";

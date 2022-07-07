@@ -392,9 +392,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 1
-  limbIndex: 0
-  boneIndex: 1
 --- !u!1 &108534373
 GameObject:
   m_ObjectHideFlags: 0
@@ -740,9 +737,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 0
-  limbIndex: 0
-  boneIndex: 1
 --- !u!136 &170135518
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -934,9 +928,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 8
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &175130089
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1149,9 +1140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 0
-  limbIndex: 1
-  boneIndex: 0
 --- !u!136 &226636363
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1408,9 +1396,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 3
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &262582601
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1895,9 +1880,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 7
-  limbIndex: 1
-  boneIndex: 0
 --- !u!136 &504235364
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2585,9 +2567,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 7
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &1098728494
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2748,13 +2727,20 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 7102182538700851678, guid: d5f144a367666f44fa0adb5e01ef55e3, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 100
+  ArenaCount: 10
   TerrainSize: 128
   Depth: 10
   Scale: 2.5
   GenerateObstacles: 0
   GenerateHeights: 1
   BakeNavMesh: 0
+  regenerateTerrain: 1
+  regenerateTerrainAfterXSteps: 1
+  placeTargetCubeRandomly: 1
+  placeTargetCubeRandomlyAfterXSteps: 1
+  fastResetForTheFirstEpisodes: 1
+  fastResetLength: 10000000
+  penalizeGroundContact: 1
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3045,9 +3031,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 1
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &1308350479
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3321,9 +3304,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 0
-  limbIndex: 1
-  boneIndex: 1
 --- !u!136 &1344028331
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3705,9 +3685,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 2
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &1541495163
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3980,9 +3957,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 1
-  limbIndex: 1
-  boneIndex: 0
 --- !u!136 &1611422937
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4354,6 +4328,7 @@ MonoBehaviour:
   target: {fileID: 823835494}
   bodyParts: []
   otherTransform: {fileID: 0}
+  m_OrientationCube: {fileID: 0}
   m_JdController: {fileID: 1666840327}
   yheightOffset: 0.075
   regenerateTerrain: 1
@@ -4638,9 +4613,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 5
-  limbIndex: 1
-  boneIndex: 0
 --- !u!65 &1772474571
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4912,9 +4884,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 4
-  limbIndex: 0
-  boneIndex: 0
 --- !u!135 &1870964481
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5105,9 +5074,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 1
-  limbIndex: 1
-  boneIndex: 1
 --- !u!136 &1911918421
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5364,9 +5330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 4
-  limbIndex: 1
-  boneIndex: 0
 --- !u!135 &1971110425
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -5557,9 +5520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 0
-  limbIndex: 0
-  boneIndex: 0
 --- !u!136 &1986397959
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5718,9 +5678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f57f24d18a7e934f95f14a0986c27fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  category: 5
-  limbIndex: 0
-  boneIndex: 0
 --- !u!65 &2086184120
 BoxCollider:
   m_ObjectHideFlags: 0

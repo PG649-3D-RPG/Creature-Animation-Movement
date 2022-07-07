@@ -1,11 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Numerics;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
@@ -21,7 +24,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Arena Settings")]
     [SerializeField]
-    public int ArenaCount = 100;
+    public int ArenaCount = 10;
 
 
     [Header("Terrain settings")]
@@ -77,7 +80,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     
     void Awake()
     {
-         GenerateArena();
+        GenerateArena();
+
         //GenerateCreature(arena);
         //AddTargetToArena(arena);
     }
@@ -85,31 +89,45 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    void Start()
+    {
     }
 
     private void GenerateArena()
     {
         var posX = (int) Math.Ceiling(Math.Sqrt(ArenaCount));
-        var posZ = posX;
 
         var posXCounter = 0;
         var posZCounter = 0;
 
-        var arenaContainer = new GameObject(name = "Arena Container");
-
-        var arena = new GameObject();
+        var arenaContainer = new GameObject
+        {
+            name = "Arena Container"
+        };
 
         for (var i = 0; i < ArenaCount; i++, posXCounter++)
         {
-            Instantiate(arena, new Vector3(posXCounter * TerrainSize, 0, posZCounter * TerrainSize),
-                Quaternion.identity, arenaContainer.transform);
-            arena.name = $"Arena {i}";
+            var arena = new GameObject
+            {
+                name = $"Arena {i}",
+                transform =
+                {
+                    parent = arenaContainer.transform,
+                    localPosition = new Vector3(posXCounter * TerrainSize, 0, posZCounter * TerrainSize )
+                }
+            };
 
             var terrainObj = new GameObject
             {
                 name = $"Terrain {i}",
-                transform = { parent = arena.transform}
+                transform =
+                {
+                    parent = arena.transform,
+                    localPosition = Vector3.zero
+                }
             };
 
 
@@ -130,12 +148,17 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
             var wall1 = Instantiate(WallPrefab, new Vector3(64, 12, 126), Quaternion.identity, terrain.transform);
             wall1.name = "Wall North";
+            wall1.transform.localPosition = new Vector3(64, 12, 126);
             var wall2 = Instantiate(WallPrefab, new Vector3(126, 12, 64), Quaternion.Euler(0, 90, 0), terrain.transform);
             wall2.name = "Wall East";
+            wall2.transform.localPosition = new Vector3(126, 12, 64);
             var wall3 = Instantiate(WallPrefab, new Vector3(64, 12, 2), Quaternion.identity, terrain.transform);
             wall3.name = "Wall South";
+            wall3.transform.localPosition = new Vector3(64, 12, 2);
             var wall4 = Instantiate(WallPrefab, new Vector3(2, 12, 64), Quaternion.Euler(0, 90, 0), terrain.transform);
             wall4.name = "Wall West";
+            wall4.transform.localPosition = new Vector3(2, 12, 64);
+
 
             if (posXCounter == posX - 1)
             {
@@ -143,8 +166,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
                 posZCounter++;
             }
         }
-
-        Destroy(arena);
     }
 
     public void GenerateCreature(GameObject arena)

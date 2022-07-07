@@ -50,7 +50,7 @@ public class WalkerAgent : Agent
         terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
         // TODO: Update
-        target = transform.parent.Find("target").transform;
+        target = transform.parent.Find("Creature Target").transform;
         orientationCube = transform.Find("orientation cube").AddComponent<OrientationCubeController>();
 
         //Get Body Parts

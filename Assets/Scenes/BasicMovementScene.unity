@@ -2727,7 +2727,7 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 7102182538700851678, guid: d5f144a367666f44fa0adb5e01ef55e3, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 120
+  ArenaCount: 2
   TerrainSize: 128
   Depth: 10
   Scale: 2.5
@@ -2743,6 +2743,13 @@ MonoBehaviour:
   notAllowedToTouchGround: 06000000
   notAllowedToTouchGroundInFastPhase: 030000000700000005000000
   penalizeGroundContact: 1
+  IsMovingTarget: 1
+  MovementSpeed: 0.1
+  TargetMaxSecondsInOneDirection: 10
+  targetWalkingSpeed: 10
+  maxWalkingSpeed: 10
+  randomizeWalkSpeedEachEpisode: 0
+  yheightOffset: 0.05
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4325,21 +4332,6 @@ MonoBehaviour:
     maxStep: 0
   hasUpgradedFromAgentParameters: 1
   MaxStep: 5000
-  m_TargetWalkingSpeed: 10
-  randomizeWalkSpeedEachEpisode: 0
-  target: {fileID: 823835494}
-  bodyParts: []
-  otherTransform: {fileID: 0}
-  m_OrientationCube: {fileID: 0}
-  m_JdController: {fileID: 1666840327}
-  yheightOffset: 0.075
-  regenerateTerrain: 1
-  regenerateTerrainAfterXSteps: 100000
-  placeTargetCubeRandomly: 1
-  placeTargetCubeRandomlyAfterXSteps: 1
-  fastResetLength: 30000000
-  notAllowedToTouchGround: 03000000
-  penalizeGroundContact: 1
 --- !u!114 &1666840326
 MonoBehaviour:
   m_ObjectHideFlags: 0

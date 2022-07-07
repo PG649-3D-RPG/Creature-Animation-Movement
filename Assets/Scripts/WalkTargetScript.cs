@@ -5,35 +5,27 @@ using Random = System.Random;
 
 public class WalkTargetScript : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _arenaTerrain;
-    private int _arenaWidth;
-    private int _arenaLength;
-    [SerializeField]
-    private bool _isMovingTarget = true;
-    [SerializeField]
-    private float _movementSpeed = 0.1f;
-    [SerializeField] private int _targetMaxSecondsInOneDirection = 10;
+    private GameObject ArenaTerrain { get; set; }
 
-    private Random _random;
+    private Random Rng { get; set; }
 
-    private Vector3 _targetDirection;
+    private Vector3 TargetDirection { get; set; }
 
-    private Rigidbody _thisRigidbody;
+    private Rigidbody ThisRigidbody { get; set; }
 
-    private TerrainGenerator _terrainGenerator;
-    
+    private TerrainGenerator TerrainGenerator { get; set; }
+
+    private DynamicEnviormentGenerator Deg => transform.GetComponentInParent<DynamicEnviormentGenerator>();
+
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     /// <returns></returns>
     void Start()
     {
-        _random = new Random();
-        _terrainGenerator = _arenaTerrain.GetComponent<TerrainGenerator>();
-        _arenaWidth = _terrainGenerator.width;
-        _arenaLength = _terrainGenerator.length;
-        _thisRigidbody = transform.GetComponentInChildren<Rigidbody>();
+        Rng = new Random();
+        TerrainGenerator = transform.parent.GetComponent<TerrainGenerator>();
+        ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
     }
@@ -45,7 +37,7 @@ public class WalkTargetScript : MonoBehaviour
     public void FixedUpdate()
     {
         // Move the target randomly
-        if (_isMovingTarget)
+        if (Deg.IsMovingTarget)
         {
             MoveTargetRandomlyPerTick();
         }
@@ -61,9 +53,9 @@ public class WalkTargetScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        var x = UnityEngine.Random.Range(4 , _arenaWidth-4);
-        var z = UnityEngine.Random.Range(4, _arenaLength-4);
-        var y = _terrainGenerator.GetTerrainHeight(x, z) + 1f;
+        var x = UnityEngine.Random.Range(4 , Deg .TerrainSize - 4);
+        var z = UnityEngine.Random.Range(4, Deg.TerrainSize  - 4);
+        var y = TerrainGenerator.GetTerrainHeight(x, z) + 1f;
         transform.localPosition = new Vector3(x, y, z);
     }
 
@@ -73,7 +65,7 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     public void MoveTargetRandomlyPerTick()
     {
-        _thisRigidbody.MovePosition(transform.position + (_movementSpeed * Time.deltaTime * _targetDirection));
+        ThisRigidbody.MovePosition(transform.position + (Deg.MovementSpeed * Time.deltaTime * TargetDirection));
     }
 
     /// <summary> 
@@ -84,8 +76,8 @@ public class WalkTargetScript : MonoBehaviour
     {
         while (true)
         {
-            _targetDirection = Vector3.Normalize(new Vector3((float)(_random.NextDouble() * 2) - 1, 0, (float)(_random.NextDouble() * 2) - 1));
-            yield return new WaitForSeconds(UnityEngine.Random.Range(1, _targetMaxSecondsInOneDirection));
+            TargetDirection = Vector3.Normalize(new Vector3((float)(Rng.NextDouble() * 2) - 1, 0, (float)(Rng.NextDouble() * 2) - 1));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(1, Deg.TargetMaxSecondsInOneDirection));
         }
     }
 
@@ -98,7 +90,7 @@ public class WalkTargetScript : MonoBehaviour
     {
         if (collision.gameObject.name != "Terrain")
         {
-            _targetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * _targetDirection;
+            TargetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * TargetDirection;
         }
     }
 }

@@ -70,11 +70,11 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Target Settings")] 
     [SerializeField]
-    public bool _isMovingTarget = true;
+    public bool IsMovingTarget = true;
     [SerializeField]
-    public float _movementSpeed = 0.1f;
+    public float MovementSpeed = 0.1f;
     [SerializeField] 
-    public int _targetMaxSecondsInOneDirection = 10;
+    public int TargetMaxSecondsInOneDirection = 10;
 
     // Start is called before the first frame update
     void Awake()
@@ -149,7 +149,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
         colliderObj.terrainData = terrain.terrainData;
-        terrainGenerator.Deg = this;
 
         var wall1 = Instantiate(WallPrefab, new Vector3(64, 12, 126), Quaternion.identity, terrain.transform);
         wall1.name = "Wall North";

@@ -8,11 +8,11 @@ using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
-    public DynamicEnviormentGenerator Deg { get; set; }
+    private DynamicEnviormentGenerator Deg => transform.GetComponentInParent<DynamicEnviormentGenerator>();
 
-    private GameObject _obstaclesContainer { get; set; }
+    private GameObject ObstaclesContainer { get; set; }
 
-    private Terrain terrain { get; set; }
+    private Terrain Terrain { get; set; }
 
     private float OffsetX { get; set; } = 100f;
     
@@ -24,7 +24,7 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     private void Awake()
     {
-        _obstaclesContainer = new GameObject
+        ObstaclesContainer = new GameObject
         {
             name = "Obstacle Container",
             transform = { parent = this.transform }
@@ -35,7 +35,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         OffsetX = Random.Range(0f, 9999f);
         OffsetY = Random.Range(0f, 9999f);
-        terrain = GetComponent<Terrain>();
+        Terrain = GetComponent<Terrain>();
         RegenerateTerrain();
     }
 
@@ -48,13 +48,13 @@ public class TerrainGenerator : MonoBehaviour
         OffsetY = Random.Range(0f, 9999f);
 
         // Kill obstacles
-        foreach (Transform child in _obstaclesContainer.transform)
+        foreach (Transform child in ObstaclesContainer.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
 
         // Generate Terrain
-        terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        Terrain.terrainData = GenerateTerrain(Terrain.terrainData);
 
         if (!Deg.BakeNavMesh) return; // Skipp Nav Mesh generation
         //NavMeshBuilder.ClearAllNavMeshes();
@@ -119,7 +119,7 @@ public class TerrainGenerator : MonoBehaviour
             {
 
                 if (!(Mathf.PerlinNoise((x + OffsetX) / Deg.TerrainSize * Deg.ScaleObstacle, (y + OffsetY) / Deg.TerrainSize * Deg.ScaleObstacle + OffsetY) > Deg.ObstacleThreshold)) continue;
-                var newObstacle = GameObject.Instantiate(Deg.ObstaclePrefab, Vector3.zero, Quaternion.identity, _obstaclesContainer.transform);
+                var newObstacle = GameObject.Instantiate(Deg.ObstaclePrefab, Vector3.zero, Quaternion.identity, ObstaclesContainer.transform);
                 newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
             }
         }

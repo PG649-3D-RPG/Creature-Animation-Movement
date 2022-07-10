@@ -217,6 +217,7 @@ public class WalkerAgent : Agent
 
         foreach (var bodyPart in jdController.bodyPartsList)
         {
+            // TODO Hier fliegt der ArgumentException Fehler. Irgendwas ist wahrscheinlich mit unser Initialisierung falsch?
             Debug.Log($"Is BodyPart == null{bodyPart == null}  or sensor == null {sensor == null} ");
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head

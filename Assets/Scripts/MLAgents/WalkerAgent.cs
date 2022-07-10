@@ -35,8 +35,8 @@ public class WalkerAgent : Agent
 
     public float MTargetWalkingSpeed // property
     {
-        get => deg.targetWalkingSpeed;
-        set => deg.targetWalkingSpeed = Mathf.Clamp(value, .1f, deg.maxWalkingSpeed);
+        get => deg.TargetWalkingSpeed;
+        set => deg.TargetWalkingSpeed = Mathf.Clamp(value, .1f, deg.MaxWalkingSpeed);
     }
 
     public void Awake()
@@ -44,7 +44,14 @@ public class WalkerAgent : Agent
         deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         jdController = this.AddComponent<JointDriveController>();
         decisionRequester = this.AddComponent<DecisionRequester>(); 
+
+        // Set behavior parameters
+        var skeleton = GetComponentInChildren<Skeleton>();
+        var bpScript = GetComponent<BehaviorParameters>();
+        bpScript.BrainParameters.VectorObservationSize =  (3 * skeleton.nBones) + deg.ObservationSpaceOffset;
+        bpScript.BrainParameters.ActionSpec = new ActionSpec((3 * skeleton.nBones) + deg.ContinuousActionSpaceOffset, new int[deg.DiscreteBranches] );
     }
+
 
     public override void Initialize()
     {
@@ -67,15 +74,15 @@ public class WalkerAgent : Agent
                 bodyParts.Add(trans);
                 var groundContact = trans.AddComponent<GroundContact>();
                 // TODO Config Ground Contact
-                if (deg.notAllowedToTouchGround.Contains(boneScript.category))
+                if (deg.NotAllowedToTouchGround.Contains(boneScript.category))
                 {
                     groundContact.agentDoneOnGroundContact = true;
                 }
 
-                if (deg.penalizeGroundContact && deg.penaltiesForBodyParts.ContainsKey(boneScript.category))
+                if (deg.PenalizeGroundContact && deg.PenaltiesForBodyParts.ContainsKey(boneScript.category))
                 {
                     groundContact.penalizeGroundContact = true;
-                    groundContact.groundContactPenalty = deg.penaltiesForBodyParts.GetValueOrDefault(boneScript.category);
+                    groundContact.groundContactPenalty = deg.PenaltiesForBodyParts.GetValueOrDefault(boneScript.category);
                 }
                 var bodyPartHeight = trans.position.y - transform.position.y;
                 jdController.SetupBodyPart(trans, bodyPartHeight);
@@ -90,7 +97,7 @@ public class WalkerAgent : Agent
 
         otherBodyPartHeight = otherTransform.position.y - transform.position.y;
 
-        //SetWalkerOnGround();
+        SetWalkerOnGround();
     }
 
 
@@ -103,12 +110,12 @@ public class WalkerAgent : Agent
     {
         episodeCounter++;
 
-        if (deg.regenerateTerrain && episodeCounter % deg.regenerateTerrainAfterXSteps == 0)
+        if (deg.RegenerateTerrain && episodeCounter % deg.RegenerateTerrainAfterXSteps == 0)
         {
             terrainGenerator.RegenerateTerrain();
         }
 
-        if (deg.placeTargetCubeRandomly && episodeCounter % deg.placeTargetCubeRandomlyAfterXSteps == 0)
+        if (deg.PlaceTargetCubeRandomly && episodeCounter % deg.PlaceTargetCubeRandomlyAfterXSteps == 0)
         {
             walkTargetScript.PlaceTargetCubeRandomly();
         }
@@ -122,7 +129,7 @@ public class WalkerAgent : Agent
 
         //Set our goal walking speed
         MTargetWalkingSpeed =
-            deg.randomizeWalkSpeedEachEpisode ? Random.Range(0.1f, deg.maxWalkingSpeed) : MTargetWalkingSpeed;
+            deg.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, deg.MaxWalkingSpeed) : MTargetWalkingSpeed;
     }
 
 
@@ -131,11 +138,10 @@ public class WalkerAgent : Agent
     /// </summary>
     public void SetWalkerOnGround()
     {
-        var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
 
-        Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
-        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + otherBodyPartHeight + deg.yheightOffset, otherTransform.position.z);
+        var otherRigidbody = otherTransform.GetComponent<Rigidbody>();
+        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + otherBodyPartHeight + deg.YHeightOffset, otherTransform.position.z);
         otherTransform.rotation = _otherStartingRotation;
 
         otherRigidbody.velocity = Vector3.zero;
@@ -144,7 +150,7 @@ public class WalkerAgent : Agent
         //Reset all of the body parts
         foreach (var bodyPart in jdController.bodyPartsDict.Values)
         {
-            bodyPart.Reset(bodyPart, terrainHeight, deg.yheightOffset);
+            bodyPart.Reset(bodyPart, terrainHeight, deg.YHeightOffset);
         }
     }
 
@@ -226,10 +232,10 @@ public class WalkerAgent : Agent
         var continuousActions = actionBuffers.ContinuousActions;
         foreach (var parts in bpList)
         {
-            float x_target = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            float y_target = parts.joint.angularYMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            float z_target = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
-            parts.SetJointTargetRotation(x_target, y_target, z_target);
+            var xTarget = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            var yTarget = parts.joint.angularYMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            var zTarget = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
+            parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
         }
     }
@@ -270,7 +276,7 @@ public class WalkerAgent : Agent
         Vector3 velSum = Vector3.zero;
 
         //ALL RBS
-        int numOfRb = 0;
+        var numOfRb = 0;
         foreach (var item in jdController.bodyPartsList)
         {
             numOfRb++;

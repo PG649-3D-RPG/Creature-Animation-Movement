@@ -43,28 +43,18 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float ObstacleThreshold { get; set; } = 0.9f;
     [SerializeField]
     public float ScaleObstacle { get; set; } = 10f;
+    [SerializeField]
+    public bool RegenerateTerrain = true;
+    [SerializeField]
+    public int RegenerateTerrainAfterXSteps = 1;
 
     [Header("Creature Settings")]
     [SerializeField]
-    public bool regenerateTerrain = true;
-    [SerializeField]
-    public int regenerateTerrainAfterXSteps = 1;
-    [SerializeField]
-    public bool placeTargetCubeRandomly = true;
-    [SerializeField]
-    public int placeTargetCubeRandomlyAfterXSteps = 1;
-    [SerializeField]
-    public bool fastResetForTheFirstEpisodes = true;
-    [SerializeField]
-    public int fastResetLength = 10000000;
-    [SerializeField]
-    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head };
-    [SerializeField]
-    public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
+    public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
     [SerializeField] 
-    public bool penalizeGroundContact = true;
+    public bool PenalizeGroundContact = true;
     [SerializeField]
-    public FlexibleDictionary<BoneCategory, int> penaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
+    public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
         {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
 
 
@@ -75,38 +65,31 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float MovementSpeed = 0.1f;
     [SerializeField] 
     public int TargetMaxSecondsInOneDirection = 10;
+    [SerializeField]
+    public float TargetWalkingSpeed = 10;
+    [SerializeField]
+    public float MaxWalkingSpeed = 10;
+    [SerializeField]
+    public bool RandomizeWalkSpeedEachEpisode;
+    [SerializeField]
+    public float YHeightOffset = 0.05f;
+    [SerializeField]
+    public bool PlaceTargetCubeRandomly = true;
+    [SerializeField]
+    public int PlaceTargetCubeRandomlyAfterXSteps = 1;
 
+    [Header("ML-Agent Settings settings")] 
     [SerializeField]
-    public float targetWalkingSpeed = 10;
+    public int ContinuousActionSpaceOffset = 100;
     [SerializeField]
-    public float maxWalkingSpeed = 10;
-    //Should the agent sample a new goal velocity each episode?
-    //If true, walkSpeed will be randomly set between zero and m_maxWalkingSpeed in OnEpisodeBegin()
-    //If false, the goal velocity will be walkingSpeed
+    public int ObservationSpaceOffset = 100;
     [SerializeField]
-    public bool randomizeWalkSpeedEachEpisode;
-    [SerializeField]
-    public float yheightOffset = 0.05f;
+    public int DiscreteBranches = 0;
 
-    // Start is called before the first frame update
     void Awake()
     {
         GenerateTrainingEnvironment();
-
-        //GenerateCreature(arena);
-        //AddTargetToArena(arena);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
-    void Start()
-    {
-    }
-
 
     public void GenerateTrainingEnvironment()
     {
@@ -123,8 +106,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         for (var i = 0; i < ArenaCount; i++, posXCounter++)
         {
             var arena = GenerateArena(i, posXCounter, posZCounter, posX, arenaContainer);
-            var target = AddTargetToArena(arena);
-            GenerateCreature(arena);
+            AddTargetToArena(arena);
+            var creature = GenerateCreature(arena);
+            var skeleton = creature.GetComponentInChildren<Skeleton>();
             if (posXCounter == posX - 1)
             {
                 posXCounter = -1;
@@ -178,11 +162,13 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         return arena;
     }
 
-    private void GenerateCreature(GameObject arena)
+    private GameObject GenerateCreature(GameObject arena)
     {
         var creature = Instantiate(CreaturePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         creature.name = "Creature";
         creature.AddComponent<WalkerAgent>();
+
+        return creature;
     }
 
     private GameObject AddTargetToArena(GameObject arena)

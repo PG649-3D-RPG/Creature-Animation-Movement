@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
@@ -93,27 +94,18 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     public void GenerateTrainingEnvironment()
     {
-        var posX = (int)Math.Ceiling(Math.Sqrt(ArenaCount));
-
-        var posXCounter = 0;
-        var posZCounter = 0;
-
         var arenaContainer = new GameObject
         {
             name = "Arena Container"
         };
 
-        for (var i = 0; i < ArenaCount; i++, posXCounter++)
+        var xzLimit = (int) Math.Ceiling(Math.Sqrt(ArenaCount));
+        for (var i = 0; i < ArenaCount; i++)
         {
-            var arena = GenerateArena(i, posXCounter, posZCounter, posX, arenaContainer);
+            var posZCounter = Math.DivRem(i, xzLimit, out var posXCounter);
+            var arena = GenerateArena(i, posXCounter, posZCounter, xzLimit, arenaContainer);
             AddTargetToArena(arena);
-            var creature = GenerateCreature(arena);
-            var skeleton = creature.GetComponentInChildren<Skeleton>();
-            if (posXCounter == posX - 1)
-            {
-                posXCounter = -1;
-                posZCounter++;
-            }
+            GenerateCreature(arena);
         }
     }
 
@@ -141,7 +133,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
 
         var terrain = terrainObj.AddComponent<Terrain>();
-        var terrainGenerator = terrain.AddComponent<TerrainGenerator>();
+        terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
         colliderObj.terrainData = terrain.terrainData;
@@ -162,21 +154,17 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         return arena;
     }
 
-    private GameObject GenerateCreature(GameObject arena)
+    private void GenerateCreature(GameObject arena)
     {
         var creature = Instantiate(CreaturePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         creature.name = "Creature";
         creature.AddComponent<WalkerAgent>();
-
-        return creature;
     }
 
-    private GameObject AddTargetToArena(GameObject arena)
+    private void AddTargetToArena(GameObject arena)
     {
         var target = GameObject.Instantiate(TargetCubePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
-
-        return target;
     }
 }

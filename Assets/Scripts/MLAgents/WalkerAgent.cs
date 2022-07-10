@@ -217,6 +217,7 @@ public class WalkerAgent : Agent
 
         foreach (var bodyPart in jdController.bodyPartsList)
         {
+            Debug.Log($"Is BodyPart == null{bodyPart == null}  or sensor == null {sensor == null} ");
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));

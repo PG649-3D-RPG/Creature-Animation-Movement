@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  CreaturePrefab: {fileID: 7102182538700851678, guid: d5f144a367666f44fa0adb5e01ef55e3, type: 3}
+  CreaturePrefab: {fileID: 1734616957, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   ArenaCount: 100
@@ -372,9 +372,12 @@ MonoBehaviour:
   YHeightOffset: 0.05
   PlaceTargetCubeRandomly: 1
   PlaceTargetCubeRandomlyAfterXSteps: 1
-  ContinuousActionSpaceOffset: 100
-  ObservationSpaceOffset: 100
+  ContinuousActionSpaceOffset: 1000
+  ObservationSpaceOffset: 1000
   DiscreteBranches: 0
+  MaxJointForceLimit: 10
+  JointDampen: 10
+  MaxJointSpring: 10
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0

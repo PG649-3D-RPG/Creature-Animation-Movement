@@ -166,8 +166,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
-        var creature = Instantiate(CreaturePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
+        var creature = Instantiate(CreaturePrefab, new Vector3(64,24,64), Quaternion.identity, arena.transform);
         creature.name = "Creature";
+        creature.transform.localPosition = new Vector3(64, 24, 64);
         creature.AddComponent<WalkerAgent>();
     }
 

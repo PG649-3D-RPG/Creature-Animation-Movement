@@ -87,12 +87,19 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public int DiscreteBranches = 0;
 
+    [SerializeField] public float maxJointForceLimit = 10;
+    [SerializeField] public float jointDampen = 10;
+    [SerializeField] public float maxJointSpring = 10;
+
+
     void Awake()
     {
+        if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
+            throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         GenerateTrainingEnvironment();
     }
 
-    public void GenerateTrainingEnvironment()
+    private void GenerateTrainingEnvironment()
     {
         var arenaContainer = new GameObject
         {

@@ -1564,8 +1564,16 @@ MonoBehaviour:
   bodyParts: []
   otherTransform: {fileID: 0}
   m_JdController: {fileID: 1666840325}
-  notAllowedToTouchGround: 030000000400000002000000
   yheightOffset: 0.075
+  regenerateTerrain: 1
+  regenerateTerrainAfterXSteps: 1
+  placeTargetCubeRandomly: 1
+  placeTargetCubeRandomlyAfterXSteps: 1
+  fastResetForTheFirstEpisodes: 1
+  fastResetLength: 10000000
+  notAllowedToTouchGround: 030000000400000002000000
+  notAllowedToTouchGroundInFastPhase: 030000000700000005000000
+  penalizeGroundContact: 1
 --- !u!114 &1666840328
 MonoBehaviour:
   m_ObjectHideFlags: 0

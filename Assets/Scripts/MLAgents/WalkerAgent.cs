@@ -44,9 +44,9 @@ public class WalkerAgent : Agent
         deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         jdController = this.AddComponent<JointDriveController>();
         decisionRequester = this.AddComponent<DecisionRequester>();
-        jdController.maxJointForceLimit = deg.maxJointSpring;
-        jdController.jointDampen = deg.jointDampen;
-        jdController.maxJointSpring = deg.maxJointSpring;
+        jdController.maxJointForceLimit = deg.MaxJointForceLimit;
+        jdController.jointDampen = deg.JointDampen;
+        jdController.maxJointSpring = deg.MaxJointSpring;
 
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();

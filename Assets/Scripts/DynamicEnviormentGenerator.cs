@@ -87,9 +87,12 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public int DiscreteBranches = 0;
 
-    [SerializeField] public float maxJointForceLimit = 10;
-    [SerializeField] public float jointDampen = 10;
-    [SerializeField] public float maxJointSpring = 10;
+    [SerializeField]
+    public float MaxJointForceLimit = 10;
+    [SerializeField]
+    public float JointDampen = 10;
+    [SerializeField]
+    public float MaxJointSpring = 10;
 
 
     void Awake()

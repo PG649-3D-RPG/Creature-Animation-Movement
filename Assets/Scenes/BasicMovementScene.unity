@@ -352,7 +352,7 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 7102182538700851678, guid: d5f144a367666f44fa0adb5e01ef55e3, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 2
+  ArenaCount: 100
   TerrainSize: 128
   Depth: 10
   Scale: 2.5
@@ -372,6 +372,9 @@ MonoBehaviour:
   YHeightOffset: 0.05
   PlaceTargetCubeRandomly: 1
   PlaceTargetCubeRandomlyAfterXSteps: 1
+  ContinuousActionSpaceOffset: 100
+  ObservationSpaceOffset: 100
+  DiscreteBranches: 0
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0

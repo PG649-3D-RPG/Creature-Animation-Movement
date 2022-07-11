@@ -49,6 +49,8 @@ public class WalkerAgent : Agent
     [Header("Body Parts")] public List<Transform> bodyParts = new();
 
     private Quaternion _otherStartingRotation;
+
+    private Vector3 _otherStartingPos;
     public Transform otherTransform;
 
     //This will be used as a stabilized model space reference point for observations
@@ -82,7 +84,7 @@ public class WalkerAgent : Agent
     public int fastResetLength = 10000000;
 
     [SerializeField]
-    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head };
+    public List<BoneCategory> notAllowedToTouchGround = new() { BoneCategory.Head};
 
     [SerializeField]
     public List<BoneCategory> notAllowedToTouchGroundInFastPhase = new() { BoneCategory.Arm, BoneCategory.Hand, BoneCategory.Torso };
@@ -105,6 +107,7 @@ public class WalkerAgent : Agent
     {
         _terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         _walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
+        m_JdController = GetComponent<JointDriveController>();
 
         m_OrientationCube = GetComponentInChildren<OrientationCubeController>();
         m_DirectionIndicator = GetComponentInChildren<DirectionIndicator>();
@@ -120,7 +123,7 @@ public class WalkerAgent : Agent
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (boneScript != null && boneScript.category is not BoneCategory.Other)
+            if (boneScript != null && !boneScript.isRoot)
             {
                 bodyParts.Add(trans);
                 var groundContact = trans.AddComponent<GroundContact>();
@@ -138,10 +141,11 @@ public class WalkerAgent : Agent
                 var bodyPartHeight = trans.position.y - transform.position.y;
                 m_JdController.SetupBodyPart(trans, bodyPartHeight);
             }
-            else if (boneScript != null && boneScript.category is BoneCategory.Other)
+            else if (boneScript != null && boneScript.isRoot)
             {
                 otherTransform = trans;
                 _otherStartingRotation = trans.rotation;
+                _otherStartingPos = trans.position;
             }
 
         }
@@ -149,7 +153,7 @@ public class WalkerAgent : Agent
         _otherBodyPartHeight = otherTransform.position.y - transform.position.y;
 
 
-        m_JdController = GetComponent<JointDriveController>();
+
 
         SetWalkerOnGround();
     }
@@ -201,11 +205,10 @@ public class WalkerAgent : Agent
     /// </summary>
     public void SetWalkerOnGround()
     {
-        var terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
-        var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
+        var terrainHeight = _terrainGenerator.GetTerrainHeight(_otherStartingPos);
 
         Rigidbody otherRigidbody = otherTransform.GetComponent<Rigidbody>();
-        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + _otherBodyPartHeight + yheightOffset, otherTransform.position.z);
+        otherTransform.position = new Vector3(_otherStartingPos.x, terrainHeight + _otherBodyPartHeight + yheightOffset, _otherStartingPos.z);
         otherTransform.rotation = _otherStartingRotation;
 
         otherRigidbody.velocity = Vector3.zero;
@@ -278,6 +281,8 @@ public class WalkerAgent : Agent
 
         //Position of target position relative to cube
         sensor.AddObservation(m_OrientationCube.transform.InverseTransformPoint(target.transform.position));
+
+        sensor.AddObservation(Vector3.Distance(m_OrientationCube.transform.localPosition, target.localPosition));
 
         foreach (var bodyPart in m_JdController.bodyPartsList)
         {

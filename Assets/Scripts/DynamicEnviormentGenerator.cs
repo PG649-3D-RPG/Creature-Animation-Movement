@@ -26,6 +26,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [Header("Arena Settings")]
     [SerializeField]
     public int ArenaCount = 10;
+    [SerializeField]
+    public string GroundTag = "ground";
+
 
     [Header("Terrain settings")]
     [SerializeField] 
@@ -153,6 +156,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
+        terrain.tag = GroundTag;
         colliderObj.terrainData = terrain.terrainData;
 
         var wall1 = Instantiate(WallPrefab, new Vector3(64, 12, 126), Quaternion.identity, terrain.transform);

@@ -26,7 +26,15 @@ namespace Unity.MLAgentsExamples
         // TODO: Set penalty-flags according to body-part type
         public float groundContactPenalty; // Penalty amount (ex: -1).
         public bool touchingGround;
-        const string k_Ground = "ground"; // Tag of ground object.
+        private string k_Ground; // Tag of ground object.
+
+        private DynamicEnviormentGenerator deg;
+
+        public void Awake()
+        {
+            deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+            k_Ground = deg.GroundTag;
+        }
 
         /// <summary>
         /// Check for collision with ground, and optionally penalize agent. Ground needs to be tagged with "ground".

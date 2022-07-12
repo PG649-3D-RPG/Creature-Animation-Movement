@@ -20,20 +20,15 @@ namespace Unity.MLAgentsExamples
     {
         [HideInInspector] public Agent agent;
 
-        [Header("Ground Check")] public bool agentDoneOnGroundContact; // Whether to reset agent on ground contact.
-        public bool penalizeGroundContact; // Whether to penalize on contact.
-        // TODO: Assure penalty is changeable per cmd script/input
-        // TODO: Set penalty-flags according to body-part type
-        public float groundContactPenalty; // Penalty amount (ex: -1).
         public bool touchingGround;
         private string k_Ground; // Tag of ground object.
-
         private DynamicEnviormentGenerator deg;
-
+        private Bone boneScript;
         public void Awake()
         {
             deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
             k_Ground = deg.GroundTag;
+            boneScript = this.GetComponentInParent<Bone>();
         }
 
         /// <summary>
@@ -46,13 +41,13 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(k_Ground))
             {
                 touchingGround = true;
-
-                if (penalizeGroundContact)
+                
+                if (deg.PenaltiesForBodyParts.TryGetValue(boneScript.category, out var groundContactPenalty))
                 {                    
                     agent.SetReward(groundContactPenalty);
                 }
 
-                if (agentDoneOnGroundContact)
+                if (deg.NotAllowedToTouchGround.Contains(boneScript.category))
                 {
                     agent.EndEpisode();
                 }

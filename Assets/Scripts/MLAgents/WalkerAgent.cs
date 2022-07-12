@@ -90,17 +90,6 @@ public class WalkerAgent : Agent
             {
                 bodyParts.Add(trans);
                 var groundContact = trans.AddComponent<GroundContact>();
-                // TODO Config Ground Contact
-                if (deg.NotAllowedToTouchGround.Contains(boneScript.category))
-                {
-                    groundContact.agentDoneOnGroundContact = true;
-                }
-
-                if (deg.PenalizeGroundContact && deg.PenaltiesForBodyParts.ContainsKey(boneScript.category))
-                {
-                    groundContact.penalizeGroundContact = true;
-                    groundContact.groundContactPenalty = deg.PenaltiesForBodyParts.GetValueOrDefault(boneScript.category);
-                }
                 var bodyPartHeight = trans.position.y - transform.position.y;
                 jdController.SetupBodyPart(trans, bodyPartHeight);
             }
@@ -111,7 +100,6 @@ public class WalkerAgent : Agent
 
                 _otherStartingRotation = trans.rotation;
             }
-
         }
 
         otherBodyPartHeight = topTransform.position.y - transform.position.y;

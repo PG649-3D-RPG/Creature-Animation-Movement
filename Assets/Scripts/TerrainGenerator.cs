@@ -8,6 +8,7 @@ using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
+    private Terrain _terrain;
     private  DynamicEnviormentGenerator Deg { get; set; }
 
     private GameObject ObstaclesContainer { get; set; }
@@ -34,6 +35,7 @@ public class TerrainGenerator : MonoBehaviour
 
     public void Start()
     {
+        _terrain = GetComponent<Terrain>();
         OffsetX = Random.Range(0f, 9999f);
         OffsetY = Random.Range(0f, 9999f);
         Terrain = GetComponent<Terrain>();
@@ -70,8 +72,7 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns></returns>
     public float GetTerrainHeight(Vector3 position)
     {
-        Terrain terrain = GetComponent<Terrain>();
-        return terrain.SampleHeight(position);
+        return _terrain.SampleHeight(position);
     }
 
     /// <summary>
@@ -82,8 +83,7 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns></returns>
     public float GetTerrainHeight(int x, int z)
     {
-        var terrain = GetComponent<Terrain>();
-        return terrain.terrainData.GetHeight(x, z);
+        return _terrain.terrainData.GetHeight(x, z);
     }
 
     /// <summary>
@@ -118,7 +118,6 @@ public class TerrainGenerator : MonoBehaviour
         {
             for (var y = 1; y < Deg.TerrainSize - 1; y++)
             {
-
                 if (!(Mathf.PerlinNoise((x + OffsetX) / Deg.TerrainSize * Deg.ScaleObstacle, (y + OffsetY) / Deg.TerrainSize * Deg.ScaleObstacle + OffsetY) > Deg.ObstacleThreshold)) continue;
                 var newObstacle = GameObject.Instantiate(Deg.ObstaclePrefab, Vector3.zero, Quaternion.identity, ObstaclesContainer.transform);
                 newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);

@@ -20,7 +20,9 @@ public class WalkerAgent : Agent
     // Internal values
     private float otherBodyPartHeight = 1f;
     private Quaternion _otherStartingRotation;
-    private Transform otherTransform;
+    private Transform topTransform;
+    private Rigidbody topTransformRb;
+
     private long episodeCounter = 0;
     private List<Transform> bodyParts = new();
     private Vector3 dirToWalk = Vector3.right;
@@ -58,10 +60,11 @@ public class WalkerAgent : Agent
 
     public override void Initialize()
     {
-        terrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
-        walkTargetScript = transform.parent.GetComponentInChildren<WalkTargetScript>();
+        var parent = transform.parent;
+        terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
+        walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
         // TODO: Update
-        target = transform.parent.Find("Creature Target").transform;
+        target = parent.Find("Creature Target").transform;
         orientationCube = transform.Find("orientation cube").AddComponent<OrientationCubeController>();
 
         //Get Body Parts
@@ -92,13 +95,15 @@ public class WalkerAgent : Agent
             }
             else if (boneScript != null && boneScript.isRoot)
             {
-                otherTransform = trans;
+                topTransform = trans;
+                topTransformRb = trans.GetComponent<Rigidbody>();
+
                 _otherStartingRotation = trans.rotation;
             }
 
         }
 
-        otherBodyPartHeight = otherTransform.position.y - transform.position.y;
+        otherBodyPartHeight = topTransform.position.y - transform.position.y;
 
         SetWalkerOnGround();
     }
@@ -139,16 +144,17 @@ public class WalkerAgent : Agent
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
-    public void SetWalkerOnGround()
+    private void SetWalkerOnGround()
     {
-        var terrainHeight = terrainGenerator.GetTerrainHeight(otherTransform.position);
+        var position = topTransform.position;
+        var terrainHeight = terrainGenerator.GetTerrainHeight(position);
 
-        var otherRigidbody = otherTransform.GetComponent<Rigidbody>();
-        otherTransform.position = new Vector3(otherTransform.position.x, terrainHeight + otherBodyPartHeight + deg.YHeightOffset, otherTransform.position.z);
-        otherTransform.rotation = _otherStartingRotation;
+        position = new Vector3(position.x, terrainHeight + otherBodyPartHeight + deg.YHeightOffset, position.z);
+        topTransform.position = position;
+        topTransform.rotation = _otherStartingRotation;
 
-        otherRigidbody.velocity = Vector3.zero;
-        otherRigidbody.angularVelocity = Vector3.zero;
+        topTransformRb.velocity = Vector3.zero;
+        topTransformRb.angularVelocity = Vector3.zero;
 
         //Reset all of the body parts
         foreach (var bodyPart in jdController.bodyPartsDict.Values)
@@ -163,7 +169,7 @@ public class WalkerAgent : Agent
     /// </summary>
     private void CheckWalkerOutOfBound()
     {
-        if (otherTransform.position.y is < -10 or > 40)
+        if (topTransform.position.y is < -10 or > 40)
         {
             SetWalkerOnGround();
         }
@@ -184,7 +190,7 @@ public class WalkerAgent : Agent
 
         //Get position relative to hips in the context of our orientation cube's space
         // TODO Why do we do this?
-        sensor.AddObservation(orientationCube.transform.InverseTransformDirection(bp.rb.position - otherTransform.position));
+        sensor.AddObservation(orientationCube.transform.InverseTransformDirection(bp.rb.position - topTransform.position));
 
         if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
         {
@@ -213,7 +219,7 @@ public class WalkerAgent : Agent
         sensor.AddObservation(orientationCube.transform.InverseTransformDirection(velGoal));
 
         //rotation deltas
-        sensor.AddObservation(Quaternion.FromToRotation(otherTransform.forward, cubeForward));
+        sensor.AddObservation(Quaternion.FromToRotation(topTransform.forward, cubeForward));
 
         //Position of target position relative to cube
         sensor.AddObservation(orientationCube.transform.InverseTransformPoint(target.transform.position));
@@ -248,8 +254,8 @@ public class WalkerAgent : Agent
     //Update OrientationCube and DirectionIndicator
     void UpdateOrientationObjects()
     {
-        dirToWalk = target.position - otherTransform.position;
-        orientationCube.UpdateOrientation(otherTransform, target);
+        dirToWalk = target.position - topTransform.position;
+        orientationCube.UpdateOrientation(topTransform, target);
     }
 
     void FixedUpdate()

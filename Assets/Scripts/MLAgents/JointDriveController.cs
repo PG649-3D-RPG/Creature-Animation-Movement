@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -17,7 +18,7 @@ namespace Unity.MLAgentsExamples
     [System.Serializable]
     public class BodyPart
     {
-        public float _bodyPartHeight {get; set;}
+        public float BodyPartHeight {get; set;}
         [Header("Body Part Info")][Space(10)] public ConfigurableJoint joint;
         public Rigidbody rb;
         [HideInInspector] public Vector3 startingPos;
@@ -58,7 +59,7 @@ namespace Unity.MLAgentsExamples
         public void Reset(BodyPart bp, float terrainHeight, float yheightOffset = 0.05f)
         {
             //This resets the walker at the starting position
-            bp.rb.transform.position = new Vector3(startingPos.x, terrainHeight + _bodyPartHeight + yheightOffset, startingPos.z);
+            bp.rb.transform.position = new Vector3(startingPos.x, terrainHeight + BodyPartHeight + yheightOffset, startingPos.z);
             //This will reset the walker at the current position
             //bp.rb.transform.position = // new Vector3(bp.rb.transform.position.x, terrainHeight + _bodyPartHeight + yheightOffset, bp.rb.transform.position.z);
             bp.rb.transform.rotation = bp.startingRot;
@@ -139,7 +140,7 @@ namespace Unity.MLAgentsExamples
         {
             var bp = new BodyPart
             {
-                _bodyPartHeight = bodyPartHeight,
+                BodyPartHeight = bodyPartHeight,
                 rb = t.GetComponent<Rigidbody>(),
                 joint = t.GetComponent<ConfigurableJoint>(),
                 startingPos = t.position,
@@ -174,29 +175,26 @@ namespace Unity.MLAgentsExamples
 
         public void GetCurrentJointForces()
         {
-            foreach (var bodyPart in bodyPartsDict.Values)
+            foreach (var bodyPart in bodyPartsDict.Values.Where(bodyPart => bodyPart.joint))
             {
-                if (bodyPart.joint)
+                bodyPart.currentJointForce = bodyPart.joint.currentForce;
+                bodyPart.currentJointForceSqrMag = bodyPart.joint.currentForce.magnitude;
+                bodyPart.currentJointTorque = bodyPart.joint.currentTorque;
+                bodyPart.currentJointTorqueSqrMag = bodyPart.joint.currentTorque.magnitude;
+                if (Application.isEditor)
                 {
-                    bodyPart.currentJointForce = bodyPart.joint.currentForce;
-                    bodyPart.currentJointForceSqrMag = bodyPart.joint.currentForce.magnitude;
-                    bodyPart.currentJointTorque = bodyPart.joint.currentTorque;
-                    bodyPart.currentJointTorqueSqrMag = bodyPart.joint.currentTorque.magnitude;
-                    if (Application.isEditor)
+                    if (bodyPart.jointForceCurve.length > 1000)
                     {
-                        if (bodyPart.jointForceCurve.length > 1000)
-                        {
-                            bodyPart.jointForceCurve = new AnimationCurve();
-                        }
-
-                        if (bodyPart.jointTorqueCurve.length > 1000)
-                        {
-                            bodyPart.jointTorqueCurve = new AnimationCurve();
-                        }
-
-                        bodyPart.jointForceCurve.AddKey(Time.time, bodyPart.currentJointForceSqrMag);
-                        bodyPart.jointTorqueCurve.AddKey(Time.time, bodyPart.currentJointTorqueSqrMag);
+                        bodyPart.jointForceCurve = new AnimationCurve();
                     }
+
+                    if (bodyPart.jointTorqueCurve.length > 1000)
+                    {
+                        bodyPart.jointTorqueCurve = new AnimationCurve();
+                    }
+
+                    bodyPart.jointForceCurve.AddKey(Time.time, bodyPart.currentJointForceSqrMag);
+                    bodyPart.jointTorqueCurve.AddKey(Time.time, bodyPart.currentJointTorqueSqrMag);
                 }
             }
         }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using JetBrains.Annotations;
@@ -117,8 +118,26 @@ public class WalkerAgent : Agent
     }
 
 
+    void Start()
+    {
+        _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
+    }
+
+
+    private IEnumerator CheckWalkerOutOfArea()
+    {
+        while (true)
+        {
+            if (topTransform.position.y is < -10 or > 40)
+            {
+                SetWalkerOnGround();
+            }
+            yield return new WaitForFixedUpdate();
+        }
+    }
+
     /// <summary>
-    /// Is called on episode beginn.
+    /// Is called on episode begin.
     /// Loop over body parts and reset them to initial conditions.
     /// Regenerate terrain and place target cube randomly 
     /// </summary>
@@ -173,17 +192,6 @@ public class WalkerAgent : Agent
 
 
     /// <summary>
-    /// Safeguard if the walker leaves the playable area
-    /// </summary>
-    private void CheckWalkerOutOfBound()
-    {
-        if (topTransform.position.y is < -10 or > 40)
-        {
-            SetWalkerOnGround();
-        }
-    }
-
-    /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
     public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
@@ -234,7 +242,6 @@ public class WalkerAgent : Agent
 
         foreach (var bodyPart in jdController.bodyPartsList)
         {
-            // TODO Hier fliegt der ArgumentException Fehler. Irgendwas ist wahrscheinlich mit unser Initialisierung falsch?
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
@@ -248,6 +255,7 @@ public class WalkerAgent : Agent
         var i = -1;
 
         var continuousActions = actionBuffers.ContinuousActions;
+        // TODO Needs to be reworked for generalization
         foreach (var parts in bpList)
         {
             var xTarget = parts.joint.angularXMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
@@ -267,7 +275,6 @@ public class WalkerAgent : Agent
 
     public void FixedUpdate()
     {
-        CheckWalkerOutOfBound();
         UpdateOrientationObjects();
 
         var cubeForward = orientationCube.transform.forward;

@@ -55,8 +55,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [Header("Creature Settings")]
     [SerializeField]
     public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
-    [SerializeField] 
-    public bool PenalizeGroundContact = true;
     [SerializeField]
     public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
         {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
@@ -96,13 +94,15 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public int DiscreteBranches = 0;
 
     [SerializeField]
-    public float MaxJointForceLimit = 10;
+    public float MaxJointForceLimit = 20000;
     [SerializeField]
-    public float JointDampen = 10;
+    public string BehaviorName = "Walker";
     [SerializeField]
-    public float MaxJointSpring = 10;
+    public float JointDampen = 5000;
     [SerializeField]
-    public int MaxStep = 1000;
+    public float MaxJointSpring = 40000;
+    [SerializeField]
+    public int MaxStep = 5000;
 
 
     void Awake()
@@ -181,6 +181,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         creature.name = "Creature";
         creature.transform.localPosition = new Vector3(64, 24, 64);
         creature.AddComponent<WalkerAgent>();
+        // TODO Check what it does
+        creature.AddComponent<ModelOverrider>();
     }
 
     private void AddTargetToArena(GameObject arena)

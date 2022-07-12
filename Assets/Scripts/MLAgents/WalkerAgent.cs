@@ -65,6 +65,7 @@ public class WalkerAgent : Agent
         bpScript.BrainParameters.VectorObservationSize = deg.UseObservationSpaceOffsetAsObservationSpace
             ? deg.ObservationSpaceOffset
             : 3 * skeleton.nBones + deg.ObservationSpaceOffset;
+        bpScript.BehaviorName = deg.BehaviorName;
     }
 
 

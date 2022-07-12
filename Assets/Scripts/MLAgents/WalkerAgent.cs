@@ -51,14 +51,18 @@ public class WalkerAgent : Agent
         jdController.maxJointSpring = deg.MaxJointSpring;
         
         // Set agent settings (maxSteps)
-        var m_Agent = gameObject.GetComponent<Agent>();
-        m_Agent.MaxStep = deg.MaxStep;
+        var mAgent = gameObject.GetComponent<Agent>();
+        mAgent.MaxStep = deg.MaxStep;
         
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.VectorObservationSize =  (3 * skeleton.nBones) + deg.ObservationSpaceOffset;
-        bpScript.BrainParameters.ActionSpec = new ActionSpec((3 * skeleton.nBones) + deg.ContinuousActionSpaceOffset, new int[deg.DiscreteBranches] );
+        bpScript.BrainParameters.ActionSpec = deg.UseContinuousActionSpaceOffsetAsContinuousActionSpace 
+            ? new ActionSpec(deg.ContinuousActionSpaceOffset, new int[deg.DiscreteBranches]) 
+            : new ActionSpec(3 * skeleton.nBones + deg.ContinuousActionSpaceOffset, new int[deg.DiscreteBranches]);
+        bpScript.BrainParameters.VectorObservationSize = deg.UseObservationSpaceOffsetAsObservationSpace
+            ? deg.ObservationSpaceOffset
+            : 3 * skeleton.nBones + deg.ObservationSpaceOffset;
     }
 
 
@@ -231,7 +235,6 @@ public class WalkerAgent : Agent
         foreach (var bodyPart in jdController.bodyPartsList)
         {
             // TODO Hier fliegt der ArgumentException Fehler. Irgendwas ist wahrscheinlich mit unser Initialisierung falsch?
-            Debug.Log($"Is BodyPart == null{bodyPart == null}  or sensor == null {sensor == null} ");
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));

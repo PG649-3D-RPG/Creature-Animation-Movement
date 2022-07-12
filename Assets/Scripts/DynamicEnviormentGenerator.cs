@@ -85,6 +85,11 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public int ObservationSpaceOffset = 100;
     [SerializeField]
+    public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
+    [SerializeField]
+    public bool UseObservationSpaceOffsetAsObservationSpace = true;
+
+    [SerializeField]
     public int DiscreteBranches = 0;
 
     [SerializeField]

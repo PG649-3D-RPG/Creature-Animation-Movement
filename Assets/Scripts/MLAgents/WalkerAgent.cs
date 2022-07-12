@@ -66,6 +66,7 @@ public class WalkerAgent : Agent
             ? deg.ObservationSpaceOffset
             : 3 * skeleton.nBones + deg.ObservationSpaceOffset;
         bpScript.BehaviorName = deg.BehaviorName;
+        bpScript.Model = deg.NnModel;
     }
 
 

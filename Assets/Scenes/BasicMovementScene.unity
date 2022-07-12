@@ -215,7 +215,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &157039172
 GameObject:
@@ -334,7 +334,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1211399389
 MonoBehaviour:
@@ -352,25 +352,25 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 1734616957, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 10
+  ArenaCount: 200
   GroundTag: ground
   TerrainSize: 128
   Depth: 10
   Scale: 2.5
   GenerateObstacles: 0
-  GenerateHeights: 1
+  GenerateHeights: 0
   BakeNavMesh: 0
-  RegenerateTerrain: 1
-  RegenerateTerrainAfterXSteps: 100
+  RegenerateTerrain: 0
+  RegenerateTerrainAfterXSteps: 1000
   NotAllowedToTouchGround: 0600000007000000
-  IsMovingTarget: 1
+  IsMovingTarget: 0
   MovementSpeed: 0.1
   TargetMaxSecondsInOneDirection: 10
   TargetWalkingSpeed: 10
   MaxWalkingSpeed: 10
   RandomizeWalkSpeedEachEpisode: 0
   YHeightOffset: 0.05
-  PlaceTargetCubeRandomly: 1
+  PlaceTargetCubeRandomly: 0
   PlaceTargetCubeRandomlyAfterXSteps: 1
   ContinuousActionSpaceOffset: 244
   ObservationSpaceOffset: 244
@@ -503,60 +503,3 @@ Terrain:
   m_GroupingID: 0
   m_RenderingLayerMask: 1
   m_AllowAutoConnect: 1
---- !u!1001 &1545492596
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1734616957, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_Name
-      value: HumanCreature2TorsoSegments
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_RootOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 59.55976
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 26.927208
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1734616961, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}

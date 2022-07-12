@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
@@ -22,6 +23,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField] public GameObject TargetCubePrefab;
 
     [SerializeField] public GameObject ObstaclePrefab;
+
+    [SerializeField] public NNModel NnModel;
 
     [Header("Arena Settings")]
     [SerializeField]

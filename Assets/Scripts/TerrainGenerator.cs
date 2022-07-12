@@ -25,6 +25,7 @@ public class TerrainGenerator : MonoBehaviour
     /// </summary>
     private void Awake()
     {
+        _terrain = GetComponent<Terrain>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         ObstaclesContainer = new GameObject
         {
@@ -35,7 +36,6 @@ public class TerrainGenerator : MonoBehaviour
 
     public void Start()
     {
-        _terrain = GetComponent<Terrain>();
         OffsetX = Random.Range(0f, 9999f);
         OffsetY = Random.Range(0f, 9999f);
         Terrain = GetComponent<Terrain>();

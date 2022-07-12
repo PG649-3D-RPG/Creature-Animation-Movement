@@ -49,7 +49,11 @@ public class WalkerAgent : Agent
         jdController.maxJointForceLimit = deg.MaxJointForceLimit;
         jdController.jointDampen = deg.JointDampen;
         jdController.maxJointSpring = deg.MaxJointSpring;
-
+        
+        // Set agent settings (maxSteps)
+        var m_Agent = gameObject.GetComponent<Agent>();
+        m_Agent.MaxStep = deg.MaxStep;
+        
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
@@ -252,13 +256,13 @@ public class WalkerAgent : Agent
     }
 
     //Update OrientationCube and DirectionIndicator
-    void UpdateOrientationObjects()
+    public void UpdateOrientationObjects()
     {
         dirToWalk = target.position - topTransform.position;
         orientationCube.UpdateOrientation(topTransform, target);
     }
 
-    void FixedUpdate()
+    public void FixedUpdate()
     {
         CheckWalkerOutOfBound();
         UpdateOrientationObjects();
@@ -282,7 +286,7 @@ public class WalkerAgent : Agent
     //Returns the average velocity of all of the body parts
     //Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
     //...using the average helps prevent this erratic movement
-    Vector3 GetAvgVelocity()
+    private Vector3 GetAvgVelocity()
     {
         Vector3 velSum = Vector3.zero;
 
@@ -299,7 +303,7 @@ public class WalkerAgent : Agent
     }
 
     //normalized value of the difference in avg speed vs goal walking speed.
-    public float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
+    private float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
     {
         //distance between our actual velocity and goal velocity
         var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);

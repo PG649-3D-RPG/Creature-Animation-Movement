@@ -35,6 +35,7 @@ public class WalkerAgent : Agent
     private OrientationCubeController orientationCube;
     private JointDriveController jdController;
     private DecisionRequester decisionRequester;
+    private Agent agent;
 
     public float MTargetWalkingSpeed // property
     {
@@ -72,6 +73,7 @@ public class WalkerAgent : Agent
         var parent = transform.parent;
         terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
+        agent = gameObject.GetComponent<Agent>();
         // TODO: Update
         target = parent.Find("Creature Target").transform;
         orientationCube = transform.Find("orientation cube").AddComponent<OrientationCubeController>();
@@ -130,7 +132,7 @@ public class WalkerAgent : Agent
         {
             if (topTransform.position.y is < -10 or > 40)
             {
-                SetWalkerOnGround();
+                agent.EndEpisode();
             }
             yield return new WaitForFixedUpdate();
         }

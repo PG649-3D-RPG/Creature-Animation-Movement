@@ -57,10 +57,10 @@ public class TerrainGenerator : MonoBehaviour
         offsetY = Random.Range(0f, 9999f);
 
         // Kill obstacles
-        foreach (Transform child in _obstaclesContainer.transform)
+        /*foreach (Transform child in _obstaclesContainer.transform)
         {
             GameObject.Destroy(child.gameObject);
-        }
+        }*/
 
         // Generate Terrain
         terrain.terrainData = GenerateTerrain(terrain.terrainData);

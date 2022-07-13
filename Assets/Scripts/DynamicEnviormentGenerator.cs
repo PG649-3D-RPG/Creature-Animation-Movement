@@ -63,8 +63,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
     [SerializeField]
-    public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {{BoneCategory.Arm, 2}, {BoneCategory.Hand, 5},
-        {BoneCategory.Head, 10}, {BoneCategory.Hip, 5}, {BoneCategory.Leg, 1}, {BoneCategory.Shoulder, 5}};
+    public FlexibleDictionary<BoneCategory, float> PenaltiesForBodyParts = new() {{BoneCategory.Arm, -0.1f}, {BoneCategory.Hand, -0.1f},
+        {BoneCategory.Head, -0.1f}, {BoneCategory.Hip, -0.1f}, {BoneCategory.Leg, -0.1f}, {BoneCategory.Shoulder, -0.1f}
+    };
 
 
     [Header("Target Settings")] 

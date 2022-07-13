@@ -150,7 +150,7 @@ public class WalkerAgent : Agent
         SetWalkerOnGround();
 
         //Random start rotation to help generalize
-        //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
+        topTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
 
         UpdateOrientationObjects();
 
@@ -238,6 +238,8 @@ public class WalkerAgent : Agent
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
+        
+        sensor.AddObservation(topTransformRb.position.y);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -281,7 +283,7 @@ public class WalkerAgent : Agent
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
 
-        AddReward(matchSpeedReward * lookAtTargetReward);
+        AddReward(matchSpeedReward * lookAtTargetReward * topTransformRb.position.y);
     }
 
     //Returns the average velocity of all of the body parts

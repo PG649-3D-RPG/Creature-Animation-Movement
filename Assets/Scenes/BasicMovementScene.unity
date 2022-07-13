@@ -352,7 +352,8 @@ MonoBehaviour:
   CreaturePrefab: {fileID: 1734616957, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  ArenaCount: 200
+  NnModel: {fileID: 0}
+  ArenaCount: 8
   GroundTag: ground
   TerrainSize: 128
   Depth: 10
@@ -362,6 +363,8 @@ MonoBehaviour:
   BakeNavMesh: 0
   RegenerateTerrain: 0
   RegenerateTerrainAfterXSteps: 1000
+  TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
+  WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
   NotAllowedToTouchGround: 0600000007000000
   IsMovingTarget: 0
   MovementSpeed: 0.1

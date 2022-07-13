@@ -242,7 +242,6 @@ public class WalkerAgent : Agent
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
     {
-        AddReward(1f);
         var bpList = jdController.bodyPartsList;
         var i = -1;
 

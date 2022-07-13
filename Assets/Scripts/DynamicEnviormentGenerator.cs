@@ -54,6 +54,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public bool RegenerateTerrain = true;
     [SerializeField]
     public int RegenerateTerrainAfterXSteps = 1;
+    [SerializeField]
+    public Material TerrainMaterial;
+    [SerializeField]
+    public Material WallMaterial;
 
     [Header("Creature Settings")]
     [SerializeField]
@@ -161,19 +165,28 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         terrain.terrainData = new TerrainData();
         terrain.tag = GroundTag;
         colliderObj.terrainData = terrain.terrainData;
+        terrain.materialTemplate = TerrainMaterial;
+
 
         var wall1 = Instantiate(WallPrefab, new Vector3(64, 12, 126), Quaternion.identity, terrain.transform);
         wall1.name = "Wall North";
         wall1.transform.localPosition = new Vector3(64, 12, 126);
+        wall1.GetComponent<MeshRenderer>().material = WallMaterial;
+
         var wall2 = Instantiate(WallPrefab, new Vector3(126, 12, 64), Quaternion.Euler(0, 90, 0), terrain.transform);
         wall2.name = "Wall East";
         wall2.transform.localPosition = new Vector3(126, 12, 64);
+        wall2.GetComponent<MeshRenderer>().material = WallMaterial;
+
         var wall3 = Instantiate(WallPrefab, new Vector3(64, 12, 2), Quaternion.identity, terrain.transform);
         wall3.name = "Wall South";
         wall3.transform.localPosition = new Vector3(64, 12, 2);
+        wall3.GetComponent<MeshRenderer>().material = WallMaterial;
+
         var wall4 = Instantiate(WallPrefab, new Vector3(2, 12, 64), Quaternion.Euler(0, 90, 0), terrain.transform);
         wall4.name = "Wall West";
         wall4.transform.localPosition = new Vector3(2, 12, 64);
+        wall4.GetComponent<MeshRenderer>().material = WallMaterial;
 
         return arena;
     }

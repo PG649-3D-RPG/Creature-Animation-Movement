@@ -20,7 +20,9 @@ public class WalkerAgent : Agent
 
     // Internal values
     private float otherBodyPartHeight = 1f;
-    private Quaternion _otherStartingRotation;
+
+    private Vector3 topStartingPosition;
+    private Quaternion topStartingRotation;
     private Transform topTransform;
     private Rigidbody topTransformRb;
 
@@ -100,7 +102,8 @@ public class WalkerAgent : Agent
                 topTransform = trans;
                 topTransformRb = trans.GetComponent<Rigidbody>();
 
-                _otherStartingRotation = trans.rotation;
+                topStartingRotation = trans.rotation;
+                topStartingPosition = trans.position;
             }
         }
 
@@ -168,9 +171,10 @@ public class WalkerAgent : Agent
         var position = topTransform.position;
         var terrainHeight = terrainGenerator.GetTerrainHeight(position);
 
-        position = new Vector3(position.x, terrainHeight + otherBodyPartHeight + deg.YHeightOffset, position.z);
+        position = new Vector3(topStartingPosition.x, terrainHeight + otherBodyPartHeight + deg.YHeightOffset, topStartingPosition.z);
         topTransform.position = position;
-        topTransform.rotation = _otherStartingRotation;
+        topTransform.rotation = topStartingRotation;
+        
 
         topTransformRb.velocity = Vector3.zero;
         topTransformRb.angularVelocity = Vector3.zero;
@@ -180,6 +184,8 @@ public class WalkerAgent : Agent
         {
             bodyPart.Reset(bodyPart, terrainHeight, deg.YHeightOffset);
         }
+
+        topTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
     }
 
 

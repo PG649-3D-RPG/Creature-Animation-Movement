@@ -9,6 +9,7 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -64,12 +65,26 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Creature Settings")]
     [SerializeField]
-    public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
-    public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {};
+    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
+    [SerializeField]
+    public float HeadGroundContactPenalty = 0;
+    [SerializeField]
+    public float TorsoGroundContactPenalty = 0;
+    [SerializeField]
+    public float HipsGroundContactPenalty = 0;
+    [SerializeField]
+    public float LegsGroundContactPenalty = 0;
+    [SerializeField]
+    public float ArmsGroundContactPenalty = 0;
+    [SerializeField]
+    public float HandsGroundContactPenalty = 0;
+    
+    [HideInInspector]
+    public Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
     [Header("Target Cube Settings")] 
     [SerializeField]
-    public float MovementSpeed = 0f;
+    public float TargetMovementSpeed = 0f;
     [SerializeField] 
     public int TargetMaxSecondsInOneDirection = 10;
     [SerializeField]
@@ -111,6 +126,14 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     {
         if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
+        
+        if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
+        if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
+        if(HipsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hip, HipsGroundContactPenalty);
+        if(LegsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Leg, LegsGroundContactPenalty);
+        if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
+        if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
+
         GenerateTrainingEnvironment();
     }
 

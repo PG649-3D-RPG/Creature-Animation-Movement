@@ -47,7 +47,7 @@ namespace Unity.MLAgentsExamples
                     agent.SetReward(groundContactPenalty);
                 }
 
-                if (deg.NotAllowedToTouchGround.Contains(boneScript.category))
+                if (deg.ResetOnGroundContactParts.Contains(boneScript.category))
                 {
                     agent.EndEpisode();
                 }

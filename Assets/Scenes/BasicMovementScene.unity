@@ -353,7 +353,7 @@ MonoBehaviour:
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   NnModel: {fileID: 5022602860645237092, guid: 7b0c0fb098578154bba31afae64634ff, type: 3}
-  ArenaCount: 1
+  ArenaCount: 16
   GroundTag: ground
   TerrainSize: 128
   Depth: 10

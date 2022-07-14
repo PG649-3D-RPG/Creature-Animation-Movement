@@ -26,10 +26,17 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [SerializeField] public NNModel NnModel;
 
+    [Header("Materials")]
+    [SerializeField]
+    public Material TerrainMaterial;
+    [SerializeField]
+    public Material WallMaterial;
+
+    
     [Header("Arena Settings")]
     [SerializeField]
     public int ArenaCount = 10;
-    [SerializeField]
+    [HideInInspector]
     public string GroundTag = "ground";
 
 
@@ -45,32 +52,24 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public bool GenerateHeights  = true;
     [SerializeField]
+    public float ScaleObstacle  = 10f;
+    [SerializeField]
     public bool BakeNavMesh = true;
     [SerializeField]
-    public float ObstacleThreshold { get; set; } = 0.9f;
-    [SerializeField]
-    public float ScaleObstacle { get; set; } = 10f;
+    public float ObstacleThreshold = 0.9f;
     [SerializeField]
     public bool RegenerateTerrain = true;
     [SerializeField]
     public int RegenerateTerrainAfterXSteps = 1;
-    [SerializeField]
-    public Material TerrainMaterial;
-    [SerializeField]
-    public Material WallMaterial;
 
     [Header("Creature Settings")]
     [SerializeField]
     public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
-    [SerializeField]
     public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {};
 
-
-    [Header("Target Settings")] 
+    [Header("Target Cube Settings")] 
     [SerializeField]
-    public bool IsMovingTarget = true;
-    [SerializeField]
-    public float MovementSpeed = 0.1f;
+    public float MovementSpeed = 0f;
     [SerializeField] 
     public int TargetMaxSecondsInOneDirection = 10;
     [SerializeField]
@@ -80,12 +79,11 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public bool RandomizeWalkSpeedEachEpisode;
     [SerializeField]
+    public int PlaceTargetCubeRandomlyAfterXSteps = 0;
+    [HideInInspector]
     public float YHeightOffset = 0.05f;
-    [SerializeField]
-    public bool PlaceTargetCubeRandomly = true;
-    [SerializeField]
-    public int PlaceTargetCubeRandomlyAfterXSteps = 1;
 
+    
     [Header("ML-Agent Settings settings")] 
     [SerializeField]
     public int ContinuousActionSpaceOffset = 100;
@@ -95,10 +93,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
     [SerializeField]
     public bool UseObservationSpaceOffsetAsObservationSpace = true;
-
     [SerializeField]
     public int DiscreteBranches = 0;
-
     [SerializeField]
     public float MaxJointForceLimit = 20000;
     [SerializeField]

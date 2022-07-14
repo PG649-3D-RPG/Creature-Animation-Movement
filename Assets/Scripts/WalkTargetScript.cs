@@ -45,7 +45,7 @@ public class WalkTargetScript : MonoBehaviour
     public void FixedUpdate()
     {
         // Move the target randomly
-        if (Deg.IsMovingTarget)
+        if (Deg.MovementSpeed > 0)
         {
             MoveTargetRandomlyPerTick();
         }

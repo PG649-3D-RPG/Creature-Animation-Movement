@@ -145,7 +145,7 @@ public class WalkerAgent : Agent
             terrainGenerator.RegenerateTerrain();
         }
 
-        if (deg.PlaceTargetCubeRandomly && episodeCounter % deg.PlaceTargetCubeRandomlyAfterXSteps == 0)
+        if (deg.PlaceTargetCubeRandomlyAfterXSteps>0 && episodeCounter % deg.PlaceTargetCubeRandomlyAfterXSteps == 0)
         {
             walkTargetScript.PlaceTargetCubeRandomly();
         }

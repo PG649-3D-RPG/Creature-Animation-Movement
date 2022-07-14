@@ -59,9 +59,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public float ObstacleThreshold = 0.9f;
     [SerializeField]
-    public bool RegenerateTerrain = true;
-    [SerializeField]
-    public int RegenerateTerrainAfterXSteps = 1;
+    public int RegenerateTerrainAfterXSteps = 0;
 
     [Header("Creature Settings")]
     [SerializeField]

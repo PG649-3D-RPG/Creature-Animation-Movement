@@ -140,7 +140,7 @@ public class WalkerAgent : Agent
     {
         episodeCounter++;
 
-        if (deg.RegenerateTerrain && episodeCounter % deg.RegenerateTerrainAfterXSteps == 0)
+        if (deg.RegenerateTerrainAfterXSteps > 0 && episodeCounter % deg.RegenerateTerrainAfterXSteps == 0)
         {
             terrainGenerator.RegenerateTerrain();
         }

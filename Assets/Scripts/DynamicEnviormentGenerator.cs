@@ -78,7 +78,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float HandsGroundContactPenalty = 0;
     
     [HideInInspector]
-    public Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
+    public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
     [Header("Target Cube Settings")] 
     [SerializeField]
@@ -90,14 +90,14 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public float MaxWalkingSpeed = 10;
     [SerializeField]
-    public bool RandomizeWalkSpeedEachEpisode;
+    public bool RandomizeWalkSpeedEachEpisode = false;
     [SerializeField]
     public int PlaceTargetCubeRandomlyAfterXSteps = 0;
     [HideInInspector]
     public float YHeightOffset = 0.05f;
 
     
-    [Header("ML-Agent Settings settings")] 
+    [Header("ML-Agent Settings settings")]
     [SerializeField]
     public int ContinuousActionSpaceOffset = 100;
     [SerializeField]
@@ -111,15 +111,14 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public float MaxJointForceLimit = 20000;
     [SerializeField]
-    public string BehaviorName = "Walker";
-    [SerializeField]
     public float JointDampen = 5000;
     [SerializeField]
     public float MaxJointSpring = 40000;
     [SerializeField]
     public int MaxStep = 5000;
-
-
+    [HideInInspector]
+    public string BehaviorName = "Walker";
+    
     void Awake()
     {
         if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)

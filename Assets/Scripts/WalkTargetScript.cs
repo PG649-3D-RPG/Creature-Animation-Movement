@@ -17,6 +17,10 @@ public class WalkTargetScript : MonoBehaviour
 
     private DynamicEnviormentGenerator Deg { get; set; }
 
+    public WalkerAgent agent;
+
+    public string tagToDetect = "agent";
+
 
     /// <summary>
     /// Start is called before the first frame update
@@ -29,6 +33,7 @@ public class WalkTargetScript : MonoBehaviour
         Rng = new Random();
         TerrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
+        agent = transform.parent.GetComponentInChildren<WalkerAgent>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
     }
@@ -91,6 +96,10 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)
     {
+        if (collision.transform.CompareTag(tagToDetect))
+        {
+            agent.TouchedTarget();
+        }
         if (collision.gameObject.name != "Terrain")
         {
             TargetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * TargetDirection;

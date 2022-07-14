@@ -18,7 +18,7 @@ namespace Unity.MLAgentsExamples
 
         [Header("Target Placement")]
         public float spawnRadius; //The radius in which a target can be randomly spawned.
-        public bool respawnIfTouched; //Should the target respawn to a different position when touched
+        public bool respawnIfTouched = true; //Should the target respawn to a different position when touched
 
         [Header("Target Fell Protection")]
         public bool respawnIfFallsOffPlatform = true; //If the target falls off the platform, reset the position.

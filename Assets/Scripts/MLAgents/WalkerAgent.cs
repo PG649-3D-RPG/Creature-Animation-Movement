@@ -244,6 +244,8 @@ public class WalkerAgent : Agent
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
+
+        sensor.AddObservation(topTransformRb.position.y);
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -283,11 +285,11 @@ public class WalkerAgent : Agent
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = bodyParts.Where(x => x.GetComponent<Bone>().category == BoneCategory.Head).Sum(part => (Vector3.Dot(cubeForward, part.forward) + 1) * .5F);
+        var lookAtTargetReward = (Vector3.Dot(cubeForward, topTransform.forward) + 1) * 0.5f;
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
 
-        AddReward(matchSpeedReward * lookAtTargetReward);
+        AddReward(matchSpeedReward * lookAtTargetReward * topTransform.position.y);
     }
 
     //Returns the average velocity of all of the body parts
@@ -326,5 +328,6 @@ public class WalkerAgent : Agent
     public void TouchedTarget()
     {
         AddReward(1f);
+        agent.EndEpisode();
     }
 }

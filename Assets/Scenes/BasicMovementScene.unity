@@ -349,11 +349,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  CreaturePrefab: {fileID: 1734616957, guid: d821b9ada7cf1d443847d45fbbc49118, type: 3}
+  CreaturePrefab: {fileID: 1734616957, guid: e119aa9d133e3e349b9d91fca0c23f4f, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  NnModel: {fileID: 0}
-  ArenaCount: 200
+  NnModel: {fileID: 5022602860645237092, guid: 7b0c0fb098578154bba31afae64634ff, type: 3}
+  ArenaCount: 1
   GroundTag: ground
   TerrainSize: 128
   Depth: 10
@@ -372,8 +372,8 @@ MonoBehaviour:
   TargetWalkingSpeed: 10
   MaxWalkingSpeed: 10
   RandomizeWalkSpeedEachEpisode: 0
-  YHeightOffset: 0.05
-  PlaceTargetCubeRandomly: 0
+  YHeightOffset: -0.37
+  PlaceTargetCubeRandomly: 1
   PlaceTargetCubeRandomlyAfterXSteps: 1
   ContinuousActionSpaceOffset: 244
   ObservationSpaceOffset: 244

@@ -140,6 +140,7 @@ public class WalkerAgent : Agent
     {
         episodeCounter++;
 
+        // Order is important. First regenerate terrain -> than place cube!
         if (deg.RegenerateTerrainAfterXSteps > 0 && episodeCounter % deg.RegenerateTerrainAfterXSteps == 0)
         {
             terrainGenerator.RegenerateTerrain();

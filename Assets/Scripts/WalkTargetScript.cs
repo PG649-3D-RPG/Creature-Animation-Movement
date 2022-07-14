@@ -26,14 +26,15 @@ public class WalkTargetScript : MonoBehaviour
     /// Start is called before the first frame update
     /// </summary>
     /// <returns></returns>
-    void Start()
+    public void Start()
     {
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
 
         Rng = new Random();
-        TerrainGenerator = transform.parent.GetComponentInChildren<TerrainGenerator>();
+        var parent = transform.parent;
+        TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
-        agent = transform.parent.GetComponentInChildren<WalkerAgent>();
+        agent = parent.GetComponentInChildren<WalkerAgent>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
     }
@@ -47,12 +48,18 @@ public class WalkTargetScript : MonoBehaviour
         // Move the target randomly
         if (Deg.TargetMovementSpeed > 0)
         {
-            MoveTargetRandomlyPerTick();
+            ThisRigidbody.MovePosition(transform.position + (Deg.TargetMovementSpeed * Time.deltaTime * TargetDirection));
         }
+        
+        var localPosition = transform.localPosition;
+        var x = localPosition.x;
+        var z = localPosition.z;
+        var terrainHeight = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
         // Safeguard if target is outside of arena
-        if (transform.localPosition.y is < -5f or > 40 || transform.localPosition.x is < -1 or > 129 || transform.localPosition.z is < -1 or > 129) 
+        if (transform.localPosition.y < terrainHeight -1 || transform.localPosition.y> 40 || transform.localPosition.x is < -1 or > 129 || transform.localPosition.z is < -1 or > 129)
         {
-            PlaceTargetCubeRandomly();
+            localPosition = new Vector3(x,terrainHeight + 1f , z);
+            transform.localPosition = localPosition;
         }
     }
 
@@ -66,16 +73,7 @@ public class WalkTargetScript : MonoBehaviour
         var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
         transform.localPosition = new Vector3(x, y, z);
     }
-
-    /// <summary>
-    /// Move the rigidbody of the target to a random position
-    /// </summary>
-    /// <returns></returns>
-    public void MoveTargetRandomlyPerTick()
-    {
-        ThisRigidbody.MovePosition(transform.position + (Deg.TargetMovementSpeed * Time.deltaTime * TargetDirection));
-    }
-
+    
     /// <summary> 
     /// Change direction randomly every x seconds
     /// </summary>
@@ -91,7 +89,8 @@ public class WalkTargetScript : MonoBehaviour
 
 
     /// <summary>
-    /// Move to random direction if target collided with walls or
+    /// Move to random direction if target collided with walls
+    /// Signal if the agent touched the target
     /// </summary>
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)

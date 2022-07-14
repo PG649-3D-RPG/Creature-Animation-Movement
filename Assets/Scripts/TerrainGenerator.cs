@@ -66,24 +66,13 @@ public class TerrainGenerator : MonoBehaviour
     }
 
     /// <summary>
-    /// 
+    /// Gets height (y) of terrain at Vector x.
     /// </summary>
     /// <param name="position">Position vector of object on terrain</param>
     /// <returns></returns>
     public float GetTerrainHeight(Vector3 position)
     {
         return _terrain.SampleHeight(position);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="x">x cordinate for the requested position</param>
-    /// <param name="z">z cordinate for the requested position</param>
-    /// <returns></returns>
-    public float GetTerrainHeight(int x, int z)
-    {
-        return _terrain.terrainData.GetHeight(x, z);
     }
 
     /// <summary>

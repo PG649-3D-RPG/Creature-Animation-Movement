@@ -196,7 +196,7 @@ public class WalkerAgent : Agent
     public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
     {
         //GROUND CHECK
-        sensor.AddObservation(bp.groundContact.touchingGround); // Is this bp touching the ground
+        sensor.AddObservation(bp.groundContact.TouchingGround); // Is this bp touching the ground
 
         //Get velocities in the context of our orientation cube's space
         //Note: You can get these velocities in world space as well but it may not train as well.

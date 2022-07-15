@@ -68,7 +68,7 @@ namespace Unity.MLAgentsExamples
             // Reset contact infos
             if (bp.groundContact)
             {
-                bp.groundContact.touchingGround = false;
+                bp.groundContact.TouchingGround = false;
             }
 
             if (bp.targetContact)
@@ -155,7 +155,7 @@ namespace Unity.MLAgentsExamples
                 Debug.Assert(!bp.groundContact, "GroundContact script should be initialized before. Otherwise proper config of penalty or abort episode is missing. ");
                 bp.groundContact = t.gameObject.AddComponent<GroundContact>();
             }
-            bp.groundContact.agent = gameObject.GetComponent<Agent>();
+            bp.groundContact.Agent = gameObject.GetComponent<Agent>();
 
             if (bp.joint)
             {

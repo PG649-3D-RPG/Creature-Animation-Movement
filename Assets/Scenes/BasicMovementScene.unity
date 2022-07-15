@@ -366,7 +366,7 @@ MonoBehaviour:
   BakeNavMesh: 0
   ObstacleThreshold: 0.9
   RegenerateTerrainAfterXSteps: 1000
-  ResetOnGroundContactParts: 06000000
+  ResetOnGroundContactParts: 0600000007000000
   HeadGroundContactPenalty: 0
   TorsoGroundContactPenalty: 0
   HipsGroundContactPenalty: 0
@@ -378,7 +378,7 @@ MonoBehaviour:
   TargetWalkingSpeed: 10
   MaxWalkingSpeed: 10
   RandomizeWalkSpeedEachEpisode: 0
-  PlaceTargetCubeRandomlyAfterXSteps: 1
+  PlaceTargetCubeRandomlyAfterXSteps: 0
   YHeightOffset: -0.37
   ContinuousActionSpaceOffset: 245
   ObservationSpaceOffset: 245

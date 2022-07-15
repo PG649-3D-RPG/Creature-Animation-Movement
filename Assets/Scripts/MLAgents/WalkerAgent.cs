@@ -27,7 +27,6 @@ public class WalkerAgent : Agent
     private Rigidbody _topTransformRb;
 
     private long _episodeCounter = 0;
-    private readonly List<Transform> _bodyParts = new();
     private Vector3 _dirToWalk = Vector3.right;
 
     // Scripts
@@ -92,7 +91,6 @@ public class WalkerAgent : Agent
             var boneScript = trans.GetComponent<Bone>();
             if (boneScript != null && !boneScript.isRoot)
             {
-                _bodyParts.Add(trans);
                 var groundContact = trans.AddComponent<GroundContact>();
                 var bodyPartHeight = trans.position.y - transform.position.y;
                 _jdController.SetupBodyPart(trans, bodyPartHeight);
@@ -176,7 +174,7 @@ public class WalkerAgent : Agent
         _topTransformRb.angularVelocity = Vector3.zero;
 
         //Reset all of the body parts
-        foreach (var bodyPart in _jdController.bodyPartsDict.Values)
+        foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
         {
             bodyPart.Reset(bodyPart, terrainHeight, _deg.YHeightOffset);
         }
@@ -289,14 +287,16 @@ public class WalkerAgent : Agent
             .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
     }
 
-    //normalized value of the difference in avg speed vs goal walking speed.
+    /// <summary>
+    /// normalized value of the difference in avg speed vs goal walking speed.
+    /// </summary>
+    /// <param name="velocityGoal"></param>
+    /// <param name="actualVelocity"></param>
+    /// <returns>Return the value on a declining sigmoid shaped curve that decays from 1 to 0. This reward will approach 1 if it matches perfectly and approach zero as it deviates. </returns>
     private float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
     {
         //distance between our actual velocity and goal velocity
         var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
-
-        //return the value on a declining sigmoid shaped curve that decays from 1 to 0
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
         return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
     }
 

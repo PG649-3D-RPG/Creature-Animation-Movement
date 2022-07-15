@@ -17,9 +17,9 @@ public class WalkTargetScript : MonoBehaviour
 
     private DynamicEnviormentGenerator Deg { get; set; }
 
-    public WalkerAgent agent;
+    private WalkerAgent _agent;
 
-    public string tagToDetect = "agent";
+    private const string TagToDetect = "agent";
 
 
     /// <summary>
@@ -34,7 +34,7 @@ public class WalkTargetScript : MonoBehaviour
         var parent = transform.parent;
         TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
-        agent = parent.GetComponentInChildren<WalkerAgent>();
+        _agent = parent.GetComponentInChildren<WalkerAgent>();
         PlaceTargetCubeRandomly();
         _ = StartCoroutine(nameof(ChangeDirection));
     }
@@ -95,9 +95,9 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.transform.CompareTag(tagToDetect))
+        if (collision.transform.CompareTag(TagToDetect))
         {
-            agent.TouchedTarget();
+            _agent.TouchedTarget();
         }
         if (collision.gameObject.name != "Terrain")
         {

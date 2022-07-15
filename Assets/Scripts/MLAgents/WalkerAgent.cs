@@ -153,11 +153,6 @@ public class WalkerAgent : Agent
 
         SetWalkerOnGround();
 
-        //Random start rotation to help generalize
-        //otherTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
-
-        UpdateOrientationObjects();
-
         //Set our goal walking speed
         MTargetWalkingSpeed =
             _deg.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _deg.MaxWalkingSpeed) : MTargetWalkingSpeed;
@@ -224,7 +219,7 @@ public class WalkerAgent : Agent
         //velocity we want to match
         var velGoal = cubeForward * MTargetWalkingSpeed;
         //ragdoll's avg vel
-        var avgVel = GetAvgVelocity();
+        var avgVel = GetAvgVelocityOfCreature();
 
         //current ragdoll velocity. normalized
         sensor.AddObservation(Vector3.Distance(velGoal, avgVel));
@@ -266,23 +261,18 @@ public class WalkerAgent : Agent
         }
     }
 
-    //Update OrientationCube and DirectionIndicator
-    public void UpdateOrientationObjects()
-    {
-        _dirToWalk = _target.position - _topTransform.position;
-        _orientationCube.UpdateOrientation(_topTransform, _target);
-    }
-
     public void FixedUpdate()
     {
-        UpdateOrientationObjects();
+        //Update OrientationCube and DirectionIndicator
+        _dirToWalk = _target.position - _topTransform.position;
+        _orientationCube.UpdateOrientation(_topTransform, _target);
 
         var cubeForward = _orientationCube.transform.forward;
 
         // Set reward for this step according to mixture of the following elements.
         // a. Match target speed
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocity());
+        var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocityOfCreature());
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
@@ -293,23 +283,10 @@ public class WalkerAgent : Agent
         AddReward(matchSpeedReward * lookAtTargetReward * _topTransform.position.y);
     }
 
-    //Returns the average velocity of all of the body parts
-    //Using the velocity of the hips only has shown to result in more erratic movement from the limbs, so...
-    //...using the average helps prevent this erratic movement
-    private Vector3 GetAvgVelocity()
+    private Vector3 GetAvgVelocityOfCreature()
     {
-        Vector3 velSum = Vector3.zero;
-
-        //ALL RBS
-        var numOfRb = 0;
-        foreach (var item in _jdController.bodyPartsList)
-        {
-            numOfRb++;
-            velSum += item.rb.velocity;
-        }
-
-        var avgVel = velSum / numOfRb;
-        return avgVel;
+        return _jdController.bodyPartsList.Select(x => x.rb.velocity)
+            .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
     }
 
     //normalized value of the difference in avg speed vs goal walking speed.

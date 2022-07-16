@@ -18,24 +18,6 @@ using Vector3 = UnityEngine.Vector3;
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
 
-    [Header("Prefabs")]
-    [SerializeField] public GameObject WallPrefab;
-
-    [SerializeField] public GameObject CreaturePrefab;
-    
-    [SerializeField] public GameObject TargetCubePrefab;
-
-    [SerializeField] public GameObject ObstaclePrefab;
-
-    [SerializeField] public NNModel NnModel;
-
-    [Header("Materials")]
-    [SerializeField]
-    public Material TerrainMaterial;
-    [SerializeField]
-    public Material WallMaterial;
-
-    
     [Header("Arena Settings")]
     [SerializeField]
     public int ArenaCount = 10;
@@ -43,88 +25,109 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public string GroundTag = "ground";
 
 
-    [Header("Terrain settings")]
-    [SerializeField] 
-    public int TerrainSize = 128;
-    [SerializeField]
-    public int Depth = 10;
-    [SerializeField]
-    public float Scale = 2.5f;
-    [SerializeField]
-    public bool GenerateObstacles  = true;
-    [SerializeField]
-    public bool GenerateHeights  = true;
-    [SerializeField, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
-    //valid range (0, NavMesh.GetSettingsCount-1)
-    public int NavMeshBuildSettingIndex = 0;
-    [SerializeField]
-    public CollectObjects navMeshSurfaceCollectObjects = CollectObjects.Children;
-    [SerializeField]
-    public float ScaleObstacle  = 10f;
-    [SerializeField]
-    public bool BakeNavMesh = true;
-    [SerializeField]
-    public float ObstacleThreshold = 0.9f;
-    [SerializeField]
-    public int RegenerateTerrainAfterXSteps = 0;
-
     [Header("Creature Settings")]
     [SerializeField]
-    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
+    public float ArmsGroundContactPenalty = 0;
+    [SerializeField]
+    public float HandsGroundContactPenalty = 0;
     [SerializeField]
     public float HeadGroundContactPenalty = 0;
-    [SerializeField]
-    public float TorsoGroundContactPenalty = 0;
     [SerializeField]
     public float HipsGroundContactPenalty = 0;
     [SerializeField]
     public float LegsGroundContactPenalty = 0;
     [SerializeField]
-    public float ArmsGroundContactPenalty = 0;
+    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
     [SerializeField]
-    public float HandsGroundContactPenalty = 0;
+    public float TorsoGroundContactPenalty = 0;
     
     [HideInInspector]
     public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
-    [Header("Target Cube Settings")] 
-    [SerializeField]
-    public float TargetMovementSpeed = 0f;
-    [SerializeField] 
-    public int TargetMaxSecondsInOneDirection = 10;
-    [SerializeField]
-    public float TargetWalkingSpeed = 10;
-    [SerializeField]
-    public float MaxWalkingSpeed = 10;
-    [SerializeField]
-    public bool RandomizeWalkSpeedEachEpisode = false;
-    [SerializeField]
-    public int PlaceTargetCubeRandomlyAfterXSteps = 0;
-    [HideInInspector]
-    public float YHeightOffset = 0.05f;
 
-    
+    [Header("Materials")]
+    [SerializeField]
+    public Material TerrainMaterial;
+    [SerializeField]
+    public Material WallMaterial;
+
+
     [Header("ML-Agent Settings settings")]
     [SerializeField]
     public int ContinuousActionSpaceOffset = 100;
+    [SerializeField]
+    public int DiscreteBranches = 0;
+    [SerializeField]
+    public float JointDampen = 5000;
+    [SerializeField]
+    public float MaxJointForceLimit = 20000;
+    [SerializeField]
+    public float MaxJointSpring = 40000;
+    [SerializeField]
+    public int MaxStep = 5000;
     [SerializeField]
     public int ObservationSpaceOffset = 100;
     [SerializeField]
     public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
     [SerializeField]
     public bool UseObservationSpaceOffsetAsObservationSpace = true;
-    [SerializeField]
-    public int DiscreteBranches = 0;
-    [SerializeField]
-    public float MaxJointForceLimit = 20000;
-    [SerializeField]
-    public float JointDampen = 5000;
-    [SerializeField]
-    public float MaxJointSpring = 40000;
-    [SerializeField]
-    public int MaxStep = 5000;
-    [HideInInspector]
+    [HideInInspector]//Kann leider nicht nach oben, da ansonsten der Header im Inspektor verschwindet
     public string BehaviorName = "Walker";
+
+
+    [Header("Prefabs")]
+    [SerializeField] public GameObject CreaturePrefab;
+    
+    [SerializeField] public NNModel NnModel;
+
+    [SerializeField] public GameObject ObstaclePrefab;
+
+    [SerializeField] public GameObject TargetCubePrefab;
+
+    [SerializeField] public GameObject WallPrefab;
+
+
+    [Header("Target Cube Settings")] 
+    [SerializeField]
+    public float MaxWalkingSpeed = 10;
+    [SerializeField]
+    public int PlaceTargetCubeRandomlyAfterXSteps = 0;
+    [SerializeField]
+    public bool RandomizeWalkSpeedEachEpisode = false;
+    [SerializeField] 
+    public int TargetMaxSecondsInOneDirection = 10;
+    [SerializeField]
+    public float TargetMovementSpeed = 0f;
+    [SerializeField]
+    public float TargetWalkingSpeed = 10;
+    [HideInInspector]
+    public float YHeightOffset = 0.05f;
+
+
+    [Header("Terrain settings")]
+    [SerializeField]
+    public bool BakeNavMesh = true;
+    [SerializeField]
+    public int Depth = 10;
+    [SerializeField]
+    public bool GenerateHeights  = true;
+    [SerializeField]
+    public bool GenerateObstacles  = true;
+    [SerializeField, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
+    //valid range (0, NavMesh.GetSettingsCount-1)
+    public int NavMeshBuildSettingIndex = 0;
+    [SerializeField]
+    public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
+    [SerializeField]
+    public float ObstacleThreshold = 0.9f;
+    [SerializeField]
+    public int RegenerateTerrainAfterXSteps = 0;
+    [SerializeField]
+    public float Scale = 2.5f;
+    [SerializeField]
+    public float ScaleObstacle  = 10f;
+    [SerializeField] 
+    public int TerrainSize = 128;
     
     void Awake()
     {
@@ -184,7 +187,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var terrain = terrainObj.AddComponent<Terrain>();
         NavMeshSurface navMeshSurface = terrain.AddComponent<NavMeshSurface>();
         navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(NavMeshBuildSettingIndex).agentTypeID;
-        navMeshSurface.collectObjects = navMeshSurfaceCollectObjects;
+        navMeshSurface.collectObjects = NavMeshSurfaceCollectObjects;
         terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();

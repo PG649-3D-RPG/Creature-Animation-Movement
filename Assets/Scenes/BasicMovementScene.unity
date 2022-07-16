@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 23800000, guid: 2ac026b96c0342f4e9759b2452cc57eb, type: 2}
+  m_NavMeshData: {fileID: 0}
 --- !u!1 &60314858
 GameObject:
   m_ObjectHideFlags: 0
@@ -362,6 +362,8 @@ MonoBehaviour:
   Scale: 2.5
   GenerateObstacles: 0
   GenerateHeights: 0
+  NavMeshBuildSettingIndex: 0
+  navMeshSurfaceCollectObjects: 2
   ScaleObstacle: 10
   BakeNavMesh: 0
   ObstacleThreshold: 0.9

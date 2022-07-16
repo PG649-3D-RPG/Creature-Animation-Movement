@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor.AI;
 using UnityEngine;
+using Unity.AI.Navigation;
 using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
     private Terrain _terrain;
     private  DynamicEnviormentGenerator Deg { get; set; }
+
+    private NavMeshSurface NavMeshSurface { get; set; }
 
     private GameObject ObstaclesContainer { get; set; }
 
@@ -26,6 +29,7 @@ public class TerrainGenerator : MonoBehaviour
     private void Awake()
     {
         _terrain = GetComponent<Terrain>();
+        NavMeshSurface = GetComponent<NavMeshSurface>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         ObstaclesContainer = new GameObject
         {
@@ -60,9 +64,7 @@ public class TerrainGenerator : MonoBehaviour
         Terrain.terrainData = GenerateTerrain(Terrain.terrainData);
 
         if (!Deg.BakeNavMesh) return; // Skipp Nav Mesh generation
-        //NavMeshBuilder.ClearAllNavMeshes();
-        //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
-        //NavMeshBuilder.BuildNavMeshAsync();
+        NavMeshSurface.BuildNavMesh();
     }
 
     /// <summary>

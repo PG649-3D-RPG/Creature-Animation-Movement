@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using Unity.AI.Navigation;
 using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
@@ -52,6 +54,11 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public bool GenerateObstacles  = true;
     [SerializeField]
     public bool GenerateHeights  = true;
+    [SerializeField, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
+    //valid range (0, NavMesh.GetSettingsCount-1)
+    public int NavMeshBuildSettingIndex = 0;
+    [SerializeField]
+    public CollectObjects navMeshSurfaceCollectObjects = CollectObjects.Children;
     [SerializeField]
     public float ScaleObstacle  = 10f;
     [SerializeField]
@@ -175,6 +182,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
 
         var terrain = terrainObj.AddComponent<Terrain>();
+        NavMeshSurface navMeshSurface = terrain.AddComponent<NavMeshSurface>();
+        navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(NavMeshBuildSettingIndex).agentTypeID;
+        navMeshSurface.collectObjects = navMeshSurfaceCollectObjects;
         terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();

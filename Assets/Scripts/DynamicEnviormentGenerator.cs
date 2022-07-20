@@ -17,15 +17,36 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
+    [Header("Materials")]
+    [Space(10)]
+    [SerializeField]
+    public Material TerrainMaterial;
+    [SerializeField]
+    public Material WallMaterial;
+
+    [Header("Prefabs")]
+    [Space(10)]
+    [SerializeField] public GameObject CreaturePrefab;
+
+    [SerializeField] public NNModel NnModel;
+
+    [SerializeField] public GameObject ObstaclePrefab;
+
+    [SerializeField] public GameObject TargetCubePrefab;
+
+    [SerializeField] public GameObject WallPrefab;
+
 
     [Header("Arena Settings")]
+    [Space(10)]
     [SerializeField]
     public int ArenaCount = 10;
     [HideInInspector]
     public string GroundTag = "ground";
 
 
-    [Header("Creature Settings")]
+    [Header("Creature Settings")] [Space(10)] [SerializeField]
+    public bool DebugMode = false;
     [SerializeField]
     public float ArmsGroundContactPenalty = 0;
     [SerializeField]
@@ -37,22 +58,15 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public float LegsGroundContactPenalty = 0;
     [SerializeField]
-    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
-    [SerializeField]
     public float TorsoGroundContactPenalty = 0;
-    
+    [SerializeField]
+    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
     [HideInInspector]
     public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
 
-    [Header("Materials")]
-    [SerializeField]
-    public Material TerrainMaterial;
-    [SerializeField]
-    public Material WallMaterial;
-
-
     [Header("ML-Agent Settings settings")]
+    [Space(10)]
     [SerializeField]
     public int ContinuousActionSpaceOffset = 100;
     [SerializeField]
@@ -75,23 +89,12 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public string BehaviorName = "Walker";
 
 
-    [Header("Prefabs")]
-    [SerializeField] public GameObject CreaturePrefab;
-    
-    [SerializeField] public NNModel NnModel;
-
-    [SerializeField] public GameObject ObstaclePrefab;
-
-    [SerializeField] public GameObject TargetCubePrefab;
-
-    [SerializeField] public GameObject WallPrefab;
-
-
-    [Header("Target Cube Settings")] 
+    [Header("Target Cube Settings")]
+    [Space(10)]
     [SerializeField]
     public float MaxWalkingSpeed = 10;
     [SerializeField]
-    public int PlaceTargetCubeRandomlyAfterXSteps = 0;
+    public int EpisodeCountToRandomizeTargetCubePosition = 0;
     [SerializeField]
     public bool RandomizeWalkSpeedEachEpisode = false;
     [SerializeField] 
@@ -100,33 +103,34 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float TargetMovementSpeed = 0f;
     [SerializeField]
     public float TargetWalkingSpeed = 10;
-    [HideInInspector]
+    [SerializeField]
     public float YHeightOffset = 0.05f;
 
 
     [Header("Terrain settings")]
-    [SerializeField]
-    public bool BakeNavMesh = true;
-    [SerializeField]
-    public int Depth = 10;
+    [Space(10)]
     [SerializeField]
     public bool GenerateHeights  = true;
     [SerializeField]
     public bool GenerateObstacles  = true;
-    [SerializeField, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
+    [SerializeField]
+    public int RegenerateTerrainAfterXEpisodes = 0;
+    [HideInInspector]
+    public bool BakeNavMesh = true;
+    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
     //valid range (0, NavMesh.GetSettingsCount-1)
     public int NavMeshBuildSettingIndex = 0;
-    [SerializeField]
+    [HideInInspector]
     public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
     [SerializeField]
-    public float ObstacleThreshold = 0.9f;
+    public int Depth = 10;
     [SerializeField]
-    public int RegenerateTerrainAfterXSteps = 0;
+    public float ObstacleThreshold = 0.9f;
     [SerializeField]
     public float Scale = 2.5f;
     [SerializeField]
     public float ScaleObstacle  = 10f;
-    [SerializeField] 
+    [HideInInspector] // Ist nicht wirklich überall implementiert. Brauchen wir wahrscheinlich auch nicht?
     public int TerrainSize = 128;
     
     void Awake()
@@ -141,6 +145,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
 
+        if(DebugMode) Time.timeScale = 0.1f;
         GenerateTrainingEnvironment();
     }
 
@@ -225,8 +230,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         creature.name = "Creature";
         creature.transform.localPosition = new Vector3(64, 24, 64);
         creature.AddComponent<WalkerAgent>();
-        // TODO Check what it does
-        creature.AddComponent<ModelOverrider>();
+        creature.AddComponent<ModelOverrider>(); // TODO Check what it does
+        if (DebugMode) creature.AddComponent<DebugScript>();
     }
 
     private void AddTargetToArena(GameObject arena)

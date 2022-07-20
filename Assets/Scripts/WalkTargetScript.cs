@@ -35,7 +35,10 @@ public class WalkTargetScript : MonoBehaviour
         TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
         _agent = parent.GetComponentInChildren<WalkerAgent>();
-        PlaceTargetCubeRandomly();
+        const int x = 64;
+        const int z = 80;
+        var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
+        transform.localPosition = new Vector3(x, y, z);
         _ = StartCoroutine(nameof(ChangeDirection));
     }
 

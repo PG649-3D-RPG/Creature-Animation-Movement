@@ -139,12 +139,12 @@ public class WalkerAgent : Agent
         _episodeCounter++;
 
         // Order is important. First regenerate terrain -> than place cube!
-        if (_deg.RegenerateTerrainAfterXSteps > 0 && _episodeCounter % _deg.RegenerateTerrainAfterXSteps == 0)
+        if (_deg.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _deg.RegenerateTerrainAfterXEpisodes == 0)
         {
             _terrainGenerator.RegenerateTerrain();
         }
 
-        if (_deg.PlaceTargetCubeRandomlyAfterXSteps>0 && _episodeCounter % _deg.PlaceTargetCubeRandomlyAfterXSteps == 0)
+        if (_deg.EpisodeCountToRandomizeTargetCubePosition>0 && _episodeCounter % _deg.EpisodeCountToRandomizeTargetCubePosition == 0)
         {
             _walkTargetScript.PlaceTargetCubeRandomly();
         }

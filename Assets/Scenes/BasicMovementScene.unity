@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -348,17 +348,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 16
+  TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
+  WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
+  CreaturePrefab: {fileID: 1734616957, guid: da42aa65e6649e14baf2d53e932c64d3, type: 3}
+  NnModel: {fileID: 0}
+  ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
+  TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
+  WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
+  ArenaCount: 1
   GroundTag: ground
+  DebugMode: 1
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0
   HeadGroundContactPenalty: 0
   HipsGroundContactPenalty: 0
   LegsGroundContactPenalty: 0
-  ResetOnGroundContactParts: 0600000007000000
   TorsoGroundContactPenalty: 0
-  TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
-  WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
+  ResetOnGroundContactParts: 0600000007000000
   ContinuousActionSpaceOffset: 245
   DiscreteBranches: 0
   JointDampen: 5000
@@ -369,26 +375,21 @@ MonoBehaviour:
   UseContinuousActionSpaceOffsetAsContinuousActionSpace: 1
   UseObservationSpaceOffsetAsObservationSpace: 1
   BehaviorName: Walker
-  CreaturePrefab: {fileID: 1734616957, guid: e119aa9d133e3e349b9d91fca0c23f4f, type: 3}
-  NnModel: {fileID: 0}
-  ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
-  WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   MaxWalkingSpeed: 10
-  PlaceTargetCubeRandomlyAfterXSteps: 0
+  EpisodeCountToRandomizeTargetCubePosition: 0
   RandomizeWalkSpeedEachEpisode: 0
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0
   TargetWalkingSpeed: 10
-  YHeightOffset: -0.37
-  BakeNavMesh: 0
-  Depth: 10
+  YHeightOffset: 0.05
   GenerateHeights: 0
   GenerateObstacles: 0
+  RegenerateTerrainAfterXEpisodes: 0
+  BakeNavMesh: 0
   NavMeshBuildSettingIndex: 0
   NavMeshSurfaceCollectObjects: 2
+  Depth: 10
   ObstacleThreshold: 0.9
-  RegenerateTerrainAfterXSteps: 1000
   Scale: 2.5
   ScaleObstacle: 10
   TerrainSize: 128
@@ -404,11 +405,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d41be8c7456fd43921ebb738a0e5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityMultiplier: 1
-  fixedDeltaTime: 0.02
-  maximumDeltaTime: 0.33333334
-  solverIterations: 6
-  solverVelocityIterations: 1
+  gravityMultiplier: 1.5
+  fixedDeltaTime: 0.01333
+  maximumDeltaTime: 0.15
+  solverIterations: 100
+  solverVelocityIterations: 100
   reuseCollisionCallbacks: 1
 --- !u!114 &1211399391
 MonoBehaviour:

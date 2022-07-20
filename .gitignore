@@ -577,3 +577,7 @@ FodyWeavers.xsd
 .idea/.idea.Creature-Animation-Movement/.idea/indexLayout.xml
 
 .idea/.idea.Creature-Animation-Movement/.idea/projectSettingsUpdater.xml
+
+
+# Game Files
+Game/**

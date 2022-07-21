@@ -12,6 +12,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Serialization;
+using Debug = System.Diagnostics.Debug;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
@@ -24,6 +25,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField]
     public Material WallMaterial;
 
+    [Header("Scripts")] [Space(10)] [SerializeField, Tooltip("Must exist in the project!")]
+    public string AgentScriptName = "WalkerAgent" ;
+    
     [Header("Prefabs")]
     [Space(10)]
     [SerializeField] public GameObject CreaturePrefab;
@@ -41,12 +45,15 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [Space(10)]
     [SerializeField]
     public int ArenaCount = 10;
-    [HideInInspector]
     public string GroundTag = "ground";
 
 
-    [Header("Creature Settings")] [Space(10)] [SerializeField]
+    [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
+    [SerializeField]
+    public float TimeScale = 1f;
+    
+    [Header("Creature Settings")] [Space(10)] 
     [SerializeField]
     public float ArmsGroundContactPenalty = 0;
     [SerializeField]
@@ -85,7 +92,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
     [SerializeField]
     public bool UseObservationSpaceOffsetAsObservationSpace = true;
-    [HideInInspector]//Kann leider nicht nach oben, da ansonsten der Header im Inspektor verschwindet
     public string BehaviorName = "Walker";
 
 
@@ -111,32 +117,34 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [Space(10)]
     [SerializeField]
     public bool GenerateHeights  = true;
-    [SerializeField]
+    [HideInInspector] // TODO Activate when implemented
     public bool GenerateObstacles  = true;
     [SerializeField]
     public int RegenerateTerrainAfterXEpisodes = 0;
-    [HideInInspector]
-    public bool BakeNavMesh = true;
-    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]
+    [HideInInspector] // TODO Activate when implemented
+    public bool BakeNavMesh = false;
+    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented
     //valid range (0, NavMesh.GetSettingsCount-1)
     public int NavMeshBuildSettingIndex = 0;
     [HideInInspector]
     public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
     [SerializeField]
     public int Depth = 10;
-    [SerializeField]
+    [HideInInspector] // TODO Activate when implemented
     public float ObstacleThreshold = 0.9f;
     [SerializeField]
     public float Scale = 2.5f;
     [SerializeField]
     public float ScaleObstacle  = 10f;
-    [HideInInspector] // Ist nicht wirklich überall implementiert. Brauchen wir wahrscheinlich auch nicht?
+    [HideInInspector] // Ist nicht wirklich ï¿½berall implementiert. Brauchen wir wahrscheinlich auch nicht?
     public int TerrainSize = 128;
     
     void Awake()
     {
         if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
+        if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
+        
         
         if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
         if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
@@ -145,7 +153,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
 
-        if(DebugMode) Time.timeScale = 0.1f;
+        if(DebugMode) Time.timeScale = TimeScale;
         GenerateTrainingEnvironment();
     }
 
@@ -229,7 +237,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var creature = Instantiate(CreaturePrefab, new Vector3(64,24,64), Quaternion.identity, arena.transform);
         creature.name = "Creature";
         creature.transform.localPosition = new Vector3(64, 24, 64);
-        creature.AddComponent<WalkerAgent>();
+        if (creature.AddComponent(Type.GetType("WalkerAgent")) == null)
+            throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
         creature.AddComponent<ModelOverrider>(); // TODO Check what it does
         if (DebugMode) creature.AddComponent<DebugScript>();
     }
@@ -240,4 +249,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
     }
+}
+
+public enum WalkerAgentType
+{
+    Default,
+    
 }

@@ -356,10 +356,10 @@ MonoBehaviour:
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  ArenaCount: 32
+  ArenaCount: 64
   GroundTag: ground
-  DebugMode: 0
-  TimeScale: 1
+  DebugMode: 1
+  TimeScale: 0.1
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0
   HeadGroundContactPenalty: 0

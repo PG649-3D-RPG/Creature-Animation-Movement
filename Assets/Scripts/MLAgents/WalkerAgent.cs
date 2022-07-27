@@ -278,7 +278,7 @@ public class WalkerAgent : Agent
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
 
-        AddReward(matchSpeedReward * lookAtTargetReward * _topTransform.position.y);
+        AddReward(matchSpeedReward * lookAtTargetReward);
     }
 
     private Vector3 GetAvgVelocityOfCreature()

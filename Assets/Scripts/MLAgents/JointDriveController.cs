@@ -168,6 +168,13 @@ namespace Unity.MLAgentsExamples
                 bp.joint.slerpDrive = jd;
             }
 
+            var connectedCollider = bp.joint.connectedBody.transform.GetComponent<Collider>();
+
+            if (connectedCollider != null) {
+                Debug.Log(t.GetComponent<Bone>().category);
+                Physics.IgnoreCollision(t.GetComponent<Collider>(), connectedCollider);
+            }
+
             bp.thisJdController = this;
             bodyPartsDict.Add(t, bp);
             bodyPartsList.Add(bp);

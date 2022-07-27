@@ -3,118 +3,157 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
 using System.Threading.Tasks;
+using Unity.AI.Navigation;
 using Unity.Barracuda;
 using Unity.MLAgents;
 using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
+using UnityEngine.Serialization;
+using Debug = System.Diagnostics.Debug;
 using Quaternion = UnityEngine.Quaternion;
 using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
-
-    [Header("Prefabs")]
-    [SerializeField] public GameObject WallPrefab;
-
-    [SerializeField] public GameObject CreaturePrefab;
-    
-    [SerializeField] public GameObject TargetCubePrefab;
-
-    [SerializeField] public GameObject ObstaclePrefab;
-
-    [SerializeField] public NNModel NnModel;
-
-    [Header("Arena Settings")]
-    [SerializeField]
-    public int ArenaCount = 10;
-    [SerializeField]
-    public string GroundTag = "ground";
-
-
-    [Header("Terrain settings")]
-    [SerializeField] 
-    public int TerrainSize = 128;
-    [SerializeField]
-    public int Depth = 10;
-    [SerializeField]
-    public float Scale = 2.5f;
-    [SerializeField]
-    public bool GenerateObstacles  = true;
-    [SerializeField]
-    public bool GenerateHeights  = true;
-    [SerializeField]
-    public bool BakeNavMesh = true;
-    [SerializeField]
-    public float ObstacleThreshold { get; set; } = 0.9f;
-    [SerializeField]
-    public float ScaleObstacle { get; set; } = 10f;
-    [SerializeField]
-    public bool RegenerateTerrain = true;
-    [SerializeField]
-    public int RegenerateTerrainAfterXSteps = 1;
+    [Header("Materials")]
+    [Space(10)]
     [SerializeField]
     public Material TerrainMaterial;
     [SerializeField]
     public Material WallMaterial;
 
-    [Header("Creature Settings")]
-    [SerializeField]
-    public List<BoneCategory> NotAllowedToTouchGround = new() { BoneCategory.Head };
-    [SerializeField]
-    public FlexibleDictionary<BoneCategory, int> PenaltiesForBodyParts = new() {};
+    [Header("Scripts")] [Space(10)] [SerializeField, Tooltip("Must exist in the project!")]
+    public string AgentScriptName = "WalkerAgent" ;
+    
+    [Header("Prefabs")]
+    [Space(10)]
+    [SerializeField] public GameObject CreaturePrefab;
+
+    [SerializeField] public NNModel NnModel;
+
+    [SerializeField] public GameObject ObstaclePrefab;
+
+    [SerializeField] public GameObject TargetCubePrefab;
+
+    [SerializeField] public GameObject WallPrefab;
 
 
-    [Header("Target Settings")] 
+    [Header("Arena Settings")]
+    [Space(10)]
     [SerializeField]
-    public bool IsMovingTarget = true;
-    [SerializeField]
-    public float MovementSpeed = 0.1f;
-    [SerializeField] 
-    public int TargetMaxSecondsInOneDirection = 10;
-    [SerializeField]
-    public float TargetWalkingSpeed = 10;
-    [SerializeField]
-    public float MaxWalkingSpeed = 10;
-    [SerializeField]
-    public bool RandomizeWalkSpeedEachEpisode;
-    [SerializeField]
-    public float YHeightOffset = 0.05f;
-    [SerializeField]
-    public bool PlaceTargetCubeRandomly = true;
-    [SerializeField]
-    public int PlaceTargetCubeRandomlyAfterXSteps = 1;
+    public int ArenaCount = 10;
+    public string GroundTag = "ground";
 
-    [Header("ML-Agent Settings settings")] 
+
+    [Header("Debug Settings")] [Space(10)] [SerializeField]
+    public bool DebugMode = false;
+    [SerializeField]
+    public float TimeScale = 1f;
+    
+    [Header("Creature Settings")] [Space(10)] 
+    [SerializeField]
+    public float ArmsGroundContactPenalty = 0;
+    [SerializeField]
+    public float HandsGroundContactPenalty = 0;
+    [SerializeField]
+    public float HeadGroundContactPenalty = 0;
+    [SerializeField]
+    public float HipsGroundContactPenalty = 0;
+    [SerializeField]
+    public float LegsGroundContactPenalty = 0;
+    [SerializeField]
+    public float TorsoGroundContactPenalty = 0;
+    [SerializeField]
+    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
+    [HideInInspector]
+    public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
+
+
+    [Header("ML-Agent Settings settings")]
+    [Space(10)]
     [SerializeField]
     public int ContinuousActionSpaceOffset = 100;
+    [SerializeField]
+    public int DiscreteBranches = 0;
+    [SerializeField]
+    public float JointDampen = 5000;
+    [SerializeField]
+    public float MaxJointForceLimit = 20000;
+    [SerializeField]
+    public float MaxJointSpring = 40000;
+    [SerializeField]
+    public int MaxStep = 5000;
     [SerializeField]
     public int ObservationSpaceOffset = 100;
     [SerializeField]
     public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
     [SerializeField]
     public bool UseObservationSpaceOffsetAsObservationSpace = true;
-
-    [SerializeField]
-    public int DiscreteBranches = 0;
-
-    [SerializeField]
-    public float MaxJointForceLimit = 20000;
-    [SerializeField]
     public string BehaviorName = "Walker";
-    [SerializeField]
-    public float JointDampen = 5000;
-    [SerializeField]
-    public float MaxJointSpring = 40000;
-    [SerializeField]
-    public int MaxStep = 5000;
 
 
+    [Header("Target Cube Settings")]
+    [Space(10)]
+    [SerializeField]
+    public float MaxWalkingSpeed = 10;
+    [SerializeField]
+    public int EpisodeCountToRandomizeTargetCubePosition = 0;
+    [SerializeField]
+    public bool RandomizeWalkSpeedEachEpisode = false;
+    [SerializeField] 
+    public int TargetMaxSecondsInOneDirection = 10;
+    [SerializeField]
+    public float TargetMovementSpeed = 0f;
+    [SerializeField]
+    public float TargetWalkingSpeed = 10;
+    [SerializeField]
+    public float YHeightOffset = 0.05f;
+
+
+    [Header("Terrain settings")]
+    [Space(10)]
+    [SerializeField]
+    public bool GenerateHeights  = true;
+    [HideInInspector] // TODO Activate when implemented
+    public bool GenerateObstacles  = true;
+    [SerializeField]
+    public int RegenerateTerrainAfterXEpisodes = 0;
+    [HideInInspector] // TODO Activate when implemented
+    public bool BakeNavMesh = false;
+    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented
+    //valid range (0, NavMesh.GetSettingsCount-1)
+    public int NavMeshBuildSettingIndex = 0;
+    [HideInInspector]
+    public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
+    [SerializeField]
+    public int Depth = 10;
+    [HideInInspector] // TODO Activate when implemented
+    public float ObstacleThreshold = 0.9f;
+    [SerializeField]
+    public float Scale = 2.5f;
+    [SerializeField]
+    public float ScaleObstacle  = 10f;
+    [HideInInspector] // Ist nicht wirklich �berall implementiert. Brauchen wir wahrscheinlich auch nicht?
+    public int TerrainSize = 128;
+    
     void Awake()
     {
         if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
+        if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
+        
+        
+        if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
+        if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
+        if(HipsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hip, HipsGroundContactPenalty);
+        if(LegsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Leg, LegsGroundContactPenalty);
+        if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
+        if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
+
+        if(DebugMode) Time.timeScale = TimeScale;
         GenerateTrainingEnvironment();
     }
 
@@ -159,6 +198,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
 
         var terrain = terrainObj.AddComponent<Terrain>();
+        NavMeshSurface navMeshSurface = terrain.AddComponent<NavMeshSurface>();
+        navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(NavMeshBuildSettingIndex).agentTypeID;
+        navMeshSurface.collectObjects = NavMeshSurfaceCollectObjects;
         terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
@@ -195,9 +237,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var creature = Instantiate(CreaturePrefab, new Vector3(64,24,64), Quaternion.identity, arena.transform);
         creature.name = "Creature";
         creature.transform.localPosition = new Vector3(64, 24, 64);
-        creature.AddComponent<WalkerAgent>();
-        // TODO Check what it does
-        creature.AddComponent<ModelOverrider>();
+        if (creature.AddComponent(Type.GetType("WalkerAgent")) == null)
+            throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
+        creature.AddComponent<ModelOverrider>(); // TODO Check what it does
+        if (DebugMode) creature.AddComponent<DebugScript>();
     }
 
     private void AddTargetToArena(GameObject arena)
@@ -206,4 +249,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
     }
+}
+
+public enum WalkerAgentType
+{
+    Default,
+    
 }

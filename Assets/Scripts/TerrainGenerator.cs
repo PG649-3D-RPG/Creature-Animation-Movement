@@ -2,14 +2,16 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.AI;
 using UnityEngine;
+using Unity.AI.Navigation;
 using Random = UnityEngine.Random;
 
 public class TerrainGenerator : MonoBehaviour
 {
     private Terrain _terrain;
     private  DynamicEnviormentGenerator Deg { get; set; }
+
+    private NavMeshSurface NavMeshSurface { get; set; }
 
     private GameObject ObstaclesContainer { get; set; }
 
@@ -26,6 +28,7 @@ public class TerrainGenerator : MonoBehaviour
     private void Awake()
     {
         _terrain = GetComponent<Terrain>();
+        NavMeshSurface = GetComponent<NavMeshSurface>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         ObstaclesContainer = new GameObject
         {
@@ -60,30 +63,17 @@ public class TerrainGenerator : MonoBehaviour
         Terrain.terrainData = GenerateTerrain(Terrain.terrainData);
 
         if (!Deg.BakeNavMesh) return; // Skipp Nav Mesh generation
-        //NavMeshBuilder.ClearAllNavMeshes();
-        //NavMeshBuilder.BuildNavMesh(); //Blocking Operation is slow
-        //NavMeshBuilder.BuildNavMeshAsync();
+        NavMeshSurface.BuildNavMesh();
     }
 
     /// <summary>
-    /// 
+    /// Gets height (y) of terrain at Vector x.
     /// </summary>
     /// <param name="position">Position vector of object on terrain</param>
     /// <returns></returns>
     public float GetTerrainHeight(Vector3 position)
     {
         return _terrain.SampleHeight(position);
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="x">x cordinate for the requested position</param>
-    /// <param name="z">z cordinate for the requested position</param>
-    /// <returns></returns>
-    public float GetTerrainHeight(int x, int z)
-    {
-        return _terrain.terrainData.GetHeight(x, z);
     }
 
     /// <summary>

@@ -18,51 +18,43 @@ namespace Unity.MLAgentsExamples
     [DisallowMultipleComponent]
     public class GroundContact : MonoBehaviour
     {
-        [HideInInspector] public Agent agent;
+        public Agent Agent;
+        public bool TouchingGround;
+        private string _kGround; // Tag of ground object.
+        private DynamicEnviormentGenerator _deg;
+        private Bone _boneScript;
 
-        public bool touchingGround;
-        private string k_Ground; // Tag of ground object.
-        private DynamicEnviormentGenerator deg;
-        private Bone boneScript;
+        public GroundContact(Agent agent)
+        {
+            Agent = agent;
+        }
+
         public void Awake()
         {
-            deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
-            k_Ground = deg.GroundTag;
-            boneScript = this.GetComponentInParent<Bone>();
+            _deg = FindObjectOfType<DynamicEnviormentGenerator>();
+            _kGround = _deg.GroundTag;
+            _boneScript = GetComponentInParent<Bone>();
         }
 
         /// <summary>
         /// Check for collision with ground, and optionally penalize agent. Ground needs to be tagged with "ground".
         /// </summary>
-        void OnCollisionEnter(Collision col)
+        private void OnCollisionEnter(Collision col)
         {
-
-            // TODO: Ground should be tagged
-            if (col.transform.CompareTag(k_Ground))
+            if (col.transform.CompareTag(_kGround))
             {
-                touchingGround = true;
-                
-                if (deg.PenaltiesForBodyParts.TryGetValue(boneScript.category, out var groundContactPenalty))
-                {                    
-                    agent.SetReward(groundContactPenalty);
-                }
-
-                if (deg.NotAllowedToTouchGround.Contains(boneScript.category))
-                {
-                    agent.EndEpisode();
-                }
+                TouchingGround = true;
+                if (_deg.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
+                if (_deg.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
             }
         }
 
         /// <summary>
         /// Check for end of ground collision and reset flag appropriately.
         /// </summary>
-        void OnCollisionExit(Collision other)
+        private void OnCollisionExit(Collision other)
         {
-            if (other.transform.CompareTag(k_Ground))
-            {
-                touchingGround = false;
-            }
+            if (other.transform.CompareTag(_kGround)) TouchingGround = false;
         }
     }
 }

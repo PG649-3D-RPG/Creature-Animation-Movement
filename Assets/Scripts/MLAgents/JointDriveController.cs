@@ -171,7 +171,6 @@ namespace Unity.MLAgentsExamples
             var connectedCollider = bp.joint.connectedBody.transform.GetComponent<Collider>();
 
             if (connectedCollider != null) {
-                Debug.Log(t.GetComponent<Bone>().category);
                 Physics.IgnoreCollision(t.GetComponent<Collider>(), connectedCollider);
             }
 

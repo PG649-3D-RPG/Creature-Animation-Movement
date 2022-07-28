@@ -18,6 +18,11 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
+    public string BehaviorName => "Walker";
+    public string GroundTag => "ground";
+    public float YHeightOffset => 0.00001f;
+    public int TerrainSize => 128;
+
     [Header("Materials")]
     [Space(10)]
     [SerializeField]
@@ -45,8 +50,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [Space(10)]
     [SerializeField]
     public int ArenaCount = 10;
-    public string GroundTag = "ground";
-
 
     [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
@@ -92,8 +95,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
     [SerializeField]
     public bool UseObservationSpaceOffsetAsObservationSpace = true;
-    public string BehaviorName = "Walker";
-
+    [SerializeField]
+    public bool TakeActionsBetweenDecisions = false;
 
     [Header("Target Cube Settings")]
     [Space(10)]
@@ -109,36 +112,33 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float TargetMovementSpeed = 0f;
     [SerializeField]
     public float TargetWalkingSpeed = 10;
-    [SerializeField]
-    public float YHeightOffset = 0.05f;
-
 
     [Header("Terrain settings")]
     [Space(10)]
     [SerializeField]
     public bool GenerateHeights  = true;
-    [HideInInspector] // TODO Activate when implemented
-    public bool GenerateObstacles  = true;
     [SerializeField]
     public int RegenerateTerrainAfterXEpisodes = 0;
-    [HideInInspector] // TODO Activate when implemented
-    public bool BakeNavMesh = false;
-    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented
-    //valid range (0, NavMesh.GetSettingsCount-1)
-    public int NavMeshBuildSettingIndex = 0;
-    [HideInInspector]
-    public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
     [SerializeField]
     public int Depth = 10;
-    [HideInInspector] // TODO Activate when implemented
-    public float ObstacleThreshold = 0.9f;
     [SerializeField]
     public float Scale = 2.5f;
     [SerializeField]
     public float ScaleObstacle  = 10f;
-    [HideInInspector] // Ist nicht wirklich �berall implementiert. Brauchen wir wahrscheinlich auch nicht?
-    public int TerrainSize = 128;
+
+
+    [HideInInspector] // TODO Activate when implemented
+    public float ObstacleThreshold = 0.9f;
+    [HideInInspector]
+    public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
+    [HideInInspector] // TODO Activate when implemented
+    public bool BakeNavMesh = false;
+    [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented. Valid range (0, NavMesh.GetSettingsCount-1)
+    public int NavMeshBuildSettingIndex = 0;
+    [HideInInspector] // TODO Activate when implemented
+    public bool GenerateObstacles = true;
     
+
     void Awake()
     {
         if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
@@ -249,10 +249,4 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
     }
-}
-
-public enum WalkerAgentType
-{
-    Default,
-    
 }

@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
-public class WalkerAgent : Agent
+public class WalkerAgentHeadReward : Agent
 {
     // Generator
     private DynamicEnviormentGenerator _deg;
@@ -52,16 +52,16 @@ public class WalkerAgent : Agent
         _jdController.maxJointForceLimit = _deg.MaxJointForceLimit;
         _jdController.jointDampen = _deg.JointDampen;
         _jdController.maxJointSpring = _deg.MaxJointSpring;
-        
+
         // Set agent settings (maxSteps)
         var mAgent = gameObject.GetComponent<Agent>();
         mAgent.MaxStep = _deg.MaxStep;
-        
+
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = _deg.UseContinuousActionSpaceOffsetAsContinuousActionSpace 
-            ? new ActionSpec(_deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches]) 
+        bpScript.BrainParameters.ActionSpec = _deg.UseContinuousActionSpaceOffsetAsContinuousActionSpace
+            ? new ActionSpec(_deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches])
             : new ActionSpec(3 * skeleton.nBones + _deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _deg.UseObservationSpaceOffsetAsObservationSpace
             ? _deg.ObservationSpaceOffset
@@ -144,7 +144,7 @@ public class WalkerAgent : Agent
             _terrainGenerator.RegenerateTerrain();
         }
 
-        if (_deg.EpisodeCountToRandomizeTargetCubePosition>0 && _episodeCounter % _deg.EpisodeCountToRandomizeTargetCubePosition == 0)
+        if (_deg.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _deg.EpisodeCountToRandomizeTargetCubePosition == 0)
         {
             _walkTargetScript.PlaceTargetCubeRandomly();
         }
@@ -168,7 +168,7 @@ public class WalkerAgent : Agent
         position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + _deg.YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
         _topTransform.rotation = _topStartingRotation;
-        
+
 
         _topTransformRb.velocity = Vector3.zero;
         _topTransformRb.angularVelocity = Vector3.zero;
@@ -278,7 +278,7 @@ public class WalkerAgent : Agent
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
 
-        AddReward(matchSpeedReward * lookAtTargetReward);
+        AddReward(matchSpeedReward * lookAtTargetReward * _topTransformRb.position.y);
     }
 
     private Vector3 GetAvgVelocityOfCreature()

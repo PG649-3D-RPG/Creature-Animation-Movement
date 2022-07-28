@@ -350,51 +350,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
   WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
-  AgentScriptName: WalkerAgent
+  AgentScriptName: WalkerAgentNullSafe
   CreaturePrefab: {fileID: 1734616957, guid: 14c9349c0959964429d873f345a3d63b, type: 3}
   NnModel: {fileID: 0}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  ArenaCount: 64
-  GroundTag: ground
-  DebugMode: 1
-  TimeScale: 0.1
+  ArenaCount: 16
+  DebugMode: 0
+  TimeScale: 0.3
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0
   HeadGroundContactPenalty: 0
   HipsGroundContactPenalty: 0
   LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: 0
-  ResetOnGroundContactParts: 0600000007000000
+  ResetOnGroundContactParts: 06000000
   ContinuousActionSpaceOffset: 245
   DiscreteBranches: 0
   JointDampen: 5000
-  MaxJointForceLimit: 20000
-  MaxJointSpring: 40000
-  MaxStep: 5000
+  MaxJointForceLimit: 40000
+  MaxJointSpring: 80000
+  MaxStep: 10000
   ObservationSpaceOffset: 245
   UseContinuousActionSpaceOffsetAsContinuousActionSpace: 1
   UseObservationSpaceOffsetAsObservationSpace: 1
-  BehaviorName: Walker
+  TakeActionsBetweenDecisions: 0
   MaxWalkingSpeed: 10
   EpisodeCountToRandomizeTargetCubePosition: 0
   RandomizeWalkSpeedEachEpisode: 1
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0
   TargetWalkingSpeed: 10
-  YHeightOffset: 0.05
   GenerateHeights: 0
-  GenerateObstacles: 0
   RegenerateTerrainAfterXEpisodes: 0
-  BakeNavMesh: 0
-  NavMeshBuildSettingIndex: 0
-  NavMeshSurfaceCollectObjects: 2
   Depth: 10
-  ObstacleThreshold: 0.9
   Scale: 2.5
   ScaleObstacle: 10
-  TerrainSize: 128
+  ObstacleThreshold: 0.9
+  NavMeshSurfaceCollectObjects: 2
+  BakeNavMesh: 0
+  NavMeshBuildSettingIndex: 0
+  GenerateObstacles: 0
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -408,10 +405,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gravityMultiplier: 1.5
-  fixedDeltaTime: 0.01333
-  maximumDeltaTime: 0.15
-  solverIterations: 100
-  solverVelocityIterations: 100
+  fixedDeltaTime: 0.008333
+  maximumDeltaTime: 0.01
+  solverIterations: 12
+  solverVelocityIterations: 12
   reuseCollisionCallbacks: 1
 --- !u!114 &1211399391
 MonoBehaviour:
@@ -491,7 +488,7 @@ Terrain:
   m_GameObject: {fileID: 1438603205}
   m_Enabled: 1
   serializedVersion: 6
-  m_TerrainData: {fileID: 15600000, guid: 695c563a7b9404a46845a47de602d478, type: 2}
+  m_TerrainData: {fileID: 0}
   m_TreeDistance: 5000
   m_TreeBillboardDistance: 50
   m_TreeCrossFadeLength: 5

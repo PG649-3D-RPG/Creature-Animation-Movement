@@ -237,7 +237,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         var creature = Instantiate(CreaturePrefab, new Vector3(64,24,64), Quaternion.identity, arena.transform);
         creature.name = "Creature";
         creature.transform.localPosition = new Vector3(64, 24, 64);
-        if (creature.AddComponent(Type.GetType("WalkerAgent")) == null)
+        if (creature.AddComponent(Type.GetType(AgentScriptName)) == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
         creature.AddComponent<ModelOverrider>(); // TODO Check what it does
         if (DebugMode) creature.AddComponent<DebugScript>();

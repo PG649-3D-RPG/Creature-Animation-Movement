@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
-public class WalkerAgentHeadReward : Agent
+public class AgentNew : Agent
 {
     // Generator
     private DynamicEnviormentGenerator _deg;
@@ -49,6 +49,7 @@ public class WalkerAgentHeadReward : Agent
         _deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         _jdController = this.AddComponent<JointDriveController>();
         _decisionRequester = this.AddComponent<DecisionRequester>();
+        _decisionRequester.TakeActionsBetweenDecisions = _deg.TakeActionsBetweenDecisions;
         _jdController.maxJointForceLimit = _deg.MaxJointForceLimit;
         _jdController.jointDampen = _deg.JointDampen;
         _jdController.maxJointSpring = _deg.MaxJointSpring;
@@ -79,7 +80,7 @@ public class WalkerAgentHeadReward : Agent
         _agent = gameObject.GetComponent<Agent>();
         // TODO: Update
         _target = parent.Find("Creature Target").transform;
-        _orientationCube = transform.Find("orientation cube").AddComponent<OrientationCubeController>();
+        _orientationCube = transform.Find("Orientation Cube").AddComponent<OrientationCubeController>();
 
         //Get Body Parts
         //and setup each body part
@@ -154,6 +155,9 @@ public class WalkerAgentHeadReward : Agent
         //Set our goal walking speed
         MTargetWalkingSpeed =
             _deg.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _deg.MaxWalkingSpeed) : MTargetWalkingSpeed;
+
+        //Physics.gravity = new Vector3(0, Random.Range(-200, 200), 0);
+        //Debug.Log($"Physics {Physics.gravity} Reward {_agent.GetCumulativeReward()}");
     }
 
 
@@ -179,7 +183,7 @@ public class WalkerAgentHeadReward : Agent
             bodyPart.Reset(bodyPart, terrainHeight, _deg.YHeightOffset);
         }
 
-        _topTransform.rotation = Quaternion.Euler(0, Random.Range(0.0f, 360.0f), 0);
+        _topTransform.rotation = Quaternion.Euler(90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
     }
 
 
@@ -277,8 +281,8 @@ public class WalkerAgentHeadReward : Agent
         var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
-
-        AddReward(matchSpeedReward * lookAtTargetReward * _topTransformRb.position.y);
+        //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
+        AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
     }
 
     private Vector3 GetAvgVelocityOfCreature()
@@ -306,6 +310,6 @@ public class WalkerAgentHeadReward : Agent
     public void TouchedTarget()
     {
         AddReward(1f);
-        _agent.EndEpisode();
+        _walkTargetScript.PlaceTargetCubeRandomly();
     }
 }

@@ -350,29 +350,31 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
   WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
-  AgentScriptName: WalkerAgentNullSafe
+  AgentScriptName: AgentNew
   CreaturePrefab: {fileID: 1734616957, guid: 14c9349c0959964429d873f345a3d63b, type: 3}
-  NnModel: {fileID: 0}
+  NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
   ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
   TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  ArenaCount: 16
-  DebugMode: 0
-  TimeScale: 0.3
+  CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
+  ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  ArenaCount: 1
+  DebugMode: 1
+  TimeScale: 1
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0
   HeadGroundContactPenalty: 0
   HipsGroundContactPenalty: 0
   LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: 0
-  ResetOnGroundContactParts: 06000000
-  ContinuousActionSpaceOffset: 245
+  ResetOnGroundContactParts: 
+  ContinuousActionSpaceOffset: 309
   DiscreteBranches: 0
   JointDampen: 5000
-  MaxJointForceLimit: 40000
-  MaxJointSpring: 80000
+  MaxJointForceLimit: 80000
+  MaxJointSpring: 160000
   MaxStep: 10000
-  ObservationSpaceOffset: 245
+  ObservationSpaceOffset: 309
   UseContinuousActionSpaceOffsetAsContinuousActionSpace: 1
   UseObservationSpaceOffsetAsObservationSpace: 1
   TakeActionsBetweenDecisions: 0
@@ -404,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d41be8c7456fd43921ebb738a0e5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityMultiplier: 1.5
+  gravityMultiplier: 1
   fixedDeltaTime: 0.008333
   maximumDeltaTime: 0.01
   solverIterations: 12

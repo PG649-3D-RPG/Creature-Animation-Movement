@@ -20,7 +20,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 {
     public string BehaviorName => "Walker";
     public string GroundTag => "ground";
-    public float YHeightOffset => 0.00001f;
+    public float YHeightOffset => 0.2f;
     public int TerrainSize => 128;
 
     [Header("Materials")]
@@ -45,6 +45,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [SerializeField] public GameObject WallPrefab;
 
+    [SerializeField] public ScriptableObject CreatureGeneratorSettings;
+
+    [SerializeField] public ScriptableObject ParametricCreatureSettings;
 
     [Header("Arena Settings")]
     [Space(10)]
@@ -157,6 +160,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         GenerateTrainingEnvironment();
     }
 
+    void Start()
+    {
+    }
+
     private void GenerateTrainingEnvironment()
     {
         var arenaContainer = new GameObject
@@ -234,13 +241,25 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
-        var creature = Instantiate(CreaturePrefab, new Vector3(64,24,64), Quaternion.identity, arena.transform);
-        creature.name = "Creature";
-        creature.transform.localPosition = new Vector3(64, 24, 64);
-        if (creature.AddComponent(Type.GetType(AgentScriptName)) == null)
+        var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,(ParametricCreatureSettings) ParametricCreatureSettings, 10);
+
+        var creatureContainer = new GameObject();
+        
+        var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        orientationCube.name = "Orientation Cube";
+        UnityEngine.Object.Destroy(orientationCube.GetComponent<Collider>());
+        UnityEngine.Object.Destroy(orientationCube.GetComponent<MeshRenderer>());
+
+        orientationCube.transform.parent = creatureContainer.transform;
+        creature.transform.parent = creatureContainer.transform;
+        creatureContainer.transform.parent = arena.transform;
+
+        creatureContainer.name = "Creature";
+        creatureContainer.transform.localPosition = new Vector3(64, 24, 64);
+        if (creatureContainer.AddComponent(Type.GetType(AgentScriptName)) == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
-        creature.AddComponent<ModelOverrider>(); // TODO Check what it does
-        if (DebugMode) creature.AddComponent<DebugScript>();
+        creatureContainer.AddComponent<ModelOverrider>();
+        if (DebugMode) creatureContainer.AddComponent<DebugScript>();
     }
 
     private void AddTargetToArena(GameObject arena)

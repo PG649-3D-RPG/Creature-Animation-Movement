@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = System.Random;
@@ -17,10 +18,11 @@ public class WalkTargetScript : MonoBehaviour
 
     private DynamicEnviormentGenerator Deg { get; set; }
 
-    private WalkerAgent _agent;
+    private AgentNew _agent;
 
     private const string TagToDetect = "agent";
 
+    // TODO Rework Agent reference!
 
     /// <summary>
     /// Start is called before the first frame update
@@ -34,7 +36,7 @@ public class WalkTargetScript : MonoBehaviour
         var parent = transform.parent;
         TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
-        _agent = parent.GetComponentInChildren<WalkerAgent>();
+        _agent = parent.GetComponentInChildren<AgentNew>();
         const int x = 64;
         const int z = 80;
         var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));

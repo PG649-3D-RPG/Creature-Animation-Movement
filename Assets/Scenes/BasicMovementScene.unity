@@ -368,13 +368,13 @@ MonoBehaviour:
   LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: 0
   ResetOnGroundContactParts: 
-  ContinuousActionSpaceOffset: 309
+  ContinuousActionSpaceOffset: 294
   DiscreteBranches: 0
   JointDampen: 5000
   MaxJointForceLimit: 80000
   MaxJointSpring: 160000
   MaxStep: 10000
-  ObservationSpaceOffset: 309
+  ObservationSpaceOffset: 294
   UseContinuousActionSpaceOffsetAsContinuousActionSpace: 1
   UseObservationSpaceOffsetAsObservationSpace: 1
   TakeActionsBetweenDecisions: 0

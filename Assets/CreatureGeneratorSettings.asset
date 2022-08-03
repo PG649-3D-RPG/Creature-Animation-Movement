@@ -28,6 +28,6 @@ MonoBehaviour:
     Size: 20
   DebugSettings:
     DisableBoneGravity: 0
-    DisablePhysics: 1
+    DisablePhysics: 0
     AttachPrimitiveMesh: 0
     DrawMeshNormals: 0

@@ -183,7 +183,7 @@ public class AgentNew : Agent
             bodyPart.Reset(bodyPart, terrainHeight, _deg.YHeightOffset);
         }
 
-        _topTransform.rotation = Quaternion.Euler(90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
+        _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
     }
 
 

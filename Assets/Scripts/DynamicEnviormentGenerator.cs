@@ -20,7 +20,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 {
     public string BehaviorName => "Walker";
     public string GroundTag => "ground";
-    public float YHeightOffset => 0.2f;
+    public float YHeightOffset => 5f;
     public int TerrainSize => 128;
 
     [Header("Materials")]

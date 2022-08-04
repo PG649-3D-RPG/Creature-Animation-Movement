@@ -143,7 +143,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     void Awake()
     {
-        if (WallPrefab == null || CreaturePrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
+        if (WallPrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
         
@@ -249,8 +249,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
+        Debug.LogWarning(CreaturePrefab != null);
         GameObject creatureContainer;
-        if (CreaturePrefab == null)
+        if (CreaturePrefab != null)
         {
             Debug.LogWarning("Loading creature from prefab!");
             creatureContainer = Instantiate(CreaturePrefab);
@@ -258,7 +259,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         else
         {
             Debug.LogWarning("Loading creature from generator!");
-            var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, 0);
+            var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, 12);
             creatureContainer = new GameObject();
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             orientationCube.name = "Orientation Cube";

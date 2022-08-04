@@ -12,25 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df71536d1b576a840a89b68a19365847, type: 3}
   m_Name: ParametricCreatureSettings
   m_EditorClassIdentifier: 
-  minLegThickness: 0.1
-  maxLegThickness: 0.5
+  minLegThickness: 0.25
+  maxLegThickness: 0.75
   minLegSize: 2
   maxLegSize: 3
-  minArmThickness: 0.1
+  minArmThickness: 0.15
   maxArmThickness: 0.5
   minArmSize: 1
-  maxArmSize: 3
-  minTorsoSize: 2
-  maxTorsoSize: 4
-  minTorsoThickness: 0.4
-  maxTorsoThickness: 1.5
-  minNeckSize: 1
-  maxNeckSize: 1
+  maxArmSize: 2
+  minTorsoSize: 1
+  maxTorsoSize: 2
+  minTorsoThickness: 0.25
+  maxTorsoThickness: 0.75
+  minNeckSize: 0.5
+  maxNeckSize: 0.5
   minNeckSegments: 1
   maxNeckSegments: 1
-  minHeadSize: 0.3
-  maxHeadSize: 1.5
-  minSnoutSize: 1.2
-  maxSnoutSize: 4
-  minSnoutThickness: 0.1
-  maxSnoutThickness: 0.5
+  minHeadSize: 0.5
+  maxHeadSize: 0.5
+  minSnoutSize: 0
+  maxSnoutSize: 0
+  minSnoutThickness: 0
+  maxSnoutThickness: 0

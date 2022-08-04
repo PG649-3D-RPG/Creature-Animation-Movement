@@ -19,9 +19,9 @@ MonoBehaviour:
     PrimitiveMeshShadows: 0
   MeshSettings:
     GenerateMetaballMesh: 0
-    Mode: 0
+    Mode: 1
     Material: {fileID: 0}
-    SmoothNormals: 1
+    SmoothNormals: 0
     DrawNormals: 0
     enableDQSkinner: 0
     GridResolution: 90

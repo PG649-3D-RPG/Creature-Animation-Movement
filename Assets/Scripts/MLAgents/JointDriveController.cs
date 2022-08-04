@@ -136,7 +136,7 @@ namespace Unity.MLAgentsExamples
         /// <summary>
         /// Create BodyPart object and add it to dictionary.
         /// </summary>
-        public void SetupBodyPart(Transform t, float bodyPartHeight)
+        public void SetupBodyPart(Transform t, float bodyPartHeight = 0f)
         {
             var bp = new BodyPart
             {

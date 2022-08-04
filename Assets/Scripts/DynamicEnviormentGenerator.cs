@@ -19,7 +19,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 {
     public string BehaviorName => "Walker";
     public string GroundTag => "ground";
-    public float YHeightOffset => 5f;
+    public float YHeightOffset => 0.075f;
     public int TerrainSize => 128;
 
     [Header("Materials")]
@@ -264,7 +264,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         
         creatureContainer.transform.parent = arena.transform;
         creatureContainer.name = "Creature";
-        creatureContainer.transform.localPosition = new Vector3(64, 24, 64);
+        creatureContainer.transform.localPosition = new Vector3(64, 0, 64);
 
         if (creatureContainer.AddComponent(Type.GetType(AgentScriptName)) == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");

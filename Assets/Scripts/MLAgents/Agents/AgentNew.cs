@@ -86,27 +86,38 @@ public class AgentNew : Agent
         //and setup each body part
 
         var transforms = GetComponentsInChildren<Transform>();
+        float minYBodyPartCoor = 0f;
         foreach (var trans in transforms)
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (boneScript != null && !boneScript.isRoot)
+            if (boneScript != null)
             {
-                var groundContact = trans.AddComponent<GroundContact>();
-                var bodyPartHeight = trans.position.y - transform.position.y;
-                _jdController.SetupBodyPart(trans, bodyPartHeight);
-            }
-            else if (boneScript != null && boneScript.isRoot)
-            {
-                _topTransform = trans;
-                _topTransformRb = trans.GetComponent<Rigidbody>();
+                if(!boneScript.isRoot)
+                {
+                    var groundContact = trans.AddComponent<GroundContact>();
+                    //var bodyPartHeight = trans.position.y - transform.position.y;
+                    _jdController.SetupBodyPart(trans);
+                }
+                else
+                {
+                    _topTransform = trans;
+                    _topTransformRb = trans.GetComponent<Rigidbody>();
 
-                _topStartingRotation = trans.rotation;
-                _topStartingPosition = trans.position;
+                    _topStartingRotation = trans.rotation;
+                    _topStartingPosition = trans.position;
+                }
+                minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
             }
         }
 
-        _otherBodyPartHeight = _topTransform.position.y - transform.position.y;
+        foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
+        {
+            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
+            Debug.Log($"BodyPartHeight von {trans.gameObject.name} = {bodyPart.BodyPartHeight}");
+        }
+
+        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;
 
         SetWalkerOnGround();
     }

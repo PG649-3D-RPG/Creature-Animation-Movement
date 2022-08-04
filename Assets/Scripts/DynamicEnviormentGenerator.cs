@@ -241,21 +241,32 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
-        var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,(ParametricCreatureSettings) ParametricCreatureSettings, 10);
+        GameObject creature;
+        GameObject creatureContainer;
+        GameObject orientationCube;
+        if (CreaturePrefab == null)
+        {
+            UnityEngine.Debug.LogWarning("Loading creature from prefab!");
+            creatureContainer = Instantiate(CreaturePrefab);
+        }
+        else
+        {
+            UnityEngine.Debug.LogWarning("Loading creature from generator!");
+            creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings, (ParametricCreatureSettings)ParametricCreatureSettings, 0);
+            creatureContainer = new GameObject();
+            orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            orientationCube.name = "Orientation Cube";
+            Destroy(orientationCube.GetComponent<Collider>());
+            Destroy(orientationCube.GetComponent<MeshRenderer>());
 
-        var creatureContainer = new GameObject();
+            orientationCube.transform.parent = creatureContainer.transform;
+            creature.transform.parent = creatureContainer.transform;
+        }
         
-        var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        orientationCube.name = "Orientation Cube";
-        UnityEngine.Object.Destroy(orientationCube.GetComponent<Collider>());
-        UnityEngine.Object.Destroy(orientationCube.GetComponent<MeshRenderer>());
-
-        orientationCube.transform.parent = creatureContainer.transform;
-        creature.transform.parent = creatureContainer.transform;
         creatureContainer.transform.parent = arena.transform;
-
         creatureContainer.name = "Creature";
         creatureContainer.transform.localPosition = new Vector3(64, 24, 64);
+
         if (creatureContainer.AddComponent(Type.GetType(AgentScriptName)) == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
         creatureContainer.AddComponent<ModelOverrider>();

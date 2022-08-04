@@ -13,7 +13,7 @@ using Unity.VisualScripting;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 using Random = UnityEngine.Random;
 
-public class AgentNew : Agent
+public class AgentNew : GenericAgent
 {
     // Generator
     private DynamicEnviormentGenerator _deg;
@@ -201,7 +201,7 @@ public class AgentNew : Agent
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
-    public void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
+    private void CollectObservationBodyPart(BodyPart bp, VectorSensor sensor)
     {
         //GROUND CHECK
         sensor.AddObservation(bp.groundContact.TouchingGround); // Is this bp touching the ground
@@ -318,7 +318,7 @@ public class AgentNew : Agent
     /// <summary>
     /// Agent touched the target
     /// </summary>
-    public void TouchedTarget()
+    public override void TouchedTarget()
     {
         AddReward(1f);
         _walkTargetScript.PlaceTargetCubeRandomly();

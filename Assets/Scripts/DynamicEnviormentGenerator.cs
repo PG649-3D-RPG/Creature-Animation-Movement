@@ -204,7 +204,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
 
         var terrain = terrainObj.AddComponent<Terrain>();
-        NavMeshSurface navMeshSurface = terrain.AddComponent<NavMeshSurface>();
+        var navMeshSurface = terrain.AddComponent<NavMeshSurface>();
         navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(NavMeshBuildSettingIndex).agentTypeID;
         navMeshSurface.collectObjects = NavMeshSurfaceCollectObjects;
         terrain.AddComponent<TerrainGenerator>();
@@ -235,25 +235,32 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         wall4.transform.localPosition = new Vector3(2, 12, 64);
         wall4.GetComponent<MeshRenderer>().material = WallMaterial;
 
+        if (DebugMode == false)
+        {
+            Destroy(wall1.GetComponent<MeshRenderer>());
+            Destroy(wall2.GetComponent<MeshRenderer>());
+            Destroy(wall3.GetComponent<MeshRenderer>());
+            Destroy(wall4.GetComponent<MeshRenderer>());
+            Destroy(terrain.GetComponent<MeshRenderer>());
+        }
+
         return arena;
     }
 
     private void GenerateCreature(GameObject arena)
     {
-        GameObject creature;
         GameObject creatureContainer;
-        GameObject orientationCube;
         if (CreaturePrefab == null)
         {
-            UnityEngine.Debug.LogWarning("Loading creature from prefab!");
+            Debug.LogWarning("Loading creature from prefab!");
             creatureContainer = Instantiate(CreaturePrefab);
         }
         else
         {
-            UnityEngine.Debug.LogWarning("Loading creature from generator!");
-            creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings, (ParametricCreatureSettings)ParametricCreatureSettings, 0);
+            Debug.LogWarning("Loading creature from generator!");
+            var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, 0);
             creatureContainer = new GameObject();
-            orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             orientationCube.name = "Orientation Cube";
             Destroy(orientationCube.GetComponent<Collider>());
             Destroy(orientationCube.GetComponent<MeshRenderer>());
@@ -274,7 +281,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void AddTargetToArena(GameObject arena)
     {
-        var target = GameObject.Instantiate(TargetCubePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
+        var target = Instantiate(TargetCubePrefab, new Vector3(64,12,126), Quaternion.identity, arena.transform);
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
     }

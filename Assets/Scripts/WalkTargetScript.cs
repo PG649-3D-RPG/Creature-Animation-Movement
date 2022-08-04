@@ -18,7 +18,7 @@ public class WalkTargetScript : MonoBehaviour
 
     private DynamicEnviormentGenerator Deg { get; set; }
 
-    private AgentNew _agent;
+    private GenericAgent _agent;
 
     private const string TagToDetect = "agent";
 
@@ -36,7 +36,7 @@ public class WalkTargetScript : MonoBehaviour
         var parent = transform.parent;
         TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
-        _agent = parent.GetComponentInChildren<AgentNew>();
+        _agent = parent.GetComponentInChildren<GenericAgent>();
         const int x = 64;
         const int z = 80;
         var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));

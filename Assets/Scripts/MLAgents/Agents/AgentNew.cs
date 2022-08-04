@@ -282,7 +282,8 @@ public class AgentNew : GenericAgent
         // Set reward for this step according to mixture of the following elements.
         // a. Match target speed
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        var matchSpeedReward = GetMatchingVelocityReward(cubeForward * MTargetWalkingSpeed, GetAvgVelocityOfCreature());
+        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
+        var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
@@ -297,19 +298,6 @@ public class AgentNew : GenericAgent
     {
         return _jdController.bodyPartsList.Select(x => x.rb.velocity)
             .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
-    }
-
-    /// <summary>
-    /// normalized value of the difference in avg speed vs goal walking speed.
-    /// </summary>
-    /// <param name="velocityGoal"></param>
-    /// <param name="actualVelocity"></param>
-    /// <returns>Return the value on a declining sigmoid shaped curve that decays from 1 to 0. This reward will approach 1 if it matches perfectly and approach zero as it deviates. </returns>
-    private float GetMatchingVelocityReward(Vector3 velocityGoal, Vector3 actualVelocity)
-    {
-        //distance between our actual velocity and goal velocity
-        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(actualVelocity, velocityGoal), 0, MTargetWalkingSpeed);
-        return Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
     }
 
     /// <summary>

@@ -114,7 +114,6 @@ public class AgentNew : GenericAgent
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
         {
             bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
-            Debug.Log($"BodyPartHeight von {trans.gameObject.name} = {bodyPart.BodyPartHeight}");
         }
 
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;

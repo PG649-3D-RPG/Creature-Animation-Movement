@@ -20,7 +20,7 @@ public class WalkTargetScript : MonoBehaviour
 
     private GenericAgent _agent;
 
-    private const string TagToDetect = "agent";
+    private const string TagToDetect = "Agent";
 
     // TODO Rework Agent reference!
 

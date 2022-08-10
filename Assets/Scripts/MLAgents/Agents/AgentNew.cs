@@ -80,7 +80,14 @@ public class AgentNew : GenericAgent
         _agent = gameObject.GetComponent<Agent>();
         // TODO: Update
         _target = parent.Find("Creature Target").transform;
-        _orientationCube = transform.Find("Orientation Cube").AddComponent<OrientationCubeController>();
+        Transform oCube = transform.Find("Orientation Cube");
+        _orientationCube = oCube.GetComponent<OrientationCubeController>();
+
+        if(_orientationCube == null)
+        {
+            _orientationCube = oCube.AddComponent<OrientationCubeController>();
+        }
+         
 
         //Get Body Parts
         //and setup each body part

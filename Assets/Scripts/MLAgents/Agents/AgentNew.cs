@@ -50,6 +50,7 @@ public class AgentNew : GenericAgent
         _jdController = this.AddComponent<JointDriveController>();
         _decisionRequester = this.AddComponent<DecisionRequester>();
         _decisionRequester.TakeActionsBetweenDecisions = _deg.TakeActionsBetweenDecisions;
+        _decisionRequester.DecisionPeriod = _deg.DecisionPeriod;
         _jdController.maxJointForceLimit = _deg.MaxJointForceLimit;
         _jdController.jointDampen = _deg.JointDampen;
         _jdController.maxJointSpring = _deg.MaxJointSpring;

@@ -75,6 +75,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public int ObservationSpaceOffset = 100;
     [SerializeField]
     public bool TakeActionsBetweenDecisions = false;
+    [SerializeField]
+    public int DecisionPeriod = 0;
+    
 
     [Header("Target Cube Settings")]
     [Space(10)]

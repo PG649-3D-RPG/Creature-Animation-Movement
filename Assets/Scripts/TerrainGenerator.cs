@@ -12,9 +12,7 @@ public class TerrainGenerator : MonoBehaviour
     private  DynamicEnviormentGenerator Deg { get; set; }
 
     private NavMeshSurface NavMeshSurface { get; set; }
-
-    private GameObject ObstaclesContainer { get; set; }
-
+    
     private Terrain Terrain { get; set; }
 
     private float OffsetX { get; set; } = 100f;
@@ -30,11 +28,6 @@ public class TerrainGenerator : MonoBehaviour
         _terrain = GetComponent<Terrain>();
         NavMeshSurface = GetComponent<NavMeshSurface>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
-        ObstaclesContainer = new GameObject
-        {
-            name = "Obstacle Container",
-            transform = { parent = this.transform }
-        };
     }
 
     public void Start()
@@ -52,13 +45,7 @@ public class TerrainGenerator : MonoBehaviour
     {
         OffsetX = Random.Range(0f, 9999f);
         OffsetY = Random.Range(0f, 9999f);
-
-        // Kill obstacles
-        foreach (Transform child in ObstaclesContainer.transform)
-        {
-            GameObject.Destroy(child.gameObject);
-        }
-
+        
         // Generate Terrain
         Terrain.terrainData = GenerateTerrain(Terrain.terrainData);
 
@@ -100,19 +87,7 @@ public class TerrainGenerator : MonoBehaviour
         }
 
         terrainData.SetHeights(0, 0, heights);
-
-        // Generate obstacles
-        if (!Deg.GenerateObstacles) return terrainData; // Do not generate obstacles
-
-        for (var x = 1; x < Deg.TerrainSize - 1; x++)
-        {
-            for (var y = 1; y < Deg.TerrainSize - 1; y++)
-            {
-                if (!(Mathf.PerlinNoise((x + OffsetX) / Deg.TerrainSize * Deg.ScaleObstacle, (y + OffsetY) / Deg.TerrainSize * Deg.ScaleObstacle + OffsetY) > Deg.ObstacleThreshold)) continue;
-                var newObstacle = GameObject.Instantiate(Deg.ObstaclePrefab, Vector3.zero, Quaternion.identity, ObstaclesContainer.transform);
-                newObstacle.transform.localPosition = new Vector3(x, terrainData.GetHeight(x, y) + 2f, y);
-            }
-        }
+        
         return terrainData;
     }
 }

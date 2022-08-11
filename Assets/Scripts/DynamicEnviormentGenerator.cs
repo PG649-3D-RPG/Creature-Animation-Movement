@@ -37,9 +37,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField] public GameObject CreaturePrefab;
 
     [SerializeField] public NNModel NnModel;
-
-    [SerializeField] public GameObject ObstaclePrefab;
-
+    
     [SerializeField] public GameObject TargetCubePrefab;
 
     [SerializeField] public GameObject WallPrefab;
@@ -125,25 +123,19 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public int Depth = 10;
     [SerializeField]
     public float Scale = 2.5f;
-    [SerializeField]
-    public float ScaleObstacle  = 10f;
 
 
     [HideInInspector] // TODO Activate when implemented
-    public float ObstacleThreshold = 0.9f;
-    [HideInInspector]
     public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
     [HideInInspector] // TODO Activate when implemented
     public bool BakeNavMesh = false;
     [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented. Valid range (0, NavMesh.GetSettingsCount-1)
     public int NavMeshBuildSettingIndex = 0;
-    [HideInInspector] // TODO Activate when implemented
-    public bool GenerateObstacles = true;
     
 
     void Awake()
     {
-        if (WallPrefab == null || TargetCubePrefab == null || ObstaclePrefab == null)
+        if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
         

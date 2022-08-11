@@ -21,6 +21,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public string GroundTag => "ground";
     public float YHeightOffset => 0.075f;
     public int TerrainSize => 128;
+    
+    public GameObject TargetCubePrefab;
+
+    public GameObject WallPrefab;
 
     [Header("Materials")]
     [Space(10)]
@@ -37,10 +41,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField] public GameObject CreaturePrefab;
 
     [SerializeField] public NNModel NnModel;
-    
-    [SerializeField] public GameObject TargetCubePrefab;
-
-    [SerializeField] public GameObject WallPrefab;
 
     [SerializeField] public ScriptableObject CreatureGeneratorSettings;
 
@@ -135,6 +135,10 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     void Awake()
     {
+        TargetCubePrefab = Resources.Load("TargetCube", typeof(GameObject)) as GameObject;
+        WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;
+
+        
         if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");

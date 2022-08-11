@@ -5,12 +5,10 @@ using UnityEngine;
 
 public class CreatureDebugger : MonoBehaviour
 {
-    public GameObject Arena;
-
+    [SerializeField] public bool ActivateCreatureDebugger = false;
     [SerializeField] public int Seed = 0;
     [SerializeField] public ScriptableObject CreatureGeneratorSettings;
     [SerializeField] public ScriptableObject ParametricCreatureSettings;
-    [SerializeField] public bool Debug = false;
 
 
     private GameObject creature;
@@ -18,9 +16,7 @@ public class CreatureDebugger : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Arena = GameObject.Find("Arena 0");
-        if (Arena == null) throw new ArgumentException("No arena found in scene!");
-        if (Debug)
+        if (ActivateCreatureDebugger)
         {
             var ArenaC = GameObject.Find("Arena Container");
             ArenaC.SetActive(false);
@@ -41,7 +37,7 @@ public class CreatureDebugger : MonoBehaviour
         }
     }
 
-    public void GenCreature()
+    private void GenCreature()
     {
         Destroy(creature);
         creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings, (ParametricCreatureSettings)ParametricCreatureSettings, Seed);
@@ -50,6 +46,5 @@ public class CreatureDebugger : MonoBehaviour
             name = $"DebugCreature_{Seed}"
         };
         creature.transform.parent = debugCreature.transform;
-        //debugCreature.transform.parent = Arena.transform;
     }
 }

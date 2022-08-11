@@ -37,8 +37,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
-    [SerializeField]
-    public float TimeScale = 1f;
     
     [Header("Creature Settings")] [Space(10)] 
     [SerializeField]
@@ -75,10 +73,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public int MaxStep = 5000;
     [SerializeField]
     public int ObservationSpaceOffset = 100;
-    [SerializeField]
-    public bool UseContinuousActionSpaceOffsetAsContinuousActionSpace = true;
-    [SerializeField]
-    public bool UseObservationSpaceOffsetAsObservationSpace = true;
     [SerializeField]
     public bool TakeActionsBetweenDecisions = false;
 
@@ -135,8 +129,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
-        
-        
+        if (CreaturePrefab != null) Debug.LogWarning("Creature from Prefab loaded");
+
         if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
         if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
         if(HipsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hip, HipsGroundContactPenalty);
@@ -144,7 +138,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
 
-        if(DebugMode) Time.timeScale = TimeScale;
         GenerateTrainingEnvironment();
     }
     

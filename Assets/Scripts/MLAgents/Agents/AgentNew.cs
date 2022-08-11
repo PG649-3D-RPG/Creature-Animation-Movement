@@ -61,12 +61,8 @@ public class AgentNew : GenericAgent
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = _deg.UseContinuousActionSpaceOffsetAsContinuousActionSpace
-            ? new ActionSpec(_deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches])
-            : new ActionSpec(3 * skeleton.nBones + _deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches]);
-        bpScript.BrainParameters.VectorObservationSize = _deg.UseObservationSpaceOffsetAsObservationSpace
-            ? _deg.ObservationSpaceOffset
-            : 3 * skeleton.nBones + _deg.ObservationSpaceOffset;
+        bpScript.BrainParameters.ActionSpec = new ActionSpec(_deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches]);
+        bpScript.BrainParameters.VectorObservationSize = _deg.ObservationSpaceOffset;
         bpScript.BehaviorName = _deg.BehaviorName;
         bpScript.Model = _deg.NnModel;
     }

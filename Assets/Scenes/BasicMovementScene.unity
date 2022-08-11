@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -331,11 +331,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cca73200eedb7478782f70ea0dfbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Arena: {fileID: 0}
+  ActivateCreatureDebugger: 0
   Seed: 0
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
-  Debug: 0
 --- !u!4 &855681737
 Transform:
   m_ObjectHideFlags: 0
@@ -363,6 +362,7 @@ GameObject:
   - component: {fileID: 1211399389}
   - component: {fileID: 1211399391}
   - component: {fileID: 1211399390}
+  - component: {fileID: 1211399392}
   m_Layer: 0
   m_Name: EnviormentCreator
   m_TagString: Untagged
@@ -397,26 +397,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TerrainMaterial: {fileID: 2100000, guid: acba6bf2a290a496bb8989b42bf8698d, type: 2}
-  WallMaterial: {fileID: 2100000, guid: 66163cf35956a4be08e801b750c26f33, type: 2}
   AgentScriptName: AgentNew
   CreaturePrefab: {fileID: 0}
   NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
-  ObstaclePrefab: {fileID: 7606212592799618075, guid: 5c5d7c457e604c84fb3935f7dd48de70, type: 3}
-  TargetCubePrefab: {fileID: 7954681287697178746, guid: ef97a77130570e540a3a1aa49c7e7906, type: 3}
-  WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
-  CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
-  ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
   ArenaCount: 1
   DebugMode: 1
-  TimeScale: 1
-  ArmsGroundContactPenalty: 0
-  HandsGroundContactPenalty: 0
-  HeadGroundContactPenalty: 0
-  HipsGroundContactPenalty: 0
-  LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: 0
-  ResetOnGroundContactParts: 06000000
   ContinuousActionSpaceOffset: 294
   DiscreteBranches: 0
   JointDampen: 5000
@@ -424,9 +409,8 @@ MonoBehaviour:
   MaxJointSpring: 160000
   MaxStep: 10000
   ObservationSpaceOffset: 294
-  UseContinuousActionSpaceOffsetAsContinuousActionSpace: 1
-  UseObservationSpaceOffsetAsObservationSpace: 1
   TakeActionsBetweenDecisions: 0
+  DecisionPeriod: 5
   MaxWalkingSpeed: 10
   EpisodeCountToRandomizeTargetCubePosition: 0
   RandomizeWalkSpeedEachEpisode: 1
@@ -437,12 +421,11 @@ MonoBehaviour:
   RegenerateTerrainAfterXEpisodes: 0
   Depth: 10
   Scale: 2.5
-  ScaleObstacle: 10
-  ObstacleThreshold: 0.9
   NavMeshSurfaceCollectObjects: 2
   BakeNavMesh: 0
   NavMeshBuildSettingIndex: 0
-  GenerateObstacles: 0
+  TargetCubePrefab: {fileID: 0}
+  WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -473,6 +456,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dab008d718849cf4881ac579aaa4155a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1211399392
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211399387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f45c5ae7759653bc38c5e7a9c32e657b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seed: 0
+  ArmsGroundContactPenalty: 0
+  HandsGroundContactPenalty: 0
+  HeadGroundContactPenalty: 0
+  HipsGroundContactPenalty: 0
+  LegsGroundContactPenalty: 0
+  TorsoGroundContactPenalty: 0
+  ResetOnGroundContactParts: 06000000
 --- !u!1 &1438603205
 GameObject:
   m_ObjectHideFlags: 0

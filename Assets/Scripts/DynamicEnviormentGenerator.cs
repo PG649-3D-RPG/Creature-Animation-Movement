@@ -17,19 +17,13 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
-    [Header("Scripts")] [Space(10)] [SerializeField, Tooltip("Must exist in the project!")]
+    [Header("Editor Settings")] [Space(10)] [SerializeField, Tooltip("Must exist in the project!")]
     public string AgentScriptName = "WalkerAgent" ;
-    
-    [Header("Prefabs")]
-    [Space(10)]
-    [SerializeField] public GameObject CreaturePrefab;
+
+    [SerializeField] private GameObject CreaturePrefab;
 
     [SerializeField] public NNModel NnModel;
-
-    [SerializeField] public ScriptableObject CreatureGeneratorSettings;
-
-    [SerializeField] public ScriptableObject ParametricCreatureSettings;
-
+    
     [Header("Arena Settings")]
     [Space(10)]
     [SerializeField]
@@ -37,23 +31,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
-
-    [Header("Creature Settings")] [Space(10)] [SerializeField]
-    public int seed = 0;
-    [SerializeField]
-    public float ArmsGroundContactPenalty = 0;
-    [SerializeField]
-    public float HandsGroundContactPenalty = 0;
-    [SerializeField]
-    public float HeadGroundContactPenalty = 0;
-    [SerializeField]
-    public float HipsGroundContactPenalty = 0;
-    [SerializeField]
-    public float LegsGroundContactPenalty = 0;
-    [SerializeField]
-    public float TorsoGroundContactPenalty = 0;
-    [SerializeField]
-    public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
+    
 
     [Header("ML-Agent Settings settings")]
     [Space(10)]
@@ -120,26 +98,24 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public GameObject TargetCubePrefab;
     [HideInInspector]
     public GameObject WallPrefab;
-    
-    public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
+    [HideInInspector]
+    private ScriptableObject CreatureGeneratorSettings;
+    [HideInInspector]
+    private ScriptableObject ParametricCreatureSettings;
+
 
     void Awake()
     {
         TargetCubePrefab = Resources.Load("TargetCube", typeof(GameObject)) as GameObject;
         WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;  
+        CreatureGeneratorSettings = Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
+        ParametricCreatureSettings = Resources.Load("ParametricCreatureSettings", typeof(ScriptableObject)) as ScriptableObject;
 
+        
         if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
         if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
-        if (CreaturePrefab != null) Debug.LogWarning("Creature from Prefab loaded");
-
-        if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
-        if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
-        if(HipsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hip, HipsGroundContactPenalty);
-        if(LegsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Leg, LegsGroundContactPenalty);
-        if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
-        if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
-
+        
         GenerateTrainingEnvironment();
     }
     
@@ -225,6 +201,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
+        var creatureConfig = FindObjectOfType<CreatureConfig>();
+
         GameObject creatureContainer;
         if (CreaturePrefab != null)
         {
@@ -234,7 +212,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         else
         {
             Debug.LogWarning("Loading creature from generator!");
-            creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, seed);
+            creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, creatureConfig.seed);
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             orientationCube.name = "Orientation Cube";
             Destroy(orientationCube.GetComponent<Collider>());

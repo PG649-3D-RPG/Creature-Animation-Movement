@@ -23,6 +23,7 @@ namespace Unity.MLAgentsExamples
         private string _kGround; // Tag of ground object.
         private DynamicEnviormentGenerator _deg;
         private Bone _boneScript;
+        private CreatureConfig _creatureConfig;
 
         public GroundContact(Agent agent)
         {
@@ -32,6 +33,8 @@ namespace Unity.MLAgentsExamples
         public void Awake()
         {
             _deg = FindObjectOfType<DynamicEnviormentGenerator>();
+            _creatureConfig = FindObjectOfType<CreatureConfig>();
+
             _kGround = _deg.GroundTag;
             _boneScript = GetComponentInParent<Bone>();
         }
@@ -44,8 +47,8 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(_kGround))
             {
                 TouchingGround = true;
-                if (_deg.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
-                if (_deg.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
+                if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
+                if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
             }
         }
 

@@ -37,8 +37,9 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
-    
-    [Header("Creature Settings")] [Space(10)] 
+
+    [Header("Creature Settings")] [Space(10)] [SerializeField]
+    public int seed = 0;
     [SerializeField]
     public float ArmsGroundContactPenalty = 0;
     [SerializeField]
@@ -53,9 +54,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public float TorsoGroundContactPenalty = 0;
     [SerializeField]
     public List<BoneCategory> ResetOnGroundContactParts = new() { BoneCategory.Head };
-    [HideInInspector]
-    public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
-
 
     [Header("ML-Agent Settings settings")]
     [Space(10)]
@@ -122,7 +120,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     public GameObject TargetCubePrefab;
     [HideInInspector]
     public GameObject WallPrefab;
-
+    
+    public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
     void Awake()
     {
@@ -226,7 +225,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
     private void GenerateCreature(GameObject arena)
     {
-        Debug.LogWarning(CreaturePrefab != null);
         GameObject creatureContainer;
         if (CreaturePrefab != null)
         {
@@ -236,15 +234,13 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         else
         {
             Debug.LogWarning("Loading creature from generator!");
-            var creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, 12);
-            creatureContainer = new GameObject();
+            creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, seed);
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             orientationCube.name = "Orientation Cube";
             Destroy(orientationCube.GetComponent<Collider>());
             Destroy(orientationCube.GetComponent<MeshRenderer>());
 
             orientationCube.transform.parent = creatureContainer.transform;
-            creature.transform.parent = creatureContainer.transform;
         }
         
         creatureContainer.transform.parent = arena.transform;

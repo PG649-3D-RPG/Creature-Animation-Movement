@@ -49,14 +49,16 @@ public class CreatureConfig : MonoBehaviour
     
 
     private void SaveSettingToDisk()
-    {
+    {   
         try
         {
             Debug.Log(Application.persistentDataPath + "/creatureConfig.json");
-            File.WriteAllBytes(Application.persistentDataPath + "/creatureConfig.json",
+            // It seems like Unitys own File implementation is windows exclusive :clown:
+            // Change only if you know it compiles for Linux
+            System.IO.File.WriteAllBytes(Application.persistentDataPath + "/creatureConfig.json",
                 Encoding.UTF8.GetBytes(JsonUtility.ToJson(this)));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Debug.LogError("Could not write setting file");
         }

@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Config;
 using UnityEngine;
 using UnityEngine.Windows;
+using Object = UnityEngine.Object;
 
 
 public class CreatureConfig : MonoBehaviour
@@ -34,7 +36,6 @@ public class CreatureConfig : MonoBehaviour
         if(LegsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Leg, LegsGroundContactPenalty);
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
-
         
         if (!Application.isEditor)
         {
@@ -42,7 +43,7 @@ public class CreatureConfig : MonoBehaviour
         else
         {
             Debug.Log("Savin");
-            SaveSettingToDisk();
+            //SaveSettingToDisk();
         }
     }
     
@@ -50,17 +51,6 @@ public class CreatureConfig : MonoBehaviour
 
     private void SaveSettingToDisk()
     {   
-        try
-        {
-            Debug.Log(Application.persistentDataPath + "/creatureConfig.json");
-            // It seems like Unitys own File implementation is windows exclusive :clown:
-            // Change only if you know it compiles for Linux
-            System.IO.File.WriteAllBytes(Application.persistentDataPath + "/creatureConfig.json",
-                Encoding.UTF8.GetBytes(JsonUtility.ToJson(this)));
-        }
-        catch (Exception)
-        {
-            Debug.LogError("Could not write setting file");
-        }
+        FileHelper.SaveObject(this, "creatureConfig.json");
     }
 }

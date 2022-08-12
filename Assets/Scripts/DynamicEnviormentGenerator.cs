@@ -212,6 +212,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         else
         {
             Debug.LogWarning("Loading creature from generator!");
+            Debug.LogWarning(CreatureGeneratorSettings == null || ParametricCreatureSettings == null );
             creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings) CreatureGeneratorSettings, (ParametricCreatureSettings) ParametricCreatureSettings, creatureConfig.seed);
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
             orientationCube.name = "Orientation Cube";

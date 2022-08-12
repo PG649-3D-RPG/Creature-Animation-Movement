@@ -63,7 +63,7 @@ public class AgentNew : GenericAgent
         var bpScript = GetComponent<BehaviorParameters>();
         bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpaceOffset, new int[_mlAgentsConfig.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpaceOffset;
-        bpScript.BehaviorName = _deg.BehaviorName;
+        bpScript.BehaviorName = DynamicEnviormentGenerator.BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
 
@@ -182,7 +182,7 @@ public class AgentNew : GenericAgent
         var position = _topTransform.position;
         var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
 
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + _deg.YHeightOffset, _topStartingPosition.z);
+        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnviormentGenerator.YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
         _topTransform.rotation = _topStartingRotation;
 
@@ -193,7 +193,7 @@ public class AgentNew : GenericAgent
         //Reset all of the body parts
         foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
         {
-            bodyPart.Reset(bodyPart, terrainHeight, _deg.YHeightOffset);
+            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnviormentGenerator.YHeightOffset);
         }
 
         _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));

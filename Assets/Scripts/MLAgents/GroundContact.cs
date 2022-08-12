@@ -20,7 +20,6 @@ namespace Unity.MLAgentsExamples
     {
         public Agent Agent;
         public bool TouchingGround;
-        private string _kGround; // Tag of ground object.
         private DynamicEnviormentGenerator _deg;
         private Bone _boneScript;
         private CreatureConfig _creatureConfig;
@@ -35,7 +34,6 @@ namespace Unity.MLAgentsExamples
             _deg = FindObjectOfType<DynamicEnviormentGenerator>();
             _creatureConfig = FindObjectOfType<CreatureConfig>();
 
-            _kGround = _deg.GroundTag;
             _boneScript = GetComponentInParent<Bone>();
         }
 
@@ -44,7 +42,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionEnter(Collision col)
         {
-            if (col.transform.CompareTag(_kGround))
+            if (col.transform.CompareTag(DynamicEnviormentGenerator.GroundTag))
             {
                 TouchingGround = true;
                 if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
@@ -57,7 +55,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionExit(Collision other)
         {
-            if (other.transform.CompareTag(_kGround)) TouchingGround = false;
+            if (other.transform.CompareTag(DynamicEnviormentGenerator.GroundTag)) TouchingGround = false;
         }
     }
 }

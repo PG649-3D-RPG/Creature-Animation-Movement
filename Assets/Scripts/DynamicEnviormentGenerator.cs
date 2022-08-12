@@ -18,6 +18,11 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnviormentGenerator : MonoBehaviour
 {
+    public const string BehaviorName = "Walker";
+    public const string  GroundTag = "ground";
+    public const float YHeightOffset = 0.075f;
+    public const int TerrainSize = 128;
+
     [Header("Debug Settings")] [Space(10)] [SerializeField]
     public bool DebugMode = false;
 
@@ -28,10 +33,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [SerializeField] private GameObject CreaturePrefab;
 
     [SerializeField] public NNModel NnModel;
-    public string BehaviorName => "Walker";
-    public string GroundTag => "ground";
-    public float YHeightOffset => 0.075f;
-    public const int TerrainSize = 128;
     
     [HideInInspector]
     public GameObject TargetCubePrefab;

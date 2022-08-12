@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Config;
 using JetBrains.Annotations;
 using UnityEngine;
 using Unity.MLAgents;
@@ -37,11 +38,13 @@ public class AgentNew : GenericAgent
     private JointDriveController _jdController;
     private DecisionRequester _decisionRequester;
     private Agent _agent;
+    private MlAgentConfig _mlAgentsConfig;
+    private ArenaSettings _arenaSettings;
 
     public float MTargetWalkingSpeed // property
     {
-        get => _deg.TargetWalkingSpeed;
-        set => _deg.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _deg.MaxWalkingSpeed);
+        get => _arenaSettings.TargetWalkingSpeed;
+        set => _arenaSettings.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _arenaSettings.MaxWalkingSpeed);
     }
 
     public void Awake()
@@ -49,21 +52,17 @@ public class AgentNew : GenericAgent
         _deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
         _jdController = this.AddComponent<JointDriveController>();
         _decisionRequester = this.AddComponent<DecisionRequester>();
-        _decisionRequester.TakeActionsBetweenDecisions = _deg.TakeActionsBetweenDecisions;
-        _decisionRequester.DecisionPeriod = _deg.DecisionPeriod;
-        _jdController.maxJointForceLimit = _deg.MaxJointForceLimit;
-        _jdController.jointDampen = _deg.JointDampen;
-        _jdController.maxJointSpring = _deg.MaxJointSpring;
-
+        _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
+        _arenaSettings = FindObjectOfType<ArenaSettings>();
         // Set agent settings (maxSteps)
         var mAgent = gameObject.GetComponent<Agent>();
-        mAgent.MaxStep = _deg.MaxStep;
+        mAgent.MaxStep = _mlAgentsConfig.MaxStep;
 
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = new ActionSpec(_deg.ContinuousActionSpaceOffset, new int[_deg.DiscreteBranches]);
-        bpScript.BrainParameters.VectorObservationSize = _deg.ObservationSpaceOffset;
+        bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpaceOffset, new int[_mlAgentsConfig.DiscreteBranches]);
+        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpaceOffset;
         bpScript.BehaviorName = _deg.BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
@@ -154,12 +153,12 @@ public class AgentNew : GenericAgent
         _episodeCounter++;
 
         // Order is important. First regenerate terrain -> than place cube!
-        if (_deg.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _deg.RegenerateTerrainAfterXEpisodes == 0)
+        if (_arenaSettings.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _arenaSettings.RegenerateTerrainAfterXEpisodes == 0)
         {
             _terrainGenerator.RegenerateTerrain();
         }
 
-        if (_deg.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _deg.EpisodeCountToRandomizeTargetCubePosition == 0)
+        if (_arenaSettings.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _arenaSettings.EpisodeCountToRandomizeTargetCubePosition == 0)
         {
             _walkTargetScript.PlaceTargetCubeRandomly();
         }
@@ -168,7 +167,7 @@ public class AgentNew : GenericAgent
 
         //Set our goal walking speed
         MTargetWalkingSpeed =
-            _deg.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _deg.MaxWalkingSpeed) : MTargetWalkingSpeed;
+            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _arenaSettings.MaxWalkingSpeed) : MTargetWalkingSpeed;
 
         //Physics.gravity = new Vector3(0, Random.Range(-200, 200), 0);
         //Debug.Log($"Physics {Physics.gravity} Reward {_agent.GetCumulativeReward()}");

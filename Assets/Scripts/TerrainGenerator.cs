@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Config;
 using UnityEngine;
 using Unity.AI.Navigation;
 using Random = UnityEngine.Random;
@@ -19,6 +20,7 @@ public class TerrainGenerator : MonoBehaviour
     
     private float OffsetY { get; set; } = 100f;
 
+    private ArenaSettings _arenaSettings;
 
     /// <summary>
     /// 
@@ -28,6 +30,7 @@ public class TerrainGenerator : MonoBehaviour
         _terrain = GetComponent<Terrain>();
         NavMeshSurface = GetComponent<NavMeshSurface>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
+        _arenaSettings = FindObjectOfType<ArenaSettings>();
     }
 
     public void Start()
@@ -49,7 +52,7 @@ public class TerrainGenerator : MonoBehaviour
         // Generate Terrain
         Terrain.terrainData = GenerateTerrain(Terrain.terrainData);
 
-        if (!Deg.BakeNavMesh) return; // Skipp Nav Mesh generation
+        if (!_arenaSettings.BakeNavMesh) return; // Skipp Nav Mesh generation
         NavMeshSurface.BuildNavMesh();
     }
 
@@ -70,19 +73,19 @@ public class TerrainGenerator : MonoBehaviour
     /// <returns></returns>
     private TerrainData GenerateTerrain(TerrainData terrainData)
     {
-        terrainData.heightmapResolution = Deg.TerrainSize + 1;
-        terrainData.size = new Vector3(Deg.TerrainSize, Deg.Depth, Deg.TerrainSize);
+        terrainData.heightmapResolution = DynamicEnviormentGenerator.TerrainSize + 1;
+        terrainData.size = new Vector3(DynamicEnviormentGenerator.TerrainSize, _arenaSettings.Depth, DynamicEnviormentGenerator.TerrainSize);
 
 
         // Generate terrain data
-        if (!Deg.GenerateHeights) return terrainData; // Do not generate terrain with heights
+        if (!_arenaSettings.GenerateHeights) return terrainData; // Do not generate terrain with heights
 
-        var heights = new float[Deg.TerrainSize, Deg.TerrainSize];
-        for (var x = 0; x < Deg.TerrainSize; x++)
+        var heights = new float[DynamicEnviormentGenerator.TerrainSize, DynamicEnviormentGenerator.TerrainSize];
+        for (var x = 0; x < DynamicEnviormentGenerator.TerrainSize; x++)
         {
-            for (var y = 0; y < Deg.TerrainSize; y++)
+            for (var y = 0; y < DynamicEnviormentGenerator.TerrainSize; y++)
             {
-                heights[x, y] = Mathf.PerlinNoise((float)x / Deg.TerrainSize * Deg.Scale + OffsetX, (float)y / Deg.TerrainSize * Deg.Scale + OffsetY);
+                heights[x, y] = Mathf.PerlinNoise((float)x / DynamicEnviormentGenerator.TerrainSize * _arenaSettings.Scale + OffsetX, (float)y / DynamicEnviormentGenerator.TerrainSize * _arenaSettings.Scale + OffsetY);
             }
         }
 

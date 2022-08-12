@@ -1,0 +1,1 @@
+{"ContinuousActionSpaceOffset":100,"DiscreteBranches":0,"JointDampen":5000.0,"MaxJointForceLimit":20000.0,"MaxJointSpring":40000.0,"MaxStep":5000,"ObservationSpaceOffset":100,"TakeActionsBetweenDecisions":false,"DecisionPeriod":0}

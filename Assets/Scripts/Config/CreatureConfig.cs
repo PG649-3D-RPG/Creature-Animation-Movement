@@ -5,10 +5,12 @@ using Config;
 using UnityEngine;
 using UnityEngine.Windows;
 using Object = UnityEngine.Object;
-
+using System.Reflection;
 
 public class CreatureConfig : MonoBehaviour
 {
+    private const string configName = "creatureConfig.json";
+
     [Header("Creature Settings")] [Space(10)] [SerializeField]
     public int seed = 0;
     [SerializeField]
@@ -39,18 +41,15 @@ public class CreatureConfig : MonoBehaviour
         
         if (!Application.isEditor)
         {
+            var jsonString = FileHelper.LoadJson(configName);
+            if (jsonString != null)
+            {
+                JsonUtility.FromJsonOverwrite(jsonString, this);
+            }
         }
         else
         {
-            Debug.Log("Savin");
-            //SaveSettingToDisk();
+            FileHelper.SaveObject(this, configName);
         }
-    }
-    
-    
-
-    private void SaveSettingToDisk()
-    {   
-        FileHelper.SaveObject(this, "creatureConfig.json");
     }
 }

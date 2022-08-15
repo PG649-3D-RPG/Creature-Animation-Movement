@@ -21,7 +21,7 @@ public class WalkTargetScript : MonoBehaviour
 
     private const string TagToDetect = "Agent";
 
-    private ArenaSettings _arenaSettings;
+    private ArenaConfig _arenaSettings;
     
     /// <summary>
     /// Start is called before the first frame update
@@ -29,7 +29,7 @@ public class WalkTargetScript : MonoBehaviour
     /// <returns></returns>
     public void Start()
     {
-        _arenaSettings = FindObjectOfType<ArenaSettings>();
+        _arenaSettings = FindObjectOfType<ArenaConfig>();
         
         Rng = new Random();
         var parent = transform.parent;

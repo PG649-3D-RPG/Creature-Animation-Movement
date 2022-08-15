@@ -7,10 +7,8 @@ using UnityEngine.Windows;
 using Object = UnityEngine.Object;
 using System.Reflection;
 
-public class CreatureConfig : MonoBehaviour
+public class CreatureConfig : GenericConfig
 {
-    private const string configName = "creatureConfig.json";
-
     [Header("Creature Settings")] [Space(10)] [SerializeField]
     public int seed = 0;
     [SerializeField]
@@ -30,7 +28,7 @@ public class CreatureConfig : MonoBehaviour
 
     public readonly Dictionary<BoneCategory, float> PenaltiesForBodyParts = new() {};
 
-    public void Awake()
+    protected override void ExecuteAtLoad()
     {
         if(HeadGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Head, HeadGroundContactPenalty);
         if(TorsoGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Torso, TorsoGroundContactPenalty);
@@ -38,18 +36,5 @@ public class CreatureConfig : MonoBehaviour
         if(LegsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Leg, LegsGroundContactPenalty);
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
-        
-        if (!Application.isEditor)
-        {
-            var jsonString = FileHelper.LoadJson(configName);
-            if (jsonString != null)
-            {
-                JsonUtility.FromJsonOverwrite(jsonString, this);
-            }
-        }
-        else
-        {
-            FileHelper.SaveObject(this, configName);
-        }
     }
 }

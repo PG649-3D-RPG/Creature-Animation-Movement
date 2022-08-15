@@ -20,7 +20,7 @@ public class TerrainGenerator : MonoBehaviour
     
     private float OffsetY { get; set; } = 100f;
 
-    private ArenaSettings _arenaSettings;
+    private ArenaConfig _arenaSettings;
 
     /// <summary>
     /// 
@@ -30,7 +30,7 @@ public class TerrainGenerator : MonoBehaviour
         _terrain = GetComponent<Terrain>();
         NavMeshSurface = GetComponent<NavMeshSurface>();
         Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
-        _arenaSettings = FindObjectOfType<ArenaSettings>();
+        _arenaSettings = FindObjectOfType<ArenaConfig>();
     }
 
     public void Start()

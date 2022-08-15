@@ -1,1 +1,0 @@
-{"ArenaCount":10,"MaxWalkingSpeed":10.0,"EpisodeCountToRandomizeTargetCubePosition":0,"RandomizeWalkSpeedEachEpisode":false,"TargetMaxSecondsInOneDirection":10,"TargetMovementSpeed":0.0,"TargetWalkingSpeed":10.0,"GenerateHeights":false,"RegenerateTerrainAfterXEpisodes":0,"Depth":10,"Scale":2.5,"NavMeshSurfaceCollectObjects":2,"BakeNavMesh":false,"NavMeshBuildSettingIndex":0}

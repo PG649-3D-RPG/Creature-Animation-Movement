@@ -363,6 +363,8 @@ GameObject:
   - component: {fileID: 1211399391}
   - component: {fileID: 1211399390}
   - component: {fileID: 1211399392}
+  - component: {fileID: 1211399394}
+  - component: {fileID: 1211399393}
   m_Layer: 0
   m_Name: EnviormentCreator
   m_TagString: Untagged
@@ -397,33 +399,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DebugMode: 1
   AgentScriptName: AgentNew
   CreaturePrefab: {fileID: 0}
   NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
-  ArenaCount: 1
-  DebugMode: 1
-  ContinuousActionSpaceOffset: 294
-  DiscreteBranches: 0
-  JointDampen: 5000
-  MaxJointForceLimit: 80000
-  MaxJointSpring: 160000
-  MaxStep: 10000
-  ObservationSpaceOffset: 294
-  TakeActionsBetweenDecisions: 0
-  DecisionPeriod: 5
-  MaxWalkingSpeed: 10
-  EpisodeCountToRandomizeTargetCubePosition: 0
-  RandomizeWalkSpeedEachEpisode: 1
-  TargetMaxSecondsInOneDirection: 10
-  TargetMovementSpeed: 0
-  TargetWalkingSpeed: 10
-  GenerateHeights: 0
-  RegenerateTerrainAfterXEpisodes: 0
-  Depth: 10
-  Scale: 2.5
-  NavMeshSurfaceCollectObjects: 2
-  BakeNavMesh: 0
-  NavMeshBuildSettingIndex: 0
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
 --- !u!114 &1211399390
@@ -476,6 +455,53 @@ MonoBehaviour:
   LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: 0
   ResetOnGroundContactParts: 06000000
+--- !u!114 &1211399393
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211399387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ArenaCount: 10
+  MaxWalkingSpeed: 10
+  EpisodeCountToRandomizeTargetCubePosition: 0
+  RandomizeWalkSpeedEachEpisode: 0
+  TargetMaxSecondsInOneDirection: 10
+  TargetMovementSpeed: 0
+  TargetWalkingSpeed: 10
+  GenerateHeights: 0
+  RegenerateTerrainAfterXEpisodes: 0
+  Depth: 10
+  Scale: 2.5
+  NavMeshSurfaceCollectObjects: 2
+  BakeNavMesh: 0
+  NavMeshBuildSettingIndex: 0
+--- !u!114 &1211399394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211399387}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3324768aa3a347daba1c965af3dbc12f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ContinuousActionSpaceOffset: 200
+  DiscreteBranches: 0
+  JointDampen: 5000
+  MaxJointForceLimit: 20000
+  MaxJointSpring: 40000
+  MaxStep: 5000
+  ObservationSpaceOffset: 200
+  TakeActionsBetweenDecisions: 0
+  DecisionPeriod: 10
 --- !u!1 &1438603205
 GameObject:
   m_ObjectHideFlags: 0

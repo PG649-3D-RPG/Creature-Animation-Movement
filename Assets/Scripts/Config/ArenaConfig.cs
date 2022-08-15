@@ -4,10 +4,8 @@ using UnityEngine;
 
 namespace Config
 {
-    public class ArenaSettings: MonoBehaviour
+    public class ArenaConfig: GenericConfig
     {
-        private const string configName = "arenaConfig.json";
-
         [Header("Arena Settings")]
         [SerializeField]
         public int ArenaCount = 10;
@@ -43,23 +41,10 @@ namespace Config
         public bool BakeNavMesh = false;
         [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented. Valid range (0, NavMesh.GetSettingsCount-1)
         public int NavMeshBuildSettingIndex = 0;
-        
-        public void Awake()
+
+        protected override void ExecuteAtLoad()
         {
             if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
-            if (!Application.isEditor)
-            {
-                var jsonString = FileHelper.LoadJson(configName);
-                if (jsonString != null)
-                {
-                    JsonUtility.FromJsonOverwrite(jsonString, this);
-                }
-            }
-            else
-            {
-                FileHelper.SaveObject(this, configName);
-            }
-
         }
     }
 }

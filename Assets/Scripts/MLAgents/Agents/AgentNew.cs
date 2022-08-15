@@ -16,58 +16,6 @@ using Random = UnityEngine.Random;
 
 public class AgentNew : GenericAgent
 {
-    // Generator
-    private DynamicEnviormentGenerator _deg;
-
-    // Internal values
-    private float _otherBodyPartHeight = 1f;
-
-    private Vector3 _topStartingPosition;
-    private Quaternion _topStartingRotation;
-    private Transform _topTransform;
-    private Rigidbody _topTransformRb;
-
-    private long _episodeCounter = 0;
-    private Vector3 _dirToWalk = Vector3.right;
-
-    // Scripts
-    private TerrainGenerator _terrainGenerator;
-    private WalkTargetScript _walkTargetScript;
-    private Transform _target;
-    private OrientationCubeController _orientationCube;
-    private JointDriveController _jdController;
-    private DecisionRequester _decisionRequester;
-    private Agent _agent;
-    private MlAgentConfig _mlAgentsConfig;
-    private ArenaSettings _arenaSettings;
-
-    public float MTargetWalkingSpeed // property
-    {
-        get => _arenaSettings.TargetWalkingSpeed;
-        set => _arenaSettings.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _arenaSettings.MaxWalkingSpeed);
-    }
-
-    public void Awake()
-    {
-        _deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
-        _jdController = this.AddComponent<JointDriveController>();
-        _decisionRequester = this.AddComponent<DecisionRequester>();
-        _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
-        _arenaSettings = FindObjectOfType<ArenaSettings>();
-        // Set agent settings (maxSteps)
-        var mAgent = gameObject.GetComponent<Agent>();
-        mAgent.MaxStep = _mlAgentsConfig.MaxStep;
-
-        // Set behavior parameters
-        var skeleton = GetComponentInChildren<Skeleton>();
-        var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpaceOffset, new int[_mlAgentsConfig.DiscreteBranches]);
-        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpaceOffset;
-        bpScript.BehaviorName = DynamicEnviormentGenerator.BehaviorName;
-        bpScript.Model = _deg.NnModel;
-    }
-
-
     public override void Initialize()
     {
         var parent = transform.parent;
@@ -76,7 +24,7 @@ public class AgentNew : GenericAgent
         _agent = gameObject.GetComponent<Agent>();
         // TODO: Update
         _target = parent.Find("Creature Target").transform;
-        Transform oCube = transform.Find("Orientation Cube");
+        var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
 
         if(_orientationCube == null)
@@ -89,7 +37,7 @@ public class AgentNew : GenericAgent
         //and setup each body part
 
         var transforms = GetComponentsInChildren<Transform>();
-        float minYBodyPartCoor = 0f;
+        var minYBodyPartCoor = 0f;
         foreach (var trans in transforms)
         {
             // Double check if categories change!
@@ -125,23 +73,7 @@ public class AgentNew : GenericAgent
     }
 
 
-    void Start()
-    {
-        _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
-    }
 
-
-    private IEnumerator CheckWalkerOutOfArea()
-    {
-        while (true)
-        {
-            if (_topTransform.position.y is < -10 or > 40)
-            {
-                _agent.EndEpisode();
-            }
-            yield return new WaitForFixedUpdate();
-        }
-    }
 
     /// <summary>
     /// Is called on episode begin.

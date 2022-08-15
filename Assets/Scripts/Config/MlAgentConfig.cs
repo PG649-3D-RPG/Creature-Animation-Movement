@@ -3,10 +3,8 @@ using UnityEngine;
 
 namespace Config
 {
-    public class MlAgentConfig  : MonoBehaviour
+    public class MlAgentConfig  : GenericConfig
     {
-        private const string configName = "mlAgentConfig.json";
-        
         [Header("ML-Agent Settings settings")]
         [Space(10)]
         [SerializeField]
@@ -28,21 +26,9 @@ namespace Config
         [SerializeField]
         public int DecisionPeriod = 0;
 
-
-        public void Awake()
+        protected override void ExecuteAtLoad()
         {
-            if (!Application.isEditor)
-            {
-                var jsonString = FileHelper.LoadJson(configName);
-                if (jsonString != null)
-                {
-                    JsonUtility.FromJsonOverwrite(jsonString, this);
-                }
-            }
-            else
-            {
-                FileHelper.SaveObject(this, configName);
-            }
+            // Empty on purpose
         }
     }
 }

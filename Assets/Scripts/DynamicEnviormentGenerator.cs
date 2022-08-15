@@ -43,7 +43,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [HideInInspector]
     private ScriptableObject ParametricCreatureSettings;
     [HideInInspector]
-    private ArenaSettings _arenaSettings;
+    private ArenaConfig _arenaSettings;
 
 
     void Awake()
@@ -52,6 +52,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;  
         CreatureGeneratorSettings = Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings = Resources.Load("ParametricCreatureSettings", typeof(ScriptableObject)) as ScriptableObject;
+        _arenaSettings = FindObjectOfType<ArenaConfig>();
 
         
         if (WallPrefab == null || TargetCubePrefab == null)
@@ -67,7 +68,6 @@ public class DynamicEnviormentGenerator : MonoBehaviour
             name = "Arena Container"
         };
         
-        _arenaSettings = FindObjectOfType<ArenaSettings>();
         var xzLimit = (int) Math.Ceiling(Math.Sqrt(_arenaSettings.ArenaCount));
         for (var i = 0; i < _arenaSettings.ArenaCount; i++)
         {

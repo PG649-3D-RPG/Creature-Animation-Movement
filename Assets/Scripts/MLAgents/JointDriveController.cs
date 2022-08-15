@@ -120,7 +120,6 @@ namespace Unity.MLAgentsExamples
 
         public float maxJointSpring;
         public float jointDampen;
-
         public float maxJointForceLimit;
 
         // TODO: Required?

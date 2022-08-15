@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Config;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -7,6 +9,7 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
 {
@@ -36,6 +39,13 @@ public abstract class GenericAgent : Agent
     
     public abstract void TouchedTarget();
     
+    public float MTargetWalkingSpeed // property
+    {
+        get => _arenaSettings.TargetWalkingSpeed;
+        set => _arenaSettings.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _arenaSettings.MaxWalkingSpeed);
+    }
+
+    
     public void Awake()
     {
         
@@ -44,6 +54,11 @@ public abstract class GenericAgent : Agent
         _decisionRequester = this.AddComponent<DecisionRequester>();
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
+        
+        // Config jdController
+        _jdController.maxJointForceLimit = _mlAgentsConfig.MaxJointForceLimit;
+        _jdController.jointDampen = _mlAgentsConfig.JointDampen;
+        _jdController.maxJointSpring = _mlAgentsConfig.MaxJointSpring;
         
         // Set agent settings (maxSteps)
         var mAgent = gameObject.GetComponent<Agent>();
@@ -58,10 +73,84 @@ public abstract class GenericAgent : Agent
         bpScript.Model = _deg.NnModel;
     }
 
-    public float MTargetWalkingSpeed // property
+    public override void Initialize()
     {
-        get => _arenaSettings.TargetWalkingSpeed;
-        set => _arenaSettings.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _arenaSettings.MaxWalkingSpeed);
+        var parent = transform.parent;
+        _terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
+        _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
+        _agent = gameObject.GetComponent<Agent>();
+        // TODO: Update
+        _target = parent.Find("Creature Target").transform;
+        var oCube = transform.Find("Orientation Cube");
+        _orientationCube = oCube.GetComponent<OrientationCubeController>();
+
+        if(_orientationCube == null)
+        {
+            _orientationCube = oCube.AddComponent<OrientationCubeController>();
+        }
+         
+
+        //Get Body Parts
+        //and setup each body part
+
+        var transforms = GetComponentsInChildren<Transform>();
+        var minYBodyPartCoor = 0f;
+        foreach (var trans in transforms)
+        {
+            // Double check if categories change!
+            var boneScript = trans.GetComponent<Bone>();
+            if (boneScript != null)
+            {
+                if(!boneScript.isRoot)
+                {
+                    trans.AddComponent<GroundContact>();
+                    _jdController.SetupBodyPart(trans);
+                }
+                else
+                {
+                    _topTransform = trans;
+                    _topTransformRb = trans.GetComponent<Rigidbody>();
+
+                    _topStartingRotation = trans.rotation;
+                    _topStartingPosition = trans.position;
+                }
+                minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
+            }
+        }
+
+        foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
+        {
+            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
+        }
+
+        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;
+
+        SetWalkerOnGround();
+    }
+    
+    /// <summary>
+    /// Set the walker on the terrain.
+    /// </summary>
+    protected void SetWalkerOnGround()
+    {
+        var position = _topTransform.position;
+        var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
+
+        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnviormentGenerator.YHeightOffset, _topStartingPosition.z);
+        _topTransform.position = position;
+        _topTransform.rotation = _topStartingRotation;
+
+
+        _topTransformRb.velocity = Vector3.zero;
+        _topTransformRb.angularVelocity = Vector3.zero;
+
+        //Reset all of the body parts
+        foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
+        {
+            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnviormentGenerator.YHeightOffset);
+        }
+
+        _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
     }
 
     

@@ -16,61 +16,7 @@ using Random = UnityEngine.Random;
 
 public class AgentNew : GenericAgent
 {
-    public override void Initialize()
-    {
-        var parent = transform.parent;
-        _terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
-        _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
-        _agent = gameObject.GetComponent<Agent>();
-        // TODO: Update
-        _target = parent.Find("Creature Target").transform;
-        var oCube = transform.Find("Orientation Cube");
-        _orientationCube = oCube.GetComponent<OrientationCubeController>();
-
-        if(_orientationCube == null)
-        {
-            _orientationCube = oCube.AddComponent<OrientationCubeController>();
-        }
-         
-
-        //Get Body Parts
-        //and setup each body part
-
-        var transforms = GetComponentsInChildren<Transform>();
-        var minYBodyPartCoor = 0f;
-        foreach (var trans in transforms)
-        {
-            // Double check if categories change!
-            var boneScript = trans.GetComponent<Bone>();
-            if (boneScript != null)
-            {
-                if(!boneScript.isRoot)
-                {
-                    var groundContact = trans.AddComponent<GroundContact>();
-                    //var bodyPartHeight = trans.position.y - transform.position.y;
-                    _jdController.SetupBodyPart(trans);
-                }
-                else
-                {
-                    _topTransform = trans;
-                    _topTransformRb = trans.GetComponent<Rigidbody>();
-
-                    _topStartingRotation = trans.rotation;
-                    _topStartingPosition = trans.position;
-                }
-                minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
-            }
-        }
-
-        foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
-        {
-            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
-        }
-
-        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;
-
-        SetWalkerOnGround();
-    }
+    
 
 
 
@@ -105,32 +51,7 @@ public class AgentNew : GenericAgent
         //Debug.Log($"Physics {Physics.gravity} Reward {_agent.GetCumulativeReward()}");
     }
 
-
-    /// <summary>
-    /// Set the walker on the terrain.
-    /// </summary>
-    private void SetWalkerOnGround()
-    {
-        var position = _topTransform.position;
-        var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
-
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnviormentGenerator.YHeightOffset, _topStartingPosition.z);
-        _topTransform.position = position;
-        _topTransform.rotation = _topStartingRotation;
-
-
-        _topTransformRb.velocity = Vector3.zero;
-        _topTransformRb.angularVelocity = Vector3.zero;
-
-        //Reset all of the body parts
-        foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
-        {
-            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnviormentGenerator.YHeightOffset);
-        }
-
-        _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
-    }
-
+    
 
     /// <summary>
     /// Add relevant information on each body part to observations.

@@ -43,8 +43,7 @@ public class DynamicEnviormentGenerator : MonoBehaviour
     [HideInInspector]
     private ScriptableObject ParametricCreatureSettings;
     [HideInInspector]
-    private ArenaConfig _arenaSettings;
-
+    private ArenaConfig _arenaConfig;
 
     void Awake()
     {
@@ -52,8 +51,19 @@ public class DynamicEnviormentGenerator : MonoBehaviour
         WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;  
         CreatureGeneratorSettings = Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings = Resources.Load("ParametricCreatureSettings", typeof(ScriptableObject)) as ScriptableObject;
-        _arenaSettings = FindObjectOfType<ArenaConfig>();
+        
+        // Small hack which assures, that the Config is really loaded before usage. Otherwise config values might be skipped. 
+        // If someone finds a better method to do this, please change!
+        _arenaConfig = FindObjectOfType<ArenaConfig>();
+        _arenaConfig.Awake();
+        var creatureConfig = FindObjectOfType<CreatureConfig>();
+        creatureConfig.Awake();
+        var mlAgentConfig = FindObjectOfType<MlAgentConfig>();
+        mlAgentConfig.Awake();
 
+        
+        
+        Debug.Log($"Arena Settings at creation: {_arenaConfig.ArenaCount}");
         
         if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
@@ -68,8 +78,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
             name = "Arena Container"
         };
         
-        var xzLimit = (int) Math.Ceiling(Math.Sqrt(_arenaSettings.ArenaCount));
-        for (var i = 0; i < _arenaSettings.ArenaCount; i++)
+        var xzLimit = (int) Math.Ceiling(Math.Sqrt(_arenaConfig.ArenaCount));
+        for (var i = 0; i < _arenaConfig.ArenaCount; i++)
         {
             var posZCounter = Math.DivRem(i, xzLimit, out var posXCounter);
             var arena = GenerateArena(i, posXCounter, posZCounter, xzLimit, arenaContainer);
@@ -103,8 +113,8 @@ public class DynamicEnviormentGenerator : MonoBehaviour
 
         var terrain = terrainObj.AddComponent<Terrain>();
         var navMeshSurface = terrain.AddComponent<NavMeshSurface>();
-        navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(_arenaSettings.NavMeshBuildSettingIndex).agentTypeID;
-        navMeshSurface.collectObjects = _arenaSettings.NavMeshSurfaceCollectObjects;
+        navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(_arenaConfig.NavMeshBuildSettingIndex).agentTypeID;
+        navMeshSurface.collectObjects = _arenaConfig.NavMeshSurfaceCollectObjects;
         terrain.AddComponent<TerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();

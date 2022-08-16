@@ -16,43 +16,6 @@ using Random = UnityEngine.Random;
 
 public class AgentNew : GenericAgent
 {
-    
-
-
-
-
-    /// <summary>
-    /// Is called on episode begin.
-    /// Loop over body parts and reset them to initial conditions.
-    /// Regenerate terrain and place target cube randomly 
-    /// </summary>
-    public override void OnEpisodeBegin()
-    {
-        _episodeCounter++;
-
-        // Order is important. First regenerate terrain -> than place cube!
-        if (_arenaSettings.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _arenaSettings.RegenerateTerrainAfterXEpisodes == 0)
-        {
-            _terrainGenerator.RegenerateTerrain();
-        }
-
-        if (_arenaSettings.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _arenaSettings.EpisodeCountToRandomizeTargetCubePosition == 0)
-        {
-            _walkTargetScript.PlaceTargetCubeRandomly();
-        }
-
-        SetWalkerOnGround();
-
-        //Set our goal walking speed
-        MTargetWalkingSpeed =
-            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _arenaSettings.MaxWalkingSpeed) : MTargetWalkingSpeed;
-
-        //Physics.gravity = new Vector3(0, Random.Range(-200, 200), 0);
-        //Debug.Log($"Physics {Physics.gravity} Reward {_agent.GetCumulativeReward()}");
-    }
-
-    
-
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -149,19 +112,5 @@ public class AgentNew : GenericAgent
         //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
         AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
     }
-
-    private Vector3 GetAvgVelocityOfCreature()
-    {
-        return _jdController.bodyPartsList.Select(x => x.rb.velocity)
-            .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
-    }
-
-    /// <summary>
-    /// Agent touched the target
-    /// </summary>
-    public override void TouchedTarget()
-    {
-        AddReward(1f);
-        _walkTargetScript.PlaceTargetCubeRandomly();
-    }
+    
 }

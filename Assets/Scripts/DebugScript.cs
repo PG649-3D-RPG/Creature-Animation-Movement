@@ -9,17 +9,29 @@ public class DebugScript : MonoBehaviour
     [SerializeField]
     public float TimeScale = 1f;
 
-    public void Awake()
+    private Agent _agent;
+
+    private void Start()
     {
-        var Deg = FindObjectOfType<DynamicEnviormentGenerator>();
-        if(Deg.DebugMode) Time.timeScale = TimeScale;
+        _agent = GetComponent<Agent>();
     }
 
-    void Update()
+    public void Awake()
+    {
+        var deg = FindObjectOfType<DynamicEnviormentGenerator>();
+        if(deg.DebugMode) Time.timeScale = TimeScale;
+    }
+
+    private void Update()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            GetComponent<Agent>().EndEpisode();
+            _agent.EndEpisode();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
         }
     }
 }

@@ -37,8 +37,6 @@ public abstract class GenericAgent : Agent
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
     
-    public abstract void TouchedTarget();
-    
     public float MTargetWalkingSpeed // property
     {
         get => _arenaSettings.TargetWalkingSpeed;
@@ -153,7 +151,48 @@ public abstract class GenericAgent : Agent
         _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
     }
 
+    /// <summary>
+    /// Is called on episode begin.
+    /// Loop over body parts and reset them to initial conditions.
+    /// Regenerate terrain and place target cube randomly 
+    /// </summary>
+    public override void OnEpisodeBegin()
+    {
+        _episodeCounter++;
+
+        // Order is important. First regenerate terrain -> than place cube!
+        if (_arenaSettings.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _arenaSettings.RegenerateTerrainAfterXEpisodes == 0)
+        {
+            _terrainGenerator.RegenerateTerrain();
+        }
+
+        if (_arenaSettings.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _arenaSettings.EpisodeCountToRandomizeTargetCubePosition == 0)
+        {
+            _walkTargetScript.PlaceTargetCubeRandomly();
+        }
+
+        SetWalkerOnGround();
+
+        //Set our goal walking speed
+        MTargetWalkingSpeed =
+            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _arenaSettings.MaxWalkingSpeed) : MTargetWalkingSpeed;
+    }
     
+    protected Vector3 GetAvgVelocityOfCreature()
+    {
+        return _jdController.bodyPartsList.Select(x => x.rb.velocity)
+            .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
+    }
+
+    /// <summary>
+    /// Agent touched the target
+    /// </summary>
+    public void TouchedTarget()
+    {
+        AddReward(1f);
+        _walkTargetScript.PlaceTargetCubeRandomly();
+    }
+
     void Start()
     {
         _ = StartCoroutine(nameof(CheckWalkerOutOfArea));

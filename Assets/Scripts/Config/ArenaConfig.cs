@@ -45,6 +45,7 @@ namespace Config
         protected override void ExecuteAtLoad()
         {
             if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
+            Debug.Log($"ArenaCount: {ArenaCount}");
         }
     }
 }

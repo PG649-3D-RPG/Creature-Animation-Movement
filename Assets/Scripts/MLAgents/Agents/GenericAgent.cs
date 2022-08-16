@@ -53,6 +53,10 @@ public abstract class GenericAgent : Agent
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         
+        // Config decision requester
+        _decisionRequester.DecisionPeriod = _mlAgentsConfig.DecisionPeriod;
+        _decisionRequester.TakeActionsBetweenDecisions = _mlAgentsConfig.TakeActionsBetweenDecisions;
+        
         // Config jdController
         _jdController.maxJointForceLimit = _mlAgentsConfig.MaxJointForceLimit;
         _jdController.jointDampen = _mlAgentsConfig.JointDampen;

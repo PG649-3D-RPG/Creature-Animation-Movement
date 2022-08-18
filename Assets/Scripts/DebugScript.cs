@@ -18,8 +18,11 @@ public class DebugScript : MonoBehaviour
 
     public void Awake()
     {
-        var deg = FindObjectOfType<DynamicEnviormentGenerator>();
-        if(deg.DebugMode) Time.timeScale = TimeScale;
+        if(Application.isEditor)
+        {
+            if(Math.Abs(TimeScale - 1.0) > 0.0001) Debug.LogWarning("TimeScale modified!");
+            Time.timeScale = TimeScale;
+        }
     }
 
     private void Update()

@@ -72,8 +72,8 @@ public class WalkTargetScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        var x = UnityEngine.Random.Range(4 , DynamicEnviormentGenerator.TerrainSize - 4);
-        var z = UnityEngine.Random.Range(4, DynamicEnviormentGenerator.TerrainSize  - 4);
+        var x = UnityEngine.Random.Range(4 , DynamicEnvironmentGenerator.TerrainSize - 4);
+        var z = UnityEngine.Random.Range(4, DynamicEnvironmentGenerator.TerrainSize  - 4);
         var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
         transform.localPosition = new Vector3(x, y, z);
     }

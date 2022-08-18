@@ -413,7 +413,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugMode: 1
   AgentScriptName: AgentNew
   CreaturePrefab: {fileID: 0}
   NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
@@ -461,6 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f45c5ae7759653bc38c5e7a9c32e657b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RandomizeSeed: 1
   seed: 0
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0

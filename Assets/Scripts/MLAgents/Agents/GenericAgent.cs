@@ -26,7 +26,7 @@ public abstract class GenericAgent : Agent
 
 
     // Scripts
-    protected DynamicEnviormentGenerator _deg;
+    protected DynamicEnvironmentGenerator _deg;
     protected TerrainGenerator _terrainGenerator;
     protected WalkTargetScript _walkTargetScript;
     protected Transform _target;
@@ -47,7 +47,7 @@ public abstract class GenericAgent : Agent
     public void Awake()
     {
         
-        _deg = FindObjectOfType<DynamicEnviormentGenerator>();
+        _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
         _jdController = this.AddComponent<JointDriveController>();
         _decisionRequester = this.AddComponent<DecisionRequester>();
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
@@ -71,7 +71,7 @@ public abstract class GenericAgent : Agent
         var bpScript = GetComponent<BehaviorParameters>();
         bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpaceOffset, new int[_mlAgentsConfig.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpaceOffset;
-        bpScript.BehaviorName = DynamicEnviormentGenerator.BehaviorName;
+        bpScript.BehaviorName = DynamicEnvironmentGenerator.BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
 
@@ -138,7 +138,7 @@ public abstract class GenericAgent : Agent
         var position = _topTransform.position;
         var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
 
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnviormentGenerator.YHeightOffset, _topStartingPosition.z);
+        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnvironmentGenerator.YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
         _topTransform.rotation = _topStartingRotation;
 
@@ -149,7 +149,7 @@ public abstract class GenericAgent : Agent
         //Reset all of the body parts
         foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
         {
-            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnviormentGenerator.YHeightOffset);
+            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
         _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));

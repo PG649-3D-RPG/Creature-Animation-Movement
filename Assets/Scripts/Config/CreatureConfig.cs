@@ -10,6 +10,8 @@ using System.Reflection;
 public class CreatureConfig : GenericConfig
 {
     [Header("Creature Settings")] [Space(10)] [SerializeField]
+    public bool RandomizeSeed = false;
+    [SerializeField]
     public int seed = 0;
     [SerializeField]
     public float ArmsGroundContactPenalty = 0;

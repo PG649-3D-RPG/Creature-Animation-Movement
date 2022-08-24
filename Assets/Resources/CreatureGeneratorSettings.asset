@@ -22,12 +22,10 @@ MonoBehaviour:
     Mode: 1
     Material: {fileID: 0}
     SmoothNormals: 0
-    DrawNormals: 0
     enableDQSkinner: 0
     GridResolution: 90
-    Size: 20
   DebugSettings:
     DisableBoneGravity: 0
     DisablePhysics: 0
-    AttachPrimitiveMesh: 0
-    DrawMeshNormals: 0
+    AttachPrimitiveMesh: 1
+    DrawNormals: 0

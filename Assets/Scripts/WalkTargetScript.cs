@@ -1,4 +1,5 @@
 using System.Collections;
+using Config;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -15,23 +16,21 @@ public class WalkTargetScript : MonoBehaviour
     private Rigidbody ThisRigidbody { get; set; }
 
     private TerrainGenerator TerrainGenerator { get; set; }
-
-    private DynamicEnviormentGenerator Deg { get; set; }
-
+    
     private GenericAgent _agent;
 
     private const string TagToDetect = "Agent";
 
-    // TODO Rework Agent reference!
-
+    private ArenaConfig _arenaSettings;
+    
     /// <summary>
     /// Start is called before the first frame update
     /// </summary>
     /// <returns></returns>
     public void Start()
     {
-        Deg = GameObject.FindObjectOfType<DynamicEnviormentGenerator>();
-
+        _arenaSettings = FindObjectOfType<ArenaConfig>();
+        
         Rng = new Random();
         var parent = transform.parent;
         TerrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
@@ -51,9 +50,9 @@ public class WalkTargetScript : MonoBehaviour
     public void FixedUpdate()
     {
         // Move the target randomly
-        if (Deg.TargetMovementSpeed > 0)
+        if (_arenaSettings.TargetMovementSpeed > 0)
         {
-            ThisRigidbody.MovePosition(transform.position + (Deg.TargetMovementSpeed * Time.deltaTime * TargetDirection));
+            ThisRigidbody.MovePosition(transform.position + (_arenaSettings.TargetMovementSpeed * Time.deltaTime * TargetDirection));
         }
         
         var localPosition = transform.localPosition;
@@ -73,8 +72,8 @@ public class WalkTargetScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        var x = UnityEngine.Random.Range(4 , Deg .TerrainSize - 4);
-        var z = UnityEngine.Random.Range(4, Deg.TerrainSize  - 4);
+        var x = UnityEngine.Random.Range(4 , DynamicEnvironmentGenerator.TerrainSize - 4);
+        var z = UnityEngine.Random.Range(4, DynamicEnvironmentGenerator.TerrainSize  - 4);
         var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
         transform.localPosition = new Vector3(x, y, z);
     }
@@ -88,7 +87,7 @@ public class WalkTargetScript : MonoBehaviour
         while (true)
         {
             TargetDirection = Vector3.Normalize(new Vector3((float)(Rng.NextDouble() * 2) - 1, 0, (float)(Rng.NextDouble() * 2) - 1));
-            yield return new WaitForSeconds(UnityEngine.Random.Range(1, Deg.TargetMaxSecondsInOneDirection));
+            yield return new WaitForSeconds(UnityEngine.Random.Range(1, _arenaSettings.TargetMaxSecondsInOneDirection));
         }
     }
 

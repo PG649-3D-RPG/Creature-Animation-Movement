@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df71536d1b576a840a89b68a19365847, type: 3}
+  m_Name: ParametricCreatureSettings
+  m_EditorClassIdentifier: 
+  minimumHipThickness: 0.4
+  maximumHipThickness: 1.5
+  minimumHipLength: 1
+  maximumHipLength: 2
+  minimumLegThickness: 0.1
+  maximumLegThickness: 0.5
+  minimumTotalLegLength: 2
+  maximumTotalLegLength: 6
+  minimumFeetWidth: 0.4
+  maximumFeetWidth: 1.5
+  minimumFeetLength: 1
+  maximumFeetLength: 2
+  minimumShoulderThickness: 0.1
+  maximumShoulderThickness: 0.5
+  minimumShoulderLength: 0.5
+  maximumShoulderLength: 1
+  minimumArmThickness: 0.1
+  maximumArmThickness: 0.5
+  minimumTotalArmLength: 2
+  maximumTotalArmLength: 6
+  minimumHandRadius: 0.5
+  maximumHandRadius: 1
+  minimumTorsoThickness: 0.4
+  maximumTorsoThickness: 1.5
+  minimumTotalTorsoLength: 4
+  maximumTotalTorsoLength: 8
+  minimumNeckThickness: 0.1
+  maximumNeckThickness: 0.5
+  minimumNeckLength: 1
+  maximumNeckLength: 3
+  minimumNeckBones: 1
+  maximumNeckBones: 1
+  minimumHeadSize: 0.3
+  maximumHeadSize: 1.5
+  minSnoutSize: 0
+  maxSnoutSize: 0
+  minSnoutThickness: 0
+  maxSnoutThickness: 0

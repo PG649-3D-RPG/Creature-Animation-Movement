@@ -20,9 +20,9 @@ namespace Unity.MLAgentsExamples
     {
         public Agent Agent;
         public bool TouchingGround;
-        private string _kGround; // Tag of ground object.
-        private DynamicEnviormentGenerator _deg;
+        private DynamicEnvironmentGenerator _deg;
         private Bone _boneScript;
+        private CreatureConfig _creatureConfig;
 
         public GroundContact(Agent agent)
         {
@@ -31,8 +31,9 @@ namespace Unity.MLAgentsExamples
 
         public void Awake()
         {
-            _deg = FindObjectOfType<DynamicEnviormentGenerator>();
-            _kGround = _deg.GroundTag;
+            _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
+            _creatureConfig = FindObjectOfType<CreatureConfig>();
+
             _boneScript = GetComponentInParent<Bone>();
         }
 
@@ -41,11 +42,11 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionEnter(Collision col)
         {
-            if (col.transform.CompareTag(_kGround))
+            if (col.transform.CompareTag(DynamicEnvironmentGenerator.GroundTag))
             {
                 TouchingGround = true;
-                if (_deg.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
-                if (_deg.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
+                if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
+                if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
             }
         }
 
@@ -54,7 +55,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionExit(Collision other)
         {
-            if (other.transform.CompareTag(_kGround)) TouchingGround = false;
+            if (other.transform.CompareTag(DynamicEnvironmentGenerator.GroundTag)) TouchingGround = false;
         }
     }
 }

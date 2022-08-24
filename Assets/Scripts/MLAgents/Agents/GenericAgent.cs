@@ -68,8 +68,8 @@ public abstract class GenericAgent : Agent
         // Set behavior parameters
         var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpaceOffset, new int[_mlAgentsConfig.DiscreteBranches]);
-        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpaceOffset;
+        bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
+        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
         bpScript.BehaviorName = DynamicEnvironmentGenerator.BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
@@ -178,7 +178,7 @@ public abstract class GenericAgent : Agent
 
         //Set our goal walking speed
         MTargetWalkingSpeed =
-            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;
+            _mlAgentsConfig.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;
     }
     
     protected Vector3 GetAvgVelocityOfCreature()

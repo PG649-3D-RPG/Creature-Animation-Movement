@@ -13,8 +13,6 @@ namespace Config
         [Header("Target Cube Settings")]
         [SerializeField]
         public int EpisodeCountToRandomizeTargetCubePosition = 0;
-        [SerializeField]
-        public bool RandomizeWalkSpeedEachEpisode = false;
         [SerializeField] 
         public int TargetMaxSecondsInOneDirection = 10;
         [SerializeField]
@@ -42,7 +40,6 @@ namespace Config
         protected override void ExecuteAtLoad()
         {
             if (ArenaCount <= 0) throw new ArgumentException("We need at least one arena!");
-            Debug.Log($"ArenaCount: {ArenaCount}");
         }
     }
 }

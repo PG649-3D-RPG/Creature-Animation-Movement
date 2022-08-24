@@ -12,8 +12,6 @@ namespace Config
 
         [Header("Target Cube Settings")]
         [SerializeField]
-        public float MaxWalkingSpeed = 10;
-        [SerializeField]
         public int EpisodeCountToRandomizeTargetCubePosition = 0;
         [SerializeField]
         public bool RandomizeWalkSpeedEachEpisode = false;
@@ -21,8 +19,7 @@ namespace Config
         public int TargetMaxSecondsInOneDirection = 10;
         [SerializeField]
         public float TargetMovementSpeed = 0f;
-        [SerializeField]
-        public float TargetWalkingSpeed = 10;
+        
 
         [Header("Terrain settings")]
         [SerializeField]

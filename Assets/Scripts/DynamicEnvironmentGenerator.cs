@@ -55,7 +55,6 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         var mlAgentConfig = FindObjectOfType<MlAgentConfig>();
         mlAgentConfig.Awake();
 
-
         Debug.Log($"Arena Settings at creation: {_arenaConfig.ArenaCount}");
 
         if (WallPrefab == null || TargetCubePrefab == null)

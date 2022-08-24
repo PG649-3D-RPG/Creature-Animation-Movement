@@ -1,1 +1,1 @@
-{"RandomizeSeed":true,"seed":0,"ArmsGroundContactPenalty":0.0,"HandsGroundContactPenalty":0.0,"HeadGroundContactPenalty":0.0,"HipsGroundContactPenalty":0.0,"LegsGroundContactPenalty":0.0,"TorsoGroundContactPenalty":0.0,"ResetOnGroundContactParts":[6]}
+{"seed":0,"ArmsGroundContactPenalty":0.0,"HandsGroundContactPenalty":0.0,"HeadGroundContactPenalty":0.0,"HipsGroundContactPenalty":0.0,"LegsGroundContactPenalty":0.0,"TorsoGroundContactPenalty":0.0,"ResetOnGroundContactParts":[6]}

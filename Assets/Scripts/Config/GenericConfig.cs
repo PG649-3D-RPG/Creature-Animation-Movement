@@ -29,7 +29,6 @@ namespace Config
         {
             try
             {
-                Debug.Log($"Asset Path: {configPath}");
                 // It seems like Unitys own File implementation is windows exclusive :clown:
                 // Change only if you know it compiles for Linux
                 var jsonString = System.IO.File.ReadAllText(configPath, Encoding.UTF8);

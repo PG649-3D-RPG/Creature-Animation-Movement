@@ -8,6 +8,10 @@ namespace Config
         [Header("ML-Agent Settings settings")]
         [Space(10)]
         [SerializeField]
+        public float MaxWalkingSpeed = 10;
+        [SerializeField]
+        public float TargetWalkingSpeed = 10;
+        [SerializeField]
         public int ContinuousActionSpaceOffset = 100;
         [SerializeField]
         public int DiscreteBranches = 0;

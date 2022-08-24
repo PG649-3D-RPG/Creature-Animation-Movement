@@ -30,7 +30,6 @@ public class AgentNew : GenericAgent
         sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
         //Get position relative to hips in the context of our orientation cube's space
-        // TODO Why do we do this?
         sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.position - _topTransform.position));
 
         if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)

@@ -39,14 +39,13 @@ public abstract class GenericAgent : Agent
     
     public float MTargetWalkingSpeed // property
     {
-        get => _arenaSettings.TargetWalkingSpeed;
-        set => _arenaSettings.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _arenaSettings.MaxWalkingSpeed);
+        get => _mlAgentsConfig.TargetWalkingSpeed;
+        set => _mlAgentsConfig.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _mlAgentsConfig.MaxWalkingSpeed);
     }
 
     
     public void Awake()
     {
-        
         _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
         _jdController = this.AddComponent<JointDriveController>();
         _decisionRequester = this.AddComponent<DecisionRequester>();
@@ -179,7 +178,7 @@ public abstract class GenericAgent : Agent
 
         //Set our goal walking speed
         MTargetWalkingSpeed =
-            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _arenaSettings.MaxWalkingSpeed) : MTargetWalkingSpeed;
+            _arenaSettings.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;
     }
     
     protected Vector3 GetAvgVelocityOfCreature()

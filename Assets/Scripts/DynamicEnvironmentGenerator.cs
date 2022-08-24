@@ -149,6 +149,11 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         var creatureConfig = FindObjectOfType<CreatureConfig>();
 
         GameObject creatureContainer;
+        var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        orientationCube.name = "Orientation Cube";
+        Destroy(orientationCube.GetComponent<Collider>());
+        Destroy(orientationCube.GetComponent<MeshRenderer>());
+
         if (CreaturePrefab != null)
         {
             Debug.LogWarning("Loading creature from prefab!");
@@ -159,14 +164,9 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             Debug.LogWarning("Loading creature from generator!");
             creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                 (ParametricCreatureSettings)ParametricCreatureSettings,
-                creatureConfig.RandomizeSeed ? 0 : creatureConfig.seed);
-            var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            orientationCube.name = "Orientation Cube";
-            Destroy(orientationCube.GetComponent<Collider>());
-            Destroy(orientationCube.GetComponent<MeshRenderer>());
-
-            orientationCube.transform.parent = creatureContainer.transform;
+                creatureConfig.seed);
         }
+        orientationCube.transform.parent = creatureContainer.transform;
 
         creatureContainer.transform.parent = arena.transform;
         creatureContainer.name = "Creature";

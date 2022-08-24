@@ -9,8 +9,7 @@ using System.Reflection;
 
 public class CreatureConfig : GenericConfig
 {
-    [Header("Creature Settings")] [Space(10)] [SerializeField]
-    public bool RandomizeSeed = false;
+    [Header("Creature Settings")] [Space(10)] 
     [SerializeField]
     public int seed = 0;
     [SerializeField]

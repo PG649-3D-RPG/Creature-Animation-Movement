@@ -12,16 +12,7 @@ public class CreatureDebugger : MonoBehaviour
 
 
     private GameObject creature;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (ActivateCreatureDebugger)
-        {
-            var ArenaC = GameObject.Find("Arena Container");
-            ArenaC.SetActive(false);
-        }
-    }
+    private GameObject debugCreature;
 
     // Update is called once per frame
     void Update()
@@ -29,6 +20,11 @@ public class CreatureDebugger : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I))
         {
             Seed++;
+            GenCreature();
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            Seed--;
             GenCreature();
         }
         else if (Input.GetKeyDown(KeyCode.G))
@@ -39,9 +35,10 @@ public class CreatureDebugger : MonoBehaviour
 
     private void GenCreature()
     {
-        Destroy(creature);
+        
+        Destroy(debugCreature);
         creature = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings, (ParametricCreatureSettings)ParametricCreatureSettings, Seed);
-        var debugCreature = new GameObject
+        debugCreature = new GameObject
         {
             name = $"DebugCreature_{Seed}"
         };

@@ -1,1 +1,1 @@
-{"seed":0,"ArmsGroundContactPenalty":0.0,"HandsGroundContactPenalty":0.0,"HeadGroundContactPenalty":0.0,"HipsGroundContactPenalty":0.0,"LegsGroundContactPenalty":0.0,"TorsoGroundContactPenalty":0.0,"ResetOnGroundContactParts":[6]}
+{"seed":12,"creatureType":1,"ArmsGroundContactPenalty":-5.0,"HandsGroundContactPenalty":-5.0,"HeadGroundContactPenalty":0.0,"HipsGroundContactPenalty":-5.0,"LegsGroundContactPenalty":-5.0,"TorsoGroundContactPenalty":-5.0,"ResetOnGroundContactParts":[6]}

@@ -14,9 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkeletonSettings:
     ConnectHips: 0
+    MassMultiplier: 1
+    MinimumDensity: 900
+    MaximumDensity: 1100
+    BoneDensityOverrides: []
     RigidbodyDrag: 0.05
     CollisionDetectionMode: 2
     PrimitiveMeshShadows: 0
+  SkeletonLinterSettings:
+    WarnOnColliderPenetration: 1
+    FixColliderPenetrations: 0
+    FixIdenticalBonePositions: 1
   MeshSettings:
     GenerateMetaballMesh: 0
     Mode: 1
@@ -25,7 +33,9 @@ MonoBehaviour:
     enableDQSkinner: 0
     GridResolution: 90
   DebugSettings:
+    LogAdditionalInfo: 0
     DisableBoneGravity: 0
-    DisablePhysics: 0
+    KinematicBones: 0
+    DisablePhysics: 1
     AttachPrimitiveMesh: 1
     DrawNormals: 0

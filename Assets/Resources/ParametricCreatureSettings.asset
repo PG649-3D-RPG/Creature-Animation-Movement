@@ -19,9 +19,9 @@ MonoBehaviour:
   minimumLegThickness: 0.1
   maximumLegThickness: 0.5
   minimumTotalLegLength: 2
-  maximumTotalLegLength: 6
+  maximumTotalLegLength: 4
   minimumFeetWidth: 0.4
-  maximumFeetWidth: 1.5
+  maximumFeetWidth: 1
   minimumFeetLength: 1
   maximumFeetLength: 2
   minimumShoulderThickness: 0.1
@@ -31,17 +31,17 @@ MonoBehaviour:
   minimumArmThickness: 0.1
   maximumArmThickness: 0.5
   minimumTotalArmLength: 2
-  maximumTotalArmLength: 6
-  minimumHandRadius: 0.5
-  maximumHandRadius: 1
+  maximumTotalArmLength: 4
+  minimumHandRadius: 0.25
+  maximumHandRadius: 0.5
   minimumTorsoThickness: 0.4
-  maximumTorsoThickness: 1.5
-  minimumTotalTorsoLength: 4
-  maximumTotalTorsoLength: 8
+  maximumTorsoThickness: 1.2
+  minimumTotalTorsoLength: 3
+  maximumTotalTorsoLength: 6
   minimumNeckThickness: 0.1
-  maximumNeckThickness: 0.5
-  minimumNeckLength: 1
-  maximumNeckLength: 3
+  maximumNeckThickness: 0.25
+  minimumNeckLength: 0.5
+  maximumNeckLength: 1
   minimumNeckBones: 1
   maximumNeckBones: 1
   minimumHeadSize: 0.3

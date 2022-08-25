@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cca73200eedb7478782f70ea0dfbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActivateCreatureDebugger: 0
+  ActivateCreatureDebugger: 1
   Seed: 0
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
@@ -460,13 +460,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f45c5ae7759653bc38c5e7a9c32e657b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 0
-  ArmsGroundContactPenalty: 0
-  HandsGroundContactPenalty: 0
+  seed: 12
+  creatureType: 1
+  ArmsGroundContactPenalty: -5
+  HandsGroundContactPenalty: -5
   HeadGroundContactPenalty: 0
-  HipsGroundContactPenalty: 0
-  LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: 0
+  HipsGroundContactPenalty: -5
+  LegsGroundContactPenalty: -5
+  TorsoGroundContactPenalty: -5
   ResetOnGroundContactParts: 06000000
 --- !u!114 &1211399394
 MonoBehaviour:
@@ -480,15 +481,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3324768aa3a347daba1c965af3dbc12f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ContinuousActionSpaceOffset: 293
+  RandomizeWalkSpeedEachEpisode: 0
+  MaxWalkingSpeed: 10
+  TargetWalkingSpeed: 5
+  ContinuousActionSpace: 293
   DiscreteBranches: 0
+  MaxStep: 5000
+  ObservationSpace: 293
+  TakeActionsBetweenDecisions: 1
+  DecisionPeriod: 7
   JointDampen: 5000
   MaxJointForceLimit: 20000
   MaxJointSpring: 40000
-  MaxStep: 5000
-  ObservationSpaceOffset: 293
-  TakeActionsBetweenDecisions: 0
-  DecisionPeriod: 10
 --- !u!114 &1211399395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -501,14 +505,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 10
-  MaxWalkingSpeed: 10
+  ArenaCount: 1
   EpisodeCountToRandomizeTargetCubePosition: 0
-  RandomizeWalkSpeedEachEpisode: 0
   TargetMaxSecondsInOneDirection: 10
-  TargetMovementSpeed: 0
-  TargetWalkingSpeed: 10
-  GenerateHeights: 1
+  TargetMovementSpeed: 1
+  GenerateHeights: 0
   RegenerateTerrainAfterXEpisodes: 0
   Depth: 10
   Scale: 2.5

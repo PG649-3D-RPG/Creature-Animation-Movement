@@ -2,6 +2,9 @@
 ## Info
 This repo contains the code to learn basic movement to an unblocked position.
 
+## Prefab Loading
+Please ensure no AgentScripts are attached to the prefab. This will crash the environment!
+
 ## Required Packages:
 This Unity-Project requires the following Packages. These packages must be installed separately via the Unity Package Manager (Window->Package Manager)
 * [AI Navigation](https://docs.unity3d.com/Packages/com.unity.ai.navigation@1.1/manual/index.html): Use the add package by name with com.unity.ai.navigation to install this package

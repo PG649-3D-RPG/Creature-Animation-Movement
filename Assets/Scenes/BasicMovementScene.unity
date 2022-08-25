@@ -158,7 +158,7 @@ Light:
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 2
+    m_Type: 0
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -191,7 +191,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 4
+  m_Lightmapping: 2
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -201,7 +201,7 @@ Light:
   m_UseBoundingSphereOverride: 0
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
-  m_ShadowAngle: 0
+  m_ShadowAngle: 18.1
 --- !u!4 &60314860
 Transform:
   m_ObjectHideFlags: 0
@@ -332,7 +332,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cca73200eedb7478782f70ea0dfbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActivateCreatureDebugger: 1
+  ActivateCreatureDebugger: 0
   Seed: 0
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
@@ -414,7 +414,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNew
-  CreaturePrefab: {fileID: 0}
+  CreaturePrefab: {fileID: 7708177826693173547, guid: 9b2d3ca8edb4e3a489f5148a8cf5c524, type: 3}
   NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
@@ -482,8 +482,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RandomizeWalkSpeedEachEpisode: 0
-  MaxWalkingSpeed: 10
-  TargetWalkingSpeed: 5
+  MaxWalkingSpeed: 20
+  TargetWalkingSpeed: 10
   ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 5000
@@ -508,7 +508,7 @@ MonoBehaviour:
   ArenaCount: 1
   EpisodeCountToRandomizeTargetCubePosition: 0
   TargetMaxSecondsInOneDirection: 10
-  TargetMovementSpeed: 1
+  TargetMovementSpeed: 0
   GenerateHeights: 0
   RegenerateTerrainAfterXEpisodes: 0
   Depth: 10

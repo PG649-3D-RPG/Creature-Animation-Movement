@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Threading.Tasks;
 using Config;
@@ -41,6 +42,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
     {
         TargetCubePrefab = Resources.Load("TargetCube", typeof(GameObject)) as GameObject;
         WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;
+
         CreatureGeneratorSettings =
             Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings =
@@ -146,33 +148,51 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         var creatureConfig = FindObjectOfType<CreatureConfig>();
 
         GameObject creatureContainer;
-        var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        orientationCube.name = "Orientation Cube";
-        Destroy(orientationCube.GetComponent<Collider>());
-        Destroy(orientationCube.GetComponent<MeshRenderer>());
-
         if (CreaturePrefab != null)
         {
             Debug.LogWarning("Loading creature from prefab!");
+            if (CreaturePrefab.GetComponent(Type.GetType(AgentScriptName)) != null)
+            {
+                throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proccede.");
+            }
             creatureContainer = Instantiate(CreaturePrefab);
         }
         else
         {
-            Debug.LogWarning("Loading creature from generator!");
-            creatureContainer = CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (ParametricCreatureSettings)ParametricCreatureSettings,
-                creatureConfig.seed);
+            Debug.LogWarning($"Loading creature from generator with seed {creatureConfig.seed}!");
+
+            creatureContainer = creatureConfig.creatureType switch
+            {
+                CreatureType.Biped => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
+                                        (ParametricCreatureSettings)ParametricCreatureSettings,
+                                        creatureConfig.seed),
+                CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
+                                        (ParametricCreatureSettings)ParametricCreatureSettings,
+                                        creatureConfig.seed),
+                _ => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
+                                        (ParametricCreatureSettings)ParametricCreatureSettings,
+                                        creatureConfig.seed),
+            };
         }
-        orientationCube.transform.parent = creatureContainer.transform;
+
+        if (creatureContainer.transform.Find("Orientation Cube") == null)
+        {
+            var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            orientationCube.name = "Orientation Cube";
+            Destroy(orientationCube.GetComponent<Collider>());
+            Destroy(orientationCube.GetComponent<MeshRenderer>());
+            orientationCube.transform.parent = creatureContainer.transform;
+        }
 
         creatureContainer.transform.parent = arena.transform;
         creatureContainer.name = "Creature";
         creatureContainer.transform.localPosition = new Vector3(64, 0, 64);
 
+        
         if (creatureContainer.AddComponent(Type.GetType(AgentScriptName)) == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
-        creatureContainer.AddComponent<ModelOverrider>();
-        if (Application.isEditor) creatureContainer.AddComponent<DebugScript>();
+        if(creatureContainer.GetComponent<ModelOverrider>() == null) creatureContainer.AddComponent<ModelOverrider>();
+        if (Application.isEditor && creatureContainer.GetComponent<DebugScript>() == null ) creatureContainer.AddComponent<DebugScript>();
     }
 
     private void AddTargetToArena(GameObject arena)

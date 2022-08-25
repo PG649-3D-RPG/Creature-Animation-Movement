@@ -47,8 +47,11 @@ public abstract class GenericAgent : Agent
     public void Awake()
     {
         _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
-        _jdController = this.AddComponent<JointDriveController>();
+        if(GetComponent<JointDriveController>() != null) Destroy(GetComponent<DecisionRequester>());
+        if (GetComponent<DecisionRequester>() != null) Destroy(GetComponent<JointDriveController>());
+
         _decisionRequester = this.AddComponent<DecisionRequester>();
+        _jdController = this.AddComponent<JointDriveController>();
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         
@@ -66,7 +69,6 @@ public abstract class GenericAgent : Agent
         mAgent.MaxStep = _mlAgentsConfig.MaxStep;
 
         // Set behavior parameters
-        var skeleton = GetComponentInChildren<Skeleton>();
         var bpScript = GetComponent<BehaviorParameters>();
         bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
@@ -80,17 +82,11 @@ public abstract class GenericAgent : Agent
         _terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
         _agent = gameObject.GetComponent<Agent>();
-        // TODO: Update
         _target = parent.Find("Creature Target").transform;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
-
-        if(_orientationCube == null)
-        {
-            _orientationCube = oCube.AddComponent<OrientationCubeController>();
-        }
-         
-
+        if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
+     
         //Get Body Parts
         //and setup each body part
 
@@ -100,23 +96,21 @@ public abstract class GenericAgent : Agent
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (boneScript != null)
+            if (boneScript == null) continue;
+            if(!boneScript.isRoot)
             {
-                if(!boneScript.isRoot)
-                {
-                    trans.AddComponent<GroundContact>();
-                    _jdController.SetupBodyPart(trans);
-                }
-                else
-                {
-                    _topTransform = trans;
-                    _topTransformRb = trans.GetComponent<Rigidbody>();
-
-                    _topStartingRotation = trans.rotation;
-                    _topStartingPosition = trans.position;
-                }
-                minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
+                if(trans.GetComponent<GroundContact>() == null) trans.AddComponent<GroundContact>();
+                _jdController.SetupBodyPart(trans);
             }
+            else
+            {
+                _topTransform = trans;
+                _topTransformRb = trans.GetComponent<Rigidbody>();
+
+                _topStartingRotation = trans.rotation;
+                _topStartingPosition = trans.position;
+            }
+            minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
         }
 
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)

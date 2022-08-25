@@ -12,6 +12,10 @@ public class CreatureConfig : GenericConfig
     [Header("Creature Settings")] [Space(10)] 
     [SerializeField]
     public int seed = 0;
+    public CreatureType creatureType ;
+
+    [Header("Penalty Settings")]
+    [Space(10)]
     [SerializeField]
     public float ArmsGroundContactPenalty = 0;
     [SerializeField]
@@ -38,4 +42,11 @@ public class CreatureConfig : GenericConfig
         if(ArmsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Arm, ArmsGroundContactPenalty);
         if(HandsGroundContactPenalty > 0) PenaltiesForBodyParts.Add(BoneCategory.Hand, HandsGroundContactPenalty);
     }
+}
+
+
+public enum CreatureType
+{
+    Biped,
+    Quadruped
 }

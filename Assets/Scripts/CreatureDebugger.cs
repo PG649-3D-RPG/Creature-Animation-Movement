@@ -13,16 +13,6 @@ public class CreatureDebugger : MonoBehaviour
 
     private GameObject creature;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        if (ActivateCreatureDebugger)
-        {
-            var ArenaC = GameObject.Find("Arena Container");
-            ArenaC.SetActive(false);
-        }
-    }
-
     // Update is called once per frame
     void Update()
     {

@@ -59,8 +59,12 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
 
         if (WallPrefab == null || TargetCubePrefab == null)
             throw new ArgumentException("Prefabs not set in dynamic environment creator.");
+    }
 
-        GenerateTrainingEnvironment();
+    private void Start()
+    {
+        // Only generate Training Arena if we don't want to use the creature debugger
+        if(!FindObjectOfType<CreatureDebugger>().ActivateCreatureDebugger) GenerateTrainingEnvironment();
     }
 
     private void GenerateTrainingEnvironment()

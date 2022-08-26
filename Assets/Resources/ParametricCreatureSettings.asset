@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: ParametricCreatureSettings
   m_EditorClassIdentifier: 
   minimumHipThickness: 0.4
-  maximumHipThickness: 1.5
-  minimumHipLength: 1
-  maximumHipLength: 2
-  minimumLegThickness: 0.1
-  maximumLegThickness: 0.5
+  maximumHipThickness: 0.75
+  minimumHipLength: 0.75
+  maximumHipLength: 1
+  minimumLegThickness: 0.2
+  maximumLegThickness: 0.3
   minimumTotalLegLength: 2
-  maximumTotalLegLength: 4
+  maximumTotalLegLength: 3
   minimumFeetWidth: 0.4
   maximumFeetWidth: 1
   minimumFeetLength: 1
@@ -28,24 +28,24 @@ MonoBehaviour:
   maximumShoulderThickness: 0.5
   minimumShoulderLength: 0.5
   maximumShoulderLength: 1
-  minimumArmThickness: 0.1
-  maximumArmThickness: 0.5
-  minimumTotalArmLength: 2
-  maximumTotalArmLength: 4
+  minimumArmThickness: 0.3
+  maximumArmThickness: 0.3
+  minimumTotalArmLength: 1
+  maximumTotalArmLength: 2
   minimumHandRadius: 0.25
   maximumHandRadius: 0.5
-  minimumTorsoThickness: 0.4
-  maximumTorsoThickness: 1.2
-  minimumTotalTorsoLength: 3
-  maximumTotalTorsoLength: 6
-  minimumNeckThickness: 0.1
-  maximumNeckThickness: 0.25
-  minimumNeckLength: 0.5
-  maximumNeckLength: 1
+  minimumTorsoThickness: 0.5
+  maximumTorsoThickness: 0.75
+  minimumTotalTorsoLength: 1.5
+  maximumTotalTorsoLength: 2
+  minimumNeckThickness: 0.3
+  maximumNeckThickness: 0.3
+  minimumNeckLength: 0.1
+  maximumNeckLength: 0.5
   minimumNeckBones: 1
   maximumNeckBones: 1
-  minimumHeadSize: 0.3
-  maximumHeadSize: 1.5
+  minimumHeadSize: 0.5
+  maximumHeadSize: 1
   minSnoutSize: 0
   maxSnoutSize: 0
   minSnoutThickness: 0

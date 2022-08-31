@@ -157,7 +157,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             Debug.LogWarning("Loading creature from prefab!");
             if (CreaturePrefab.GetComponent(Type.GetType(AgentScriptName)) != null)
             {
-                throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proccede.");
+                throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proceed.");
             }
             creatureContainer = Instantiate(CreaturePrefab);
         }
@@ -173,9 +173,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
                 CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (ParametricCreatureSettings)ParametricCreatureSettings,
                                         creatureConfig.seed),
-                _ => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
-                                        (ParametricCreatureSettings)ParametricCreatureSettings,
-                                        creatureConfig.seed),
+                _ => throw new ArgumentException("No creature type selected"),
             };
         }
 

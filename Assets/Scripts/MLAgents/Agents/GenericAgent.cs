@@ -36,7 +36,8 @@ public abstract class GenericAgent : Agent
     protected Agent _agent;
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
-    
+    private CreatureConfig _creatureConfig;
+
     public float MTargetWalkingSpeed // property
     {
         get => _mlAgentsConfig.TargetWalkingSpeed;
@@ -54,7 +55,9 @@ public abstract class GenericAgent : Agent
         _jdController = this.AddComponent<JointDriveController>();
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
-        
+        _creatureConfig = FindObjectOfType<CreatureConfig>();
+
+
         // Config decision requester
         _decisionRequester.DecisionPeriod = _mlAgentsConfig.DecisionPeriod;
         _decisionRequester.TakeActionsBetweenDecisions = _mlAgentsConfig.TakeActionsBetweenDecisions;
@@ -91,12 +94,17 @@ public abstract class GenericAgent : Agent
         //and setup each body part
 
         var transforms = GetComponentsInChildren<Transform>();
-        var minYBodyPartCoor = 0f;
+        var minYBodyPartCoordinate = 0f;
         foreach (var trans in transforms)
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (boneScript == null) continue;
+            if (boneScript == null)
+            {
+                Debug.LogWarning("Missing bonescript found. Skipping transform.");
+                continue;
+            }
+
             if(!boneScript.isRoot)
             {
                 if(trans.GetComponent<GroundContact>() == null) trans.AddComponent<GroundContact>();
@@ -110,15 +118,15 @@ public abstract class GenericAgent : Agent
                 _topStartingRotation = trans.rotation;
                 _topStartingPosition = trans.position;
             }
-            minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
+            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, trans.position.y);
         }
 
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
         {
-            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
+            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoordinate;
         }
 
-        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;
+        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
 
         SetWalkerOnGround();
     }
@@ -145,7 +153,7 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
-        _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
+        _topTransform.rotation = Quaternion.Euler(_creatureConfig.creatureType == CreatureType.Biped ? -90 : 180, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
     }
 
     /// <summary>

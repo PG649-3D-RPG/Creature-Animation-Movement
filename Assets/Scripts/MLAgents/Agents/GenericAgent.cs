@@ -115,7 +115,7 @@ public abstract class GenericAgent : Agent
                 _topTransform = trans;
                 _topTransformRb = trans.GetComponent<Rigidbody>();
 
-                _topStartingRotation = trans.rotation;
+                _topStartingRotation = trans.localRotation;
                 _topStartingPosition = trans.position;
             }
             minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, trans.position.y);
@@ -127,7 +127,6 @@ public abstract class GenericAgent : Agent
         }
 
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
-
         SetWalkerOnGround();
     }
     
@@ -141,7 +140,7 @@ public abstract class GenericAgent : Agent
 
         position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnvironmentGenerator.YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
-        _topTransform.rotation = _topStartingRotation;
+        _topTransform.localRotation = _topStartingRotation;
 
 
         _topTransformRb.velocity = Vector3.zero;
@@ -153,7 +152,7 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
-        _topTransform.rotation = Quaternion.Euler(_creatureConfig.creatureType == CreatureType.Biped ? -90 : 180, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
+        _topTransform.localRotation = Quaternion.Euler(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),_topStartingRotation.eulerAngles.z + Random.Range(-5,5));
     }
 
     /// <summary>

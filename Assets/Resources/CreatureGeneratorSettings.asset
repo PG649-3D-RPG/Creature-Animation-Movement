@@ -27,6 +27,7 @@ MonoBehaviour:
     FixIdenticalBonePositions: 1
   MeshSettings:
     GenerateMetaballMesh: 0
+    RigSolver: 0
     Mode: 1
     Material: {fileID: 0}
     SmoothNormals: 0
@@ -36,6 +37,6 @@ MonoBehaviour:
     LogAdditionalInfo: 0
     DisableBoneGravity: 0
     KinematicBones: 0
-    DisablePhysics: 1
+    DisablePhysics: 0
     AttachPrimitiveMesh: 1
     DrawNormals: 0

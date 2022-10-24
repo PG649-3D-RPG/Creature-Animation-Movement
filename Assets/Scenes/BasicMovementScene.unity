@@ -469,9 +469,9 @@ MonoBehaviour:
   HandsGroundContactPenalty: -10
   HeadGroundContactPenalty: -10
   HipsGroundContactPenalty: -10
-  LegsGroundContactPenalty: -10
+  LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: -10
-  ResetOnGroundContactParts: 06000000070000000900000003000000000000000a00000005000000
+  ResetOnGroundContactParts: 060000000700000009000000030000000a00000005000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0

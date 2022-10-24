@@ -465,13 +465,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 1
   creatureType: 0
-  ArmsGroundContactPenalty: 0
-  HandsGroundContactPenalty: 0
-  HeadGroundContactPenalty: 0
-  HipsGroundContactPenalty: 0
-  LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: 0
-  ResetOnGroundContactParts: 0600000007000000
+  ArmsGroundContactPenalty: -10
+  HandsGroundContactPenalty: -10
+  HeadGroundContactPenalty: -10
+  HipsGroundContactPenalty: -10
+  LegsGroundContactPenalty: -10
+  TorsoGroundContactPenalty: -10
+  ResetOnGroundContactParts: 06000000070000000900000003000000000000000a00000005000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,12 +490,12 @@ MonoBehaviour:
   ContinuousActionSpace: 308
   DiscreteBranches: 0
   MaxStep: 5000
-  ObservationSpace: 308
+  ObservationSpace: 293
   TakeActionsBetweenDecisions: 1
   DecisionPeriod: 7
   JointDampen: 5000
-  MaxJointForceLimit: 80000
-  MaxJointSpring: 100000
+  MaxJointForceLimit: 100000
+  MaxJointSpring: 200000
 --- !u!114 &1211399395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -508,7 +508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 1
+  ArenaCount: 32
   EpisodeCountToRandomizeTargetCubePosition: 0
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0

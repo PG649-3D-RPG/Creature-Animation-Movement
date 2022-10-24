@@ -6,7 +6,7 @@ using UnityEngine;
 public class Life : MonoBehaviour
 {
     [SerializeField]
-    private int BodyPartHealth = 6;
+    private int BpDmgModifier = 5;
     private CreatureController _creatureController;
     void Start()
     {
@@ -15,11 +15,6 @@ public class Life : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        TakeDamage();
-    }
-
-    private void TakeDamage()
-    {
-        if(BodyPartHealth > 0) BodyPartHealth--;
+        _creatureController.TakeDamage(BpDmgModifier);
     }
 }

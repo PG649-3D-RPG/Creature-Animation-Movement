@@ -15,6 +15,6 @@ public class Life : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        _creatureController.TakeDamage(BpDmgModifier);
+        if(_creatureController != null)  _creatureController.TakeDamage(BpDmgModifier);
     }
 }

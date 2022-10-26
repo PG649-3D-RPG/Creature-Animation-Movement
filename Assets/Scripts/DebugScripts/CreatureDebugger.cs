@@ -28,6 +28,7 @@ public class CreatureDebugger : MonoBehaviour
         if (ActivateCreatureDebugger)
         {
             if (CreatureGeneratorSettings is null || ParametricCreatureSettings is null) Debug.LogError("No config object for creature.");
+            if(!DisablePhysics) CreateDummyTerrain();
         }
     }
 

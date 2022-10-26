@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -332,10 +332,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cca73200eedb7478782f70ea0dfbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActivateCreatureDebugger: 1
-  Seed: 0
+  ActivateCreatureDebugger: 0
+  Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  DisablePhysics: 0
+  EnableStabilityHack: 1
   CreatureType: 0
 --- !u!4 &855681737
 Transform:
@@ -415,8 +417,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNew
-  CreaturePrefab: {fileID: 7708177826693173547, guid: 9b2d3ca8edb4e3a489f5148a8cf5c524, type: 3}
-  NnModel: {fileID: 5022602860645237092, guid: 614cb9c5c9d478b4c90bbc932beca07b, type: 3}
+  CreaturePrefab: {fileID: 0}
+  NnModel: {fileID: 5022602860645237092, guid: 3b9ca9673d8d4be41893e8f9e1dc3f9b, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
 --- !u!114 &1211399390
@@ -431,12 +433,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d41be8c7456fd43921ebb738a0e5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityMultiplier: 2
+  gravityMultiplier: 1
   fixedDeltaTime: 0.008333
   maximumDeltaTime: 0.01
-  solverIterations: 12
-  solverVelocityIterations: 12
-  reuseCollisionCallbacks: 1
+  solverIterations: 20
+  solverVelocityIterations: 20
+  reuseCollisionCallbacks: 0
 --- !u!114 &1211399391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -461,15 +463,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f45c5ae7759653bc38c5e7a9c32e657b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seed: 12
-  creatureType: 1
-  ArmsGroundContactPenalty: 0
-  HandsGroundContactPenalty: 0
-  HeadGroundContactPenalty: 0
-  HipsGroundContactPenalty: 0
+  seed: 1
+  creatureType: 0
+  ArmsGroundContactPenalty: -10
+  HandsGroundContactPenalty: -10
+  HeadGroundContactPenalty: -10
+  HipsGroundContactPenalty: -10
   LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: 0
-  ResetOnGroundContactParts: 06000000
+  TorsoGroundContactPenalty: -10
+  ResetOnGroundContactParts: 060000000700000009000000030000000a00000005000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -485,15 +487,15 @@ MonoBehaviour:
   RandomizeWalkSpeedEachEpisode: 0
   MaxWalkingSpeed: 20
   TargetWalkingSpeed: 10
-  ContinuousActionSpace: 293
+  ContinuousActionSpace: 308
   DiscreteBranches: 0
   MaxStep: 5000
   ObservationSpace: 293
   TakeActionsBetweenDecisions: 1
   DecisionPeriod: 7
   JointDampen: 5000
-  MaxJointForceLimit: 20000
-  MaxJointSpring: 40000
+  MaxJointForceLimit: 100000
+  MaxJointSpring: 200000
 --- !u!114 &1211399395
 MonoBehaviour:
   m_ObjectHideFlags: 0

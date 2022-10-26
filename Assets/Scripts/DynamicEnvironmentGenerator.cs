@@ -154,7 +154,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         GameObject creatureContainer;
         if (CreaturePrefab != null)
         {
-            Debug.LogWarning("Loading creature from prefab!");
+            //Debug.LogWarning("Loading creature from prefab!");
             if (CreaturePrefab.GetComponent(Type.GetType(AgentScriptName)) != null)
             {
                 throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proceed.");
@@ -163,7 +163,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning($"Loading creature from generator with seed {creatureConfig.seed}!");
+            //Debug.LogWarning($"Loading creature from generator with seed {creatureConfig.seed}!");
 
             creatureContainer = creatureConfig.creatureType switch
             {

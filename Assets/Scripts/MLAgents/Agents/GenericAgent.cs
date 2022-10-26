@@ -98,7 +98,7 @@ public abstract class GenericAgent : Agent
             var boneScript = trans.GetComponent<Bone>();
             if (boneScript == null)
             {
-                Debug.Log($"No bonescript in {trans.transform.name}");
+                //Debug.Log($"No bonescript in {trans.transform.name}");
                 continue;
             }
 

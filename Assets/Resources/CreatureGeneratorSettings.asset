@@ -17,9 +17,42 @@ MonoBehaviour:
     MassMultiplier: 1
     MinimumDensity: 900
     MaximumDensity: 1100
-    BoneDensityOverrides: []
+    BoneDensityOverrides:
+    - Category: 0
+      MinimumDensity: 0
+      MaximumDensity: 0
+    - Category: 0
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 3
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 5
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 6
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 7
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 8
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 9
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 10
+      MinimumDensity: 25
+      MaximumDensity: 30
+    - Category: 11
+      MinimumDensity: 25
+      MaximumDensity: 30
     RigidbodyDrag: 0.05
     CollisionDetectionMode: 2
+    MaxDepenetrationVelocity: 1
+    JointPreprocessing: 0
+    BoneIntercollision: 1
     PrimitiveMeshShadows: 0
   SkeletonLinterSettings:
     WarnOnColliderPenetration: 1
@@ -27,6 +60,7 @@ MonoBehaviour:
     FixIdenticalBonePositions: 1
   MeshSettings:
     GenerateMetaballMesh: 0
+    RigSolver: 0
     Mode: 1
     Material: {fileID: 0}
     SmoothNormals: 0
@@ -36,6 +70,6 @@ MonoBehaviour:
     LogAdditionalInfo: 0
     DisableBoneGravity: 0
     KinematicBones: 0
-    DisablePhysics: 1
+    DisablePhysics: 0
     AttachPrimitiveMesh: 1
     DrawNormals: 0

@@ -176,7 +176,9 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
                 _ => throw new ArgumentException("No creature type selected"),
             };
         }
-
+        
+        CreatureHooks(creatureContainer);
+        
         if (creatureContainer.transform.Find("Orientation Cube") == null)
         {
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -202,5 +204,16 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         var target = Instantiate(TargetCubePrefab, new Vector3(64, 12, 126), Quaternion.identity, arena.transform);
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
+    }
+
+    private void CreatureHooks(GameObject g)
+    {
+        g.AddComponent<CreatureController>();
+        
+        foreach (var rb in g.GetComponentsInChildren<ConfigurableJoint>())
+        {
+            rb.transform.AddComponent<Life>();
+        }
+
     }
 }

@@ -38,11 +38,7 @@ public abstract class GenericAgent : Agent
     protected ArenaConfig _arenaSettings;
     private CreatureConfig _creatureConfig;
 
-    public float MTargetWalkingSpeed // property
-    {
-        get => _mlAgentsConfig.TargetWalkingSpeed;
-        set => _mlAgentsConfig.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _mlAgentsConfig.MaxWalkingSpeed);
-    }
+    public float MTargetWalkingSpeed;
 
     
     public void Awake()
@@ -86,6 +82,7 @@ public abstract class GenericAgent : Agent
         _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
         _agent = gameObject.GetComponent<Agent>();
         _target = parent.Find("Creature Target").transform;
+        MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();

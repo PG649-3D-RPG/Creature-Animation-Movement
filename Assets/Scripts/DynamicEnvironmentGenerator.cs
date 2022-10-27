@@ -157,7 +157,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             Debug.LogWarning("Loading creature from prefab!");
             if (CreaturePrefab.GetComponent(Type.GetType(AgentScriptName)) != null)
             {
-                throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proccede.");
+                throw new ArgumentException("Creature-Prefab has AgentScript attached. Delete it to proceed.");
             }
             creatureContainer = Instantiate(CreaturePrefab);
         }
@@ -173,12 +173,12 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
                 CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (ParametricCreatureSettings)ParametricCreatureSettings,
                                         creatureConfig.seed),
-                _ => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
-                                        (ParametricCreatureSettings)ParametricCreatureSettings,
-                                        creatureConfig.seed),
+                _ => throw new ArgumentException("No creature type selected"),
             };
         }
-
+        
+        CreatureHooks(creatureContainer);
+        
         if (creatureContainer.transform.Find("Orientation Cube") == null)
         {
             var orientationCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -204,5 +204,16 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         var target = Instantiate(TargetCubePrefab, new Vector3(64, 12, 126), Quaternion.identity, arena.transform);
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
+    }
+
+    private void CreatureHooks(GameObject g)
+    {
+        g.AddComponent<CreatureController>();
+        
+        foreach (var rb in g.GetComponentsInChildren<ConfigurableJoint>())
+        {
+            rb.transform.AddComponent<Life>();
+        }
+
     }
 }

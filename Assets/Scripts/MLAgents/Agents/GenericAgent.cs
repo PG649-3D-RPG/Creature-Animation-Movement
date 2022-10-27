@@ -36,12 +36,9 @@ public abstract class GenericAgent : Agent
     protected Agent _agent;
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
-    
-    public float MTargetWalkingSpeed // property
-    {
-        get => _mlAgentsConfig.TargetWalkingSpeed;
-        set => _mlAgentsConfig.TargetWalkingSpeed = Mathf.Clamp(value, .1f, _mlAgentsConfig.MaxWalkingSpeed);
-    }
+    private CreatureConfig _creatureConfig;
+
+    public float MTargetWalkingSpeed;
 
     
     public void Awake()
@@ -54,7 +51,9 @@ public abstract class GenericAgent : Agent
         _jdController = this.AddComponent<JointDriveController>();
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
-        
+        _creatureConfig = FindObjectOfType<CreatureConfig>();
+
+
         // Config decision requester
         _decisionRequester.DecisionPeriod = _mlAgentsConfig.DecisionPeriod;
         _decisionRequester.TakeActionsBetweenDecisions = _mlAgentsConfig.TakeActionsBetweenDecisions;
@@ -83,6 +82,7 @@ public abstract class GenericAgent : Agent
         _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
         _agent = gameObject.GetComponent<Agent>();
         _target = parent.Find("Creature Target").transform;
+        MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
@@ -91,12 +91,17 @@ public abstract class GenericAgent : Agent
         //and setup each body part
 
         var transforms = GetComponentsInChildren<Transform>();
-        var minYBodyPartCoor = 0f;
+        var minYBodyPartCoordinate = 0f;
         foreach (var trans in transforms)
         {
             // Double check if categories change!
             var boneScript = trans.GetComponent<Bone>();
-            if (boneScript == null) continue;
+            if (boneScript == null)
+            {
+                Debug.Log($"No bonescript in {trans.transform.name}");
+                continue;
+            }
+
             if(!boneScript.isRoot)
             {
                 if(trans.GetComponent<GroundContact>() == null) trans.AddComponent<GroundContact>();
@@ -107,19 +112,18 @@ public abstract class GenericAgent : Agent
                 _topTransform = trans;
                 _topTransformRb = trans.GetComponent<Rigidbody>();
 
-                _topStartingRotation = trans.rotation;
+                _topStartingRotation = trans.localRotation;
                 _topStartingPosition = trans.position;
             }
-            minYBodyPartCoor = Math.Min(minYBodyPartCoor, trans.position.y);
+            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, trans.position.y);
         }
 
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
         {
-            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoor;
+            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoordinate;
         }
 
-        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoor;
-
+        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
         SetWalkerOnGround();
     }
     
@@ -133,7 +137,7 @@ public abstract class GenericAgent : Agent
 
         position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnvironmentGenerator.YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
-        _topTransform.rotation = _topStartingRotation;
+        _topTransform.localRotation = _topStartingRotation;
 
 
         _topTransformRb.velocity = Vector3.zero;
@@ -145,7 +149,7 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
-        _topTransform.rotation = Quaternion.Euler(-90, Random.Range(0.0f, 360.0f),Random.Range(-5,5));
+        _topTransform.localRotation = Quaternion.Euler(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),_topStartingRotation.eulerAngles.z + Random.Range(-5,5));
     }
 
     /// <summary>

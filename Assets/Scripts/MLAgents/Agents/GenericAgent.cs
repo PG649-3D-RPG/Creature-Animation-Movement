@@ -149,7 +149,15 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
-        _topTransform.localRotation = Quaternion.Euler(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),_topStartingRotation.eulerAngles.z + Random.Range(-5,5));
+        var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+            _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
+        while (rotation == Vector3.zero)
+        {
+            rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+                _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
+            Debug.LogError("Fixing zero vector rotation!");
+        }
+        _topTransform.localRotation = Quaternion.Euler(rotation);
     }
 
     /// <summary>

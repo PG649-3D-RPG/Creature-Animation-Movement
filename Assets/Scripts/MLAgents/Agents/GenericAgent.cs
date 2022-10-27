@@ -178,11 +178,9 @@ public abstract class GenericAgent : Agent
             _mlAgentsConfig.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;
     }
     
-    protected Vector3 GetAvgVelocityOfCreature()
-    {
-        return _jdController.bodyPartsList.Select(x => x.rb.velocity)
+    protected Vector3 GetAvgVelocityOfCreature() =>
+        _jdController.bodyPartsList.Select(x => x.rb.velocity)
             .Aggregate(Vector3.zero, (x, y) => x + y) / _jdController.bodyPartsList.Count;
-    }
 
     /// <summary>
     /// Agent touched the target
@@ -206,6 +204,7 @@ public abstract class GenericAgent : Agent
             if (_topTransform.position.y is < -10 or > 40)
             {
                 _agent.EndEpisode();
+                Debug.LogError("Walker out of arena!");
             }
             yield return new WaitForFixedUpdate();
         }

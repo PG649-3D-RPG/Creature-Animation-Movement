@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: ParametricCreatureSettings
   m_EditorClassIdentifier: 
   ArmThickness:
-    Mean: 0.3
-    StandardDeviation: 0.2
+    Mean: 1
+    StandardDeviation: 0
     Min: 1
-    Max: 2
+    Max: 1
   ArmLength:
     Mean: 3
     StandardDeviation: 1

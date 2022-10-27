@@ -117,7 +117,6 @@ public class AgentGenTests : GenericAgent
 
         var cubeForward2d = new Vector2(cubeForward.x, cubeForward.z);
         var topTranformForward2d = new Vector2(_topTransform.forward.x, _topTransform.forward.z);
-
         var lookAtTargetReward = (Vector2.Dot(cubeForward2d, -topTranformForward2d) + 1) * 0.5f;
 
         //Debug.Log(lookAtTargetReward);

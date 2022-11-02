@@ -75,7 +75,7 @@ MonoBehaviour:
     Max: 2
   NeckLength:
     Mean: 0.8
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 1
     Max: 2
   NeckBones:
@@ -83,7 +83,7 @@ MonoBehaviour:
     Max: 1
   ShoulderThickness:
     Mean: 0.3
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 1
     Max: 2
   ShoulderLength:

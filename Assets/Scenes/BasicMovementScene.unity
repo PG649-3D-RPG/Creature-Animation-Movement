@@ -335,7 +335,8 @@ MonoBehaviour:
   ActivateCreatureDebugger: 0
   Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
-  ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 0b7b03926ed8d9c4ca8d20221de93a00, type: 2}
   DisablePhysics: 0
   EnableStabilityHack: 1
   CreatureType: 1
@@ -417,7 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNew
-  CreaturePrefab: {fileID: 249843529535390555, guid: bfe583d5297570a41b169336ba260659, type: 3}
+  CreaturePrefab: {fileID: 4897979287305144627, guid: f23c7fbe556156e458ffd217809e32e5, type: 3}
   NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
@@ -487,10 +488,10 @@ MonoBehaviour:
   RandomizeWalkSpeedEachEpisode: 1
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 10
-  ContinuousActionSpace: 41
+  ContinuousActionSpace: 30
   DiscreteBranches: 0
   MaxStep: 5000
-  ObservationSpace: 228
+  ObservationSpace: 168
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

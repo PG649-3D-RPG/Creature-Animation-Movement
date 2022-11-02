@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df71536d1b576a840a89b68a19365847, type: 3}
+  m_Name: ParametricCreatureSettings4Legged
+  m_EditorClassIdentifier: 
+  ArmThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 1
+    Max: 2
+  ArmLength:
+    Mean: 3
+    StandardDeviation: 1
+    Min: 1
+    Max: 2
+  ArmBones:
+    Min: 2
+    Max: 2
+  FeetWidth:
+    Mean: 1
+    StandardDeviation: 0.5
+    Min: 1
+    Max: 2
+  FeetLength:
+    Mean: 1.5
+    StandardDeviation: 0.5
+    Min: 1
+    Max: 2
+  HandRadius:
+    Mean: 0.75
+    StandardDeviation: 0.25
+    Min: 1
+    Max: 2
+  HeadSize:
+    Mean: 0.9
+    StandardDeviation: 0.6
+    Min: 1
+    Max: 2
+  HipThickness:
+    Mean: 1
+    StandardDeviation: 0.6
+    Min: 1
+    Max: 2
+  HipLength:
+    Mean: 1.5
+    StandardDeviation: 0.5
+    Min: 1
+    Max: 2
+  LegLength:
+    Mean: 3
+    StandardDeviation: 2
+    Min: 1
+    Max: 2
+  LegThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 1
+    Max: 2
+  LegBones:
+    Min: 2
+    Max: 2
+  NeckThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 1
+    Max: 2
+  NeckLength:
+    Mean: 0.8
+    StandardDeviation: 0.2
+    Min: 1
+    Max: 2
+  NeckBones:
+    Min: 1
+    Max: 1
+  ShoulderThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 1
+    Max: 2
+  ShoulderLength:
+    Mean: 0.75
+    StandardDeviation: 0.25
+    Min: 1
+    Max: 2
+  TorsoThickness:
+    Mean: 1
+    StandardDeviation: 0.5
+    Min: 1
+    Max: 2
+  TorsoLength:
+    Mean: 2
+    StandardDeviation: 1
+    Min: 1
+    Max: 2
+  TorsoBones:
+    Min: 3
+    Max: 3

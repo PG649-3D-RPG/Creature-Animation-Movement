@@ -417,7 +417,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNew
-  CreaturePrefab: {fileID: 5959910940362136585, guid: 45c24131ed5845547a3ed8fbd41fc91b, type: 3}
+  CreaturePrefab: {fileID: 249843529535390555, guid: bfe583d5297570a41b169336ba260659, type: 3}
   NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
@@ -487,10 +487,10 @@ MonoBehaviour:
   RandomizeWalkSpeedEachEpisode: 1
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 10
-  ContinuousActionSpace: 348
+  ContinuousActionSpace: 41
   DiscreteBranches: 0
   MaxStep: 5000
-  ObservationSpace: 348
+  ObservationSpace: 228
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

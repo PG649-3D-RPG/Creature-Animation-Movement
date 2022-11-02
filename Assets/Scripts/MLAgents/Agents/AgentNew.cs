@@ -87,6 +87,8 @@ public class AgentNew : GenericAgent
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
         }
+
+        //Debug.Log($"Anzahl Aktionen {i}");
     }
 
     public void FixedUpdate()

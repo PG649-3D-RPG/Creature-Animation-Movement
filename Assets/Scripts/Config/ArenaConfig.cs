@@ -29,6 +29,11 @@ namespace Config
         [SerializeField]
         public float Scale = 2.5f;
 
+        [SerializeField]
+        public bool GenerateObstacles = false;
+        [SerializeField, Range(0, 50)]
+        public int numberObstacles = 0;
+
         
         [HideInInspector] // TODO Activate when implemented
         public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;

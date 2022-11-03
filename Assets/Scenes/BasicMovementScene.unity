@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -335,7 +335,8 @@ MonoBehaviour:
   ActivateCreatureDebugger: 0
   Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
-  ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  ParametricCreatureSettings2Legged: {fileID: 0}
+  ParametricCreatureSettings4Legged: {fileID: 0}
   DisablePhysics: 0
   EnableStabilityHack: 1
   CreatureType: 0
@@ -421,6 +422,7 @@ MonoBehaviour:
   NnModel: {fileID: 5022602860645237092, guid: 3b9ca9673d8d4be41893e8f9e1dc3f9b, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
+  ObstaclePrefab: {fileID: 0}
 --- !u!114 &1211399390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -516,6 +518,8 @@ MonoBehaviour:
   RegenerateTerrainAfterXEpisodes: 0
   Depth: 10
   Scale: 2.5
+  GenerateObstacles: 1
+  numberObstacles: 10
   NavMeshSurfaceCollectObjects: 2
   BakeNavMesh: 0
   NavMeshBuildSettingIndex: 0

@@ -86,36 +86,27 @@ public abstract class GenericAgent : Agent
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
-     
+
         //Get Body Parts
         //and setup each body part
-
-        var transforms = GetComponentsInChildren<Transform>();
         var minYBodyPartCoordinate = 0f;
-        foreach (var trans in transforms)
+        foreach (var bone in GetComponentsInChildren<Bone>())
         {
-            // Double check if categories change!
-            var boneScript = trans.GetComponent<Bone>();
-            if (boneScript == null)
+            if (!bone.isRoot)
             {
-                Debug.Log($"No bonescript in {trans.transform.name}");
-                continue;
-            }
+                if (bone.transform.GetComponent<GroundContact>() == null) bone.transform.AddComponent<GroundContact>();
+                _jdController.SetupBodyPart(bone.transform);
 
-            if(!boneScript.isRoot)
-            {
-                if(trans.GetComponent<GroundContact>() == null) trans.AddComponent<GroundContact>();
-                _jdController.SetupBodyPart(trans);
             }
             else
             {
-                _topTransform = trans;
-                _topTransformRb = trans.GetComponent<Rigidbody>();
+                _topTransform = bone.transform;
+                _topTransformRb = bone.transform.GetComponent<Rigidbody>();
 
-                _topStartingRotation = trans.localRotation;
-                _topStartingPosition = trans.position;
+                _topStartingRotation = bone.transform.localRotation;
+                _topStartingPosition = bone.transform.position;
             }
-            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, trans.position.y);
+            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, bone.transform.position.y);
         }
 
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
@@ -149,7 +140,15 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
         }
 
-        _topTransform.localRotation = Quaternion.Euler(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),_topStartingRotation.eulerAngles.z + Random.Range(-5,5));
+        var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+            _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
+        while (rotation == Vector3.zero)
+        {
+            rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+                _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
+            Debug.LogError("Fixing zero vector rotation!");
+        }
+        _topTransform.localRotation = Quaternion.Euler(rotation);
     }
 
     /// <summary>

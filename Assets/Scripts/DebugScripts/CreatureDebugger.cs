@@ -10,7 +10,8 @@ public class CreatureDebugger : MonoBehaviour
     [SerializeField] public bool ActivateCreatureDebugger = false;
     [SerializeField] public int Seed = 0;
     [SerializeField] public ScriptableObject CreatureGeneratorSettings;
-    [SerializeField] public ScriptableObject ParametricCreatureSettings;
+    [SerializeField] public ScriptableObject ParametricCreatureSettings2Legged;
+    [SerializeField] public ScriptableObject ParametricCreatureSettings4Legged;
     [SerializeField] public bool DisablePhysics;
     [SerializeField] public bool EnableStabilityHack;
     [SerializeField] public CreatureType CreatureType;
@@ -27,7 +28,7 @@ public class CreatureDebugger : MonoBehaviour
     {
         if (ActivateCreatureDebugger)
         {
-            if (CreatureGeneratorSettings is null || ParametricCreatureSettings is null) Debug.LogError("No config object for creature.");
+            if (CreatureGeneratorSettings is null || ParametricCreatureSettings2Legged is null || ParametricCreatureSettings4Legged is null) Debug.LogError("No config object for creature.");
             if(!DisablePhysics) CreateDummyTerrain();
         }
     }
@@ -102,10 +103,10 @@ public class CreatureDebugger : MonoBehaviour
         {
             CreatureType.Biped => CreatureGenerator.ParametricBiped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (ParametricCreatureSettings)ParametricCreatureSettings, Seed),
+                (ParametricCreatureSettings)ParametricCreatureSettings2Legged, Seed),
             CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (ParametricCreatureSettings)ParametricCreatureSettings, Seed),
+                (ParametricCreatureSettings)ParametricCreatureSettings4Legged, Seed),
             _ => creature
         };
 

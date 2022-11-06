@@ -35,11 +35,9 @@ namespace Config
         public int numberObstacles = 0;
 
         
-        [HideInInspector] // TODO Activate when implemented
         public CollectObjects NavMeshSurfaceCollectObjects = CollectObjects.Children;
-        [HideInInspector] // TODO Activate when implemented
         public bool BakeNavMesh = false;
-        [HideInInspector, Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")] // TODO Activate when implemented. Valid range (0, NavMesh.GetSettingsCount-1)
+        [Tooltip("valid range (0, Anzahl der NavMeshAgents (in Navigation->Agents) -1)")]// Valid range (0, NavMesh.GetSettingsCount-1)
         public int NavMeshBuildSettingIndex = 0;
 
         protected override void ExecuteAtLoad()

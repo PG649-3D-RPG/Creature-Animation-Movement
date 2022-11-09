@@ -103,10 +103,10 @@ public class CreatureDebugger : MonoBehaviour
         {
             CreatureType.Biped => CreatureGenerator.ParametricBiped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (ParametricCreatureSettings)ParametricCreatureSettings2Legged, Seed),
+                (BipedSettings)ParametricCreatureSettings2Legged, Seed),
             CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (ParametricCreatureSettings)ParametricCreatureSettings4Legged, Seed),
+                (QuadrupedSettings)ParametricCreatureSettings4Legged, Seed),
             _ => creature
         };
 

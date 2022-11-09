@@ -95,6 +95,8 @@ public class AgentNew : GenericAgent
         _dirToWalk = _target.position - _topTransform.position;
         _orientationCube.UpdateOrientation(_topTransform, _target);
 
+        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
+
         var cubeForward = _orientationCube.transform.forward;
 
         // Set reward for this step according to mixture of the following elements.
@@ -105,16 +107,16 @@ public class AgentNew : GenericAgent
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
+        var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
 
         if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward)) //throw new ArgumentException($"A reward is NaN. float.");
-            //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
+            float.IsNaN(matchSpeedReward))  //throw new ArgumentException($"A reward is NaN. float.");
         {
             Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
+            Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
             AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
         }
     }

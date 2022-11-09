@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -335,7 +335,8 @@ MonoBehaviour:
   ActivateCreatureDebugger: 0
   Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
-  ParametricCreatureSettings: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
+  ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 13b70d6fab7f72747a64e7b01777f4f7, type: 2}
+  ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 4889c4eaa2ad1a8488b601989b40e49e, type: 2}
   DisablePhysics: 0
   EnableStabilityHack: 1
   CreatureType: 0
@@ -464,7 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  creatureType: 0
+  creatureType: 1
   ArmsGroundContactPenalty: -10
   HandsGroundContactPenalty: -10
   HeadGroundContactPenalty: -10
@@ -508,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 32
+  ArenaCount: 1
   EpisodeCountToRandomizeTargetCubePosition: 0
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0

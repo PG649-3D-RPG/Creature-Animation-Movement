@@ -13,7 +13,9 @@ using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
 {
-    
+
+    private const string BehaviorName = "Walker";
+
     // Internal values
     protected float _otherBodyPartHeight = 1f;
     protected Vector3 _topStartingPosition;
@@ -53,7 +55,6 @@ public abstract class GenericAgent : Agent
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         _creatureConfig = FindObjectOfType<CreatureConfig>();
 
-
         // Config decision requester
         _decisionRequester.DecisionPeriod = _mlAgentsConfig.DecisionPeriod;
         _decisionRequester.TakeActionsBetweenDecisions = _mlAgentsConfig.TakeActionsBetweenDecisions;
@@ -71,7 +72,7 @@ public abstract class GenericAgent : Agent
         var bpScript = GetComponent<BehaviorParameters>();
         bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
-        bpScript.BehaviorName = DynamicEnvironmentGenerator.BehaviorName;
+        bpScript.BehaviorName = BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
 

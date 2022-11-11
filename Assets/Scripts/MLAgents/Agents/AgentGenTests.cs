@@ -1,18 +1,8 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Config;
-using JetBrains.Annotations;
 using UnityEngine;
-using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Policies;
-using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
-using Unity.VisualScripting;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
-using Random = UnityEngine.Random;
 
 public class AgentGenTests : GenericAgent
 {

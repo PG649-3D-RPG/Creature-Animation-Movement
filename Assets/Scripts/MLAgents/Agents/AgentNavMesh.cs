@@ -13,11 +13,17 @@ public class AgentNavMesh : GenericAgent
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
 
+    private GameObject targetBall;
+
     public override void Initialize()
     {
         base.Initialize();
         _path = new NavMeshPath();
         _timeElapsed = 1f;
+        _nextPathPoint = _topTransform.position;
+
+        targetBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        Destroy(targetBall.GetComponent<Collider>());
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -95,7 +101,8 @@ public class AgentNavMesh : GenericAgent
     public void FixedUpdate()
     {
         _timeElapsed += Time.deltaTime;
-        _nextPathPoint = GetNextPathPoint();
+        _nextPathPoint = GetNextPathPoint(_nextPathPoint);
+        targetBall.transform.position = _nextPathPoint;
 
         //Update OrientationCube and DirectionIndicator
         _dirToWalk = _nextPathPoint - _topTransform.position;
@@ -126,20 +133,25 @@ public class AgentNavMesh : GenericAgent
         }
     }
     
-    private Vector3 GetNextPathPoint()
+    private Vector3 GetNextPathPoint(Vector3 nextPoint)
     {
         if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
-        {
-            _pathCornerIndex = 1;
+        {   
             _timeElapsed = 0;
+            var oldPath = _path;
             bool pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
             if (!pathValid)
             {
+                _path = oldPath;
                 Debug.Log($"Path invalid for {gameObject.name}");
-                return _topTransform.position;
+                return nextPoint;
+            }
+            else
+            {
+                _pathCornerIndex = 1;
             }
         }
-        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 0.5f)
+        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
         {
             Debug.Log("Increased path corner index");
             _pathCornerIndex++;

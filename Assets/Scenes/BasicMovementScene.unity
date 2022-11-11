@@ -417,9 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AgentScriptName: AgentNew
-  CreaturePrefab: {fileID: 0}
-  NnModel: {fileID: 5022602860645237092, guid: 3b9ca9673d8d4be41893e8f9e1dc3f9b, type: 3}
+  AgentScriptName: AgentNavMesh
+  CreaturePrefab: {fileID: 7723699263755369605, guid: c22ee4bea13cb06449d818f29f6c4635, type: 3}
+  NnModel: {fileID: 5022602860645237092, guid: ae769714e3f8ed34fa233252bfd3377f, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}
@@ -435,11 +435,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6d41be8c7456fd43921ebb738a0e5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gravityMultiplier: 1
+  gravityMultiplier: 2
   fixedDeltaTime: 0.008333
   maximumDeltaTime: 0.01
-  solverIterations: 20
-  solverVelocityIterations: 20
+  solverIterations: 12
+  solverVelocityIterations: 12
   reuseCollisionCallbacks: 0
 --- !u!114 &1211399391
 MonoBehaviour:
@@ -473,7 +473,7 @@ MonoBehaviour:
   HipsGroundContactPenalty: -10
   LegsGroundContactPenalty: 0
   TorsoGroundContactPenalty: -10
-  ResetOnGroundContactParts: 060000000700000009000000030000000a00000005000000
+  ResetOnGroundContactParts: 06000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -487,17 +487,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   RandomizeWalkSpeedEachEpisode: 0
-  MaxWalkingSpeed: 20
-  TargetWalkingSpeed: 10
-  ContinuousActionSpace: 308
+  MaxWalkingSpeed: 10
+  TargetWalkingSpeed: 8
+  ContinuousActionSpace: 318
   DiscreteBranches: 0
   MaxStep: 5000
-  ObservationSpace: 293
-  TakeActionsBetweenDecisions: 1
-  DecisionPeriod: 7
+  ObservationSpace: 318
+  TakeActionsBetweenDecisions: 0
+  DecisionPeriod: 5
   JointDampen: 5000
-  MaxJointForceLimit: 100000
-  MaxJointSpring: 200000
+  MaxJointForceLimit: 40000
+  MaxJointSpring: 30000
 --- !u!114 &1211399395
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 32
+  ArenaCount: 1
   EpisodeCountToRandomizeTargetCubePosition: 0
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0
@@ -521,8 +521,8 @@ MonoBehaviour:
   GenerateObstacles: 1
   numberObstacles: 10
   NavMeshSurfaceCollectObjects: 2
-  BakeNavMesh: 0
-  NavMeshBuildSettingIndex: 0
+  BakeNavMesh: 1
+  NavMeshBuildSettingIndex: 1
 --- !u!1 &1438603205
 GameObject:
   m_ObjectHideFlags: 0

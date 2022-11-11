@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd6e4dcba1344614f9fdecc62b4a19f2, type: 3}
+  m_Name: BipedSettings
+  m_EditorClassIdentifier: 
+  HeadSize:
+    Mean: 0.9
+    StandardDeviation: 0.6
+    Min: 0
+    Max: 3.4028235e+38
+  HipThickness:
+    Mean: 1
+    StandardDeviation: 0.6
+    Min: 0
+    Max: 3.4028235e+38
+  HipLength:
+    Mean: 1.5
+    StandardDeviation: 0.5
+    Min: 0
+    Max: 3.4028235e+38
+  NeckThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 0
+    Max: 3.4028235e+38
+  NeckLength:
+    Mean: 0.8
+    StandardDeviation: 0.2
+    Min: 0
+    Max: 3.4028235e+38
+  NeckBones:
+    Min: 1
+    Max: 4
+  TorsoThickness:
+    Mean: 1
+    StandardDeviation: 0.5
+    Min: 0
+    Max: 3.4028235e+38
+  TorsoLength:
+    Mean: 2
+    StandardDeviation: 1
+    Min: 0
+    Max: 3.4028235e+38
+  TorsoBones:
+    Min: 1
+    Max: 3
+  ArmThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 0
+    Max: 3.4028235e+38
+  ArmLength:
+    Mean: 3
+    StandardDeviation: 1
+    Min: 0
+    Max: 3.4028235e+38
+  ArmBones:
+    Min: 2
+    Max: 2
+  LegLength:
+    Mean: 3
+    StandardDeviation: 2
+    Min: 0
+    Max: 3.4028235e+38
+  LegThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 0
+    Max: 3.4028235e+38
+  LegBones:
+    Min: 2
+    Max: 4
+  FeetWidth:
+    Mean: 1
+    StandardDeviation: 0.5
+    Min: 0
+    Max: 3.4028235e+38
+  FeetLength:
+    Mean: 1.5
+    StandardDeviation: 0.5
+    Min: 0
+    Max: 3.4028235e+38
+  HandRadius:
+    Mean: 0.75
+    StandardDeviation: 0.25
+    Min: 0
+    Max: 3.4028235e+38
+  ShoulderThickness:
+    Mean: 0.3
+    StandardDeviation: 0.2
+    Min: 0
+    Max: 3.4028235e+38
+  ShoulderLength:
+    Mean: 0.75
+    StandardDeviation: 0.25
+    Min: 0
+    Max: 3.4028235e+38

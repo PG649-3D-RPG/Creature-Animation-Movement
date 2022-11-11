@@ -36,7 +36,7 @@ public abstract class GenericAgent : Agent
     protected Agent _agent;
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
-    private CreatureConfig _creatureConfig;
+    protected CreatureConfig _creatureConfig;
 
     public float MTargetWalkingSpeed;
 

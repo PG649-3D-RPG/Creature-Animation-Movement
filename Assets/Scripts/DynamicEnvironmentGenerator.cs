@@ -12,7 +12,6 @@ using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnvironmentGenerator : MonoBehaviour
 {
-    public const float YHeightOffset = 0.075f;
     public const int TerrainSize = 128;
     private const string GroundTag = "ground";
 

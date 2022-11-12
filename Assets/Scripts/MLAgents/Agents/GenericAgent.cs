@@ -41,8 +41,8 @@ public abstract class GenericAgent : Agent
     protected CreatureConfig _creatureConfig;
 
     public float MTargetWalkingSpeed;
+    public const float YHeightOffset = 0.1f;
 
-    
     public void Awake()
     {
         _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
@@ -127,7 +127,7 @@ public abstract class GenericAgent : Agent
         var position = _topTransform.position;
         var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
 
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + DynamicEnvironmentGenerator.YHeightOffset, _topStartingPosition.z);
+        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
         _topTransform.localRotation = _topStartingRotation;
 
@@ -138,7 +138,7 @@ public abstract class GenericAgent : Agent
         //Reset all of the body parts
         foreach (var bodyPart in _jdController.bodyPartsDict.Values.AsParallel())
         {
-            bodyPart.Reset(bodyPart, terrainHeight, DynamicEnvironmentGenerator.YHeightOffset);
+            bodyPart.Reset(bodyPart, terrainHeight, YHeightOffset);
         }
 
         var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),

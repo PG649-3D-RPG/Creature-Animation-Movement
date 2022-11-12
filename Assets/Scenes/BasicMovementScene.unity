@@ -419,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNew
   CreaturePrefab: {fileID: 0}
-  NnModel: {fileID: 5022602860645237092, guid: 3b9ca9673d8d4be41893e8f9e1dc3f9b, type: 3}
+  NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
 --- !u!114 &1211399390
@@ -466,12 +466,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seed: 1
   creatureType: 0
-  ArmsGroundContactPenalty: -20
-  HandsGroundContactPenalty: -20
-  HeadGroundContactPenalty: -20
-  HipsGroundContactPenalty: -20
+  ArmsGroundContactPenalty: 0
+  HandsGroundContactPenalty: 0
+  HeadGroundContactPenalty: 0
+  HipsGroundContactPenalty: 0
   LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: -20
+  TorsoGroundContactPenalty: 0
   ResetOnGroundContactParts: 060000000700000009000000030000000a00000005000000
 --- !u!114 &1211399394
 MonoBehaviour:

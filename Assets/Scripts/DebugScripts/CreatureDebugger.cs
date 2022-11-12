@@ -87,7 +87,7 @@ public class CreatureDebugger : MonoBehaviour
                     var force = Vector3.Magnitude(v.velocity) * v.mass;
                     if (force > max)
                     {
-                        Debug.Log($"Part {v.transform.name} with force {force}");
+                        //Debug.Log($"Part {v.transform.name} with force {force}");
                         max = force;
                     }
 

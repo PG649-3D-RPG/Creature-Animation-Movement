@@ -102,6 +102,7 @@ namespace Unity.MLAgentsExamples
         public void SetJointStrength(float strength)
         {
             var rawVal = (strength + 1f) * 0.5f * thisJdController.maxJointForceLimit;
+            // if (Application.isEditor) Debug.Log($"Body Part {rb.transform.name} with strength {rawVal}");
             var jd = new JointDrive
             {
                 positionSpring = thisJdController.maxJointSpring,

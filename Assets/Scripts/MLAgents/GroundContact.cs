@@ -18,7 +18,6 @@ namespace Unity.MLAgentsExamples
     {
         public Agent Agent;
         public bool TouchingGround;
-        private DynamicEnvironmentGenerator _deg;
         private Bone _boneScript;
         private CreatureConfig _creatureConfig;
         private const string GroundTag = "ground";
@@ -30,7 +29,6 @@ namespace Unity.MLAgentsExamples
 
         public void Awake()
         {
-            _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
             _creatureConfig = FindObjectOfType<CreatureConfig>();
 
             _boneScript = GetComponentInParent<Bone>();
@@ -44,7 +42,12 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(GroundTag))
             {
                 TouchingGround = true;
-                if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
+                if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty))
+                {
+                    Agent.SetReward(groundContactPenalty);
+                    // if(Application.isEditor) Debug.Log($"Apply penalty for {_boneScript.transform.name}");
+                }
+
                 if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
             }
         }

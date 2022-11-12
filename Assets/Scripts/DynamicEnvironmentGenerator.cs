@@ -201,12 +201,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
 
     private void CreatureHooks(GameObject g)
     {
-        g.AddComponent<CreatureController>();
-        
-        foreach (var rb in g.GetComponentsInChildren<ConfigurableJoint>())
-        {
-            rb.transform.AddComponent<Life>();
-        }
+  
 
     }
 }

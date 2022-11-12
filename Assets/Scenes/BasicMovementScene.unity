@@ -335,8 +335,8 @@ MonoBehaviour:
   ActivateCreatureDebugger: 0
   Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
-  ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 5b39bd916abdff94f86d1066eed24cdf, type: 2}
-  ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 0b7b03926ed8d9c4ca8d20221de93a00, type: 2}
+  ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 13b70d6fab7f72747a64e7b01777f4f7, type: 2}
+  ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 4889c4eaa2ad1a8488b601989b40e49e, type: 2}
   DisablePhysics: 0
   EnableStabilityHack: 1
   CreatureType: 1
@@ -465,7 +465,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  creatureType: 0
+  creatureType: 1
   ArmsGroundContactPenalty: 0
   HandsGroundContactPenalty: 0
   HeadGroundContactPenalty: 0

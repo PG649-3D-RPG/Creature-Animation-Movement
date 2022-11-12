@@ -47,9 +47,9 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         CreatureGeneratorSettings =
             Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings2Legged =
-            Resources.Load("ParametricCreatureSettings2Legged", typeof(ScriptableObject)) as ScriptableObject;
+            Resources.Load("BipedSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings4Legged =
-            Resources.Load("ParametricCreatureSettings4Legged", typeof(ScriptableObject)) as ScriptableObject;
+            Resources.Load("QuadrupedSettings", typeof(ScriptableObject)) as ScriptableObject;
 
         // Small hack which assures, that the Config is really loaded before usage. Otherwise config values might be skipped. 
         // If someone finds a better method to do this, please change!
@@ -171,10 +171,10 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             creatureContainer = creatureConfig.creatureType switch
             {
                 CreatureType.Biped => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
-                                        (ParametricCreatureSettings)ParametricCreatureSettings2Legged,
+                                        (BipedSettings)ParametricCreatureSettings2Legged,
                                         creatureConfig.seed),
                 CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
-                                        (ParametricCreatureSettings)ParametricCreatureSettings4Legged,
+                                        (QuadrupedSettings)ParametricCreatureSettings4Legged,
                                         creatureConfig.seed),
                 _ => throw new ArgumentException("No creature type selected"),
             };

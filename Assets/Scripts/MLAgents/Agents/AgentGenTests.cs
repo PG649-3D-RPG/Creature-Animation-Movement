@@ -116,16 +116,16 @@ public class AgentGenTests : GenericAgent
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
 
         var cubeForward2d = new Vector2(cubeForward.x, cubeForward.z);
-        var topTranformForward2d = new Vector2(_topTransform.forward.x, _topTransform.forward.z);
+        var topTranformForward2d = new Vector2(_topTransform.up.x, _topTransform.up.z);
 
-        var lookAtTargetReward = (Vector2.Dot(cubeForward2d, -topTranformForward2d) + 1) * 0.5f;
+        var lookAtTargetReward = (Vector2.Dot(cubeForward2d, topTranformForward2d) + 1) * 0.5f;
 
         //Debug.Log(lookAtTargetReward);
         //Debug.Log("Cube: " + cubeForward2d + " | Creature: " + topTranformForward2d);
 
         if (float.IsNaN(lookAtTargetReward) || float.IsNaN(matchSpeedReward)) throw new ArgumentException($"A reward is NaN. float.");
-        //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
-        AddReward(Math.Max(matchSpeedReward, 0.1f) * lookAtTargetReward);
+        //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.0f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.0f)}");
+        AddReward(Math.Max(matchSpeedReward, 0.0f) * lookAtTargetReward);
 
         //Debug.Log(GetCumulativeReward());
     }

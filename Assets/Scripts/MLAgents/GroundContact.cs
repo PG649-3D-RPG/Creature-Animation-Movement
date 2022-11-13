@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 
@@ -23,6 +21,7 @@ namespace Unity.MLAgentsExamples
         private DynamicEnvironmentGenerator _deg;
         private Bone _boneScript;
         private CreatureConfig _creatureConfig;
+        private const string GroundTag = "ground";
 
         public GroundContact(Agent agent)
         {
@@ -42,7 +41,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionEnter(Collision col)
         {
-            if (col.transform.CompareTag(DynamicEnvironmentGenerator.GroundTag))
+            if (col.transform.CompareTag(GroundTag))
             {
                 TouchingGround = true;
                 if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
@@ -55,7 +54,7 @@ namespace Unity.MLAgentsExamples
         /// </summary>
         private void OnCollisionExit(Collision other)
         {
-            if (other.transform.CompareTag(DynamicEnvironmentGenerator.GroundTag)) TouchingGround = false;
+            if (other.transform.CompareTag(GroundTag)) TouchingGround = false;
         }
     }
 }

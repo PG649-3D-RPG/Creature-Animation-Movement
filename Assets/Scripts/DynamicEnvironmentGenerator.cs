@@ -1,30 +1,20 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Threading.Tasks;
+
 using Config;
 using Unity.AI.Navigation;
 using Unity.Barracuda;
-using Unity.MLAgents;
-using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Serialization;
 using Quaternion = UnityEngine.Quaternion;
-using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnvironmentGenerator : MonoBehaviour
 {
-    public const string BehaviorName = "Walker";
-    public const string GroundTag = "ground";
-    public const float YHeightOffset = 0.075f;
     public const int TerrainSize = 128;
-    
+    private const string GroundTag = "ground";
+
     [Header("Editor Settings")] [SerializeField, Tooltip("Must exist in the project!")]
     public string AgentScriptName = "WalkerAgent";
 
@@ -211,12 +201,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
 
     private void CreatureHooks(GameObject g)
     {
-        g.AddComponent<CreatureController>();
-        
-        foreach (var rb in g.GetComponentsInChildren<ConfigurableJoint>())
-        {
-            rb.transform.AddComponent<Life>();
-        }
+  
 
     }
 }

@@ -581,3 +581,9 @@ FodyWeavers.xsd
 
 # Game Files
 Game/**
+
+Assets/StreamingAssets/ArenaConfig.json
+
+Assets/StreamingAssets/CreatureConfig.json
+
+Assets/StreamingAssets/MlAgentConfig.json

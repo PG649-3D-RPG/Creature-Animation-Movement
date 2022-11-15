@@ -51,7 +51,7 @@ MonoBehaviour:
     Min: 0.4
     Max: 0.5
   TorsoBones:
-    Min: 1
+    Min: 3
     Max: 3
   ArmThickness:
     Mean: 0.3

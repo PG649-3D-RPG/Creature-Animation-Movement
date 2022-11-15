@@ -488,7 +488,7 @@ MonoBehaviour:
   RandomizeWalkSpeedEachEpisode: 1
   MaxWalkingSpeed: 20
   TargetWalkingSpeed: 10
-  ContinuousActionSpace: 278
+  ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 5000
   ObservationSpace: 278

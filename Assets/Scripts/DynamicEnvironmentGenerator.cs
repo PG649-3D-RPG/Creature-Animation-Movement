@@ -1,5 +1,6 @@
 using System;
-
+using System.Collections.Generic;
+using System.Linq;
 using Config;
 using Unity.AI.Navigation;
 using Unity.Barracuda;
@@ -8,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using Quaternion = UnityEngine.Quaternion;
+using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
 public class DynamicEnvironmentGenerator : MonoBehaviour

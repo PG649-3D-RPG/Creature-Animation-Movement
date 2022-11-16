@@ -24,6 +24,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
 
     [HideInInspector] public GameObject TargetCubePrefab;
     [HideInInspector] public GameObject WallPrefab;
+    [HideInInspector] public GameObject ObstaclePrefab;
     [HideInInspector] private ScriptableObject CreatureGeneratorSettings;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings2Legged;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings4Legged;
@@ -33,6 +34,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
     {
         TargetCubePrefab = Resources.Load("TargetCube", typeof(GameObject)) as GameObject;
         WallPrefab = Resources.Load("Wall", typeof(GameObject)) as GameObject;
+        ObstaclePrefab = Resources.Load("Obstacle", typeof(GameObject)) as GameObject;
 
         CreatureGeneratorSettings =
             Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
@@ -137,6 +139,20 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             Destroy(terrain.GetComponent<MeshRenderer>());
         }
 
+        if(_arenaConfig.GenerateObstacles)
+        {
+            var obstacleContainer = new GameObject
+            {
+                name = "ObstaclesContainer",
+                transform = 
+                {
+                    parent = terrain.transform,
+                    localPosition = Vector3.zero
+                }
+            };
+            GenerateObstacles(obstacleContainer.transform);
+        }
+
         return arena;
     }
 
@@ -192,6 +208,32 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         if (Application.isEditor && creatureContainer.GetComponent<DebugScript>() == null ) creatureContainer.AddComponent<DebugScript>();
     }
 
+    private void GenerateObstacles(Transform parent)
+    {
+        List<Vector3> takenSpawnPositions = new();
+        for(int i = 0; i < _arenaConfig.numberObstacles; i++)
+        {
+            Vector3 spawnPosition = GetNextObstacleSpawnPosition(takenSpawnPositions);
+            takenSpawnPositions.Add(spawnPosition);
+
+            var obstacle = Instantiate(ObstaclePrefab, spawnPosition, Quaternion.identity, parent);
+            obstacle.name = "Obstacle" + i;
+            obstacle.transform.localPosition = spawnPosition;
+        }
+    }
+
+    private Vector3 GetNextObstacleSpawnPosition(IEnumerable<Vector3> takenSpawnPositions)
+    {
+        var spawnPoint = RandomObstacleSpawnPoint();
+
+        while(!IsValidOnstacleSpawnPoint(takenSpawnPositions, spawnPoint))
+        {
+            spawnPoint = RandomObstacleSpawnPoint();
+        }
+
+        return spawnPoint;
+    }
+
     private void AddTargetToArena(GameObject arena)
     {
         var target = Instantiate(TargetCubePrefab, new Vector3(64, 12, 126), Quaternion.identity, arena.transform);
@@ -203,5 +245,31 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
     {
   
 
+    }
+
+    private bool IsValidOnstacleSpawnPoint(IEnumerable<Vector3> takenSpawnPositions, Vector3 spawnPoint)
+    {
+        var obstacleHalfWidth = ObstaclePrefab.transform.localScale.x/2;
+        var xLowerBound = 50f - obstacleHalfWidth;
+        var xUpperBound = 80f + obstacleHalfWidth;
+
+        var obstacleHalfLength = ObstaclePrefab.transform.localScale.z/2;
+        var zLowerBound = 50f - obstacleHalfLength;
+        var zUpperBound = 80f + obstacleHalfLength;
+
+        return !takenSpawnPositions.Contains(spawnPoint) &&
+                !(xLowerBound <= spawnPoint.x && spawnPoint.x <= xUpperBound && 
+                  zLowerBound <= spawnPoint.z && spawnPoint.z <= zUpperBound);
+    }
+
+    private Vector3 RandomObstacleSpawnPoint()
+    {
+        var xScale = ObstaclePrefab.transform.localScale.x;
+        var zScale = ObstaclePrefab.transform.localScale.z;
+
+        var x = Random.Range(xScale, TerrainSize - xScale);
+        var z = Random.Range(zScale, TerrainSize - zScale);
+
+        return new Vector3(x, ObstaclePrefab.transform.localScale.y/2, z);
     }
 }

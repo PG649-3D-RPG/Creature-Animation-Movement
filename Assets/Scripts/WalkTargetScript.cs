@@ -3,6 +3,7 @@ using Config;
 using Unity.MLAgents;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = System.Random;
 
 public class WalkTargetScript : MonoBehaviour
@@ -54,6 +55,14 @@ public class WalkTargetScript : MonoBehaviour
         {
             ThisRigidbody.MovePosition(transform.position + (_arenaSettings.TargetMovementSpeed * Time.deltaTime * TargetDirection));
         }
+
+        NavMeshHit hit;
+        var isOnNavMesh = NavMesh.SamplePosition(transform.position, out hit, 0.6f, NavMesh.AllAreas);
+        if(!isOnNavMesh)
+        {
+            //Debug.Log("Not on NavMesh");
+            PlaceTargetCubeRandomly();
+        }
         
         var localPosition = transform.localPosition;
         var x = localPosition.x;
@@ -74,7 +83,7 @@ public class WalkTargetScript : MonoBehaviour
     public void PlaceTargetCubeRandomly(){
         var x = UnityEngine.Random.Range(4 , DynamicEnvironmentGenerator.TerrainSize - 4);
         var z = UnityEngine.Random.Range(4, DynamicEnvironmentGenerator.TerrainSize  - 4);
-        var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
+        var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z)) + + transform.localScale.y/2;
         transform.localPosition = new Vector3(x, y, z);
     }
     

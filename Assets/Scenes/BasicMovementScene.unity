@@ -438,8 +438,8 @@ MonoBehaviour:
   gravityMultiplier: 1
   fixedDeltaTime: 0.008333
   maximumDeltaTime: 0.01
-  solverIterations: 12
-  solverVelocityIterations: 12
+  solverIterations: 20
+  solverVelocityIterations: 20
   reuseCollisionCallbacks: 0
 --- !u!114 &1211399391
 MonoBehaviour:
@@ -472,7 +472,7 @@ MonoBehaviour:
   HeadGroundContactPenalty: 0
   HipsGroundContactPenalty: 0
   LegsGroundContactPenalty: 0
-  TorsoGroundContactPenalty: -10
+  TorsoGroundContactPenalty: 0
   ResetOnGroundContactParts: 06000000
 --- !u!114 &1211399394
 MonoBehaviour:
@@ -486,18 +486,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3324768aa3a347daba1c965af3dbc12f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RandomizeWalkSpeedEachEpisode: 0
+  RandomizeWalkSpeedEachEpisode: 1
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 8
-  ContinuousActionSpace: 318
+  ContinuousActionSpace: 293
   DiscreteBranches: 0
-  MaxStep: 5000
-  ObservationSpace: 318
+  MaxStep: 10000
+  ObservationSpace: 293
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000
-  MaxJointForceLimit: 40000
-  MaxJointSpring: 30000
+  MaxJointForceLimit: 100000
+  MaxJointSpring: 200000
 --- !u!114 &1211399395
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -587,3 +587,6 @@ Assets/StreamingAssets/ArenaConfig.json
 Assets/StreamingAssets/CreatureConfig.json
 
 Assets/StreamingAssets/MlAgentConfig.json
+/Assets/StreamingAssets/MlAgentConfig.json.meta
+/Assets/StreamingAssets/ArenaConfig.json.meta
+/Assets/StreamingAssets/CreatureConfig.json.meta

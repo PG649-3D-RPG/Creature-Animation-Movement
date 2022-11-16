@@ -38,7 +38,7 @@ public class WalkTargetScript : MonoBehaviour
         _agent = parent.GetComponentInChildren<GenericAgent>();
         const int x = 64;
         const int z = 80;
-        var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
+        var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z)) + transform.localScale.y/2;
         transform.localPosition = new Vector3(x, y, z);
         _ = StartCoroutine(nameof(ChangeDirection));
     }

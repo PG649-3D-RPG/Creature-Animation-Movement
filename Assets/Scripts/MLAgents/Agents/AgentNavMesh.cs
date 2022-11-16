@@ -13,7 +13,7 @@ public class AgentNavMesh : GenericAgent
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
 
-    private GameObject targetBall;
+    //private GameObject targetBall;
 
     public override void Initialize()
     {
@@ -22,8 +22,8 @@ public class AgentNavMesh : GenericAgent
         _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
 
-        targetBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        Destroy(targetBall.GetComponent<Collider>());
+        //targetBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        //Destroy(targetBall.GetComponent<Collider>());
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -102,7 +102,7 @@ public class AgentNavMesh : GenericAgent
     {
         _timeElapsed += Time.deltaTime;
         _nextPathPoint = GetNextPathPoint(_nextPathPoint);
-        targetBall.transform.position = _nextPathPoint;
+        //targetBall.transform.position = _nextPathPoint;
 
         //Update OrientationCube and DirectionIndicator
         _dirToWalk = _nextPathPoint - _topTransform.position;
@@ -143,7 +143,7 @@ public class AgentNavMesh : GenericAgent
             if (!pathValid)
             {
                 _path = oldPath;
-                Debug.Log($"Path invalid for {gameObject.name}");
+                //Debug.Log($"Path invalid for {gameObject.name}");
                 return nextPoint;
             }
             else
@@ -153,9 +153,9 @@ public class AgentNavMesh : GenericAgent
         }
         if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
         {
-            Debug.Log("Increased path corner index");
+            //Debug.Log("Increased path corner index");
             _pathCornerIndex++;
         }
-        return _path.corners[_pathCornerIndex];
+        return _path.corners[_pathCornerIndex] + new Vector3(0, _topStartingPosition.y, 0);
     }
 }

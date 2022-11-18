@@ -156,6 +156,6 @@ public class AgentNavMesh : GenericAgent
             //Debug.Log("Increased path corner index");
             _pathCornerIndex++;
         }
-        return _path.corners[_pathCornerIndex] + new Vector3(0, _topStartingPosition.y, 0);
+        return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
     }
 }

@@ -124,6 +124,7 @@ public class AgentNavMeshRes : GenericAgent
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
         var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
+        var distanceToOriginReward = Math.Max(0.1f, 1 - Math.Pow((_topTransform.position.y - _topStartingPosition.y), 2));
 
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)) //throw new ArgumentException($"A reward is NaN. float.");
@@ -133,7 +134,8 @@ public class AgentNavMeshRes : GenericAgent
         }
         else
         {
-            AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
+            //Debug.Log(distanceToOriginReward);
+            AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f);
         }
 
         if (resilience_training)

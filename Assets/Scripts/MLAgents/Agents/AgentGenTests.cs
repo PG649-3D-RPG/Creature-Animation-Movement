@@ -6,6 +6,21 @@ using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
 public class AgentGenTests : GenericAgent
 {
+    //Must be changed, if the OnActionReceived method uses more actions
+    protected override int CalculateNumberContinuousActions()
+    {
+        var numberActions = 0;
+        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
+        {
+            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
+        }
+        return numberActions;
+    }
+
+    protected override int CalculateNumberDiscreteBranches()
+    {
+        return 0;
+    }
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>

@@ -18,6 +18,22 @@ public class AgentNavMeshRes : GenericAgent
     public bool resilience_training = true;
     private float last_bump = 0;
 
+    //Must be changed, if the OnActionReceived method uses more actions
+    protected override int CalculateNumberContinuousActions()
+    {
+        var numberActions = 0;
+        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
+        {
+            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
+        }
+        return numberActions;
+    }
+
+    protected override int CalculateNumberDiscreteBranches()
+    {
+        return 0;
+    }
+
     public override void Initialize()
     {
         base.Initialize();

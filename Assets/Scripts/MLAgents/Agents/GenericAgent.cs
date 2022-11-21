@@ -70,11 +70,13 @@ public abstract class GenericAgent : Agent
 
         // Set behavior parameters
         var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
         bpScript.BehaviorName = BehaviorName;
         bpScript.Model = _deg.NnModel;
     }
+
+    protected abstract int CalculateNumberContinuousActions();
+    protected abstract int CalculateNumberDiscreteBranches();
 
     public override void Initialize()
     {
@@ -97,7 +99,6 @@ public abstract class GenericAgent : Agent
             {
                 if (bone.transform.GetComponent<GroundContact>() == null) bone.transform.AddComponent<GroundContact>();
                 _jdController.SetupBodyPart(bone.transform);
-
             }
             else
             {
@@ -115,6 +116,16 @@ public abstract class GenericAgent : Agent
             bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoordinate;
         }
 
+        var bpScript = GetComponent<BehaviorParameters>();
+        if(_mlAgentsConfig.CalculateActionSpace)
+        {
+            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), new int[CalculateNumberDiscreteBranches()]);
+        }
+        else
+        {
+            bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
+        }
+        
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
         SetWalkerOnGround();
     }

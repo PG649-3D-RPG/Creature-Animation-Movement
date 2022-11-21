@@ -53,6 +53,15 @@ namespace Unity.MLAgentsExamples
         public AnimationCurve jointForceCurve = new();
         public AnimationCurve jointTorqueCurve = new();
 
+        public int GetNumberUnlockedAngularMotions()
+        {
+            var unlockedX = joint.angularXMotion != ConfigurableJointMotion.Locked ? 1 : 0;
+            var unlockedY = joint.angularYMotion != ConfigurableJointMotion.Locked ? 1 : 0;
+            var unlockedZ = joint.angularZMotion != ConfigurableJointMotion.Locked ? 1 : 0;
+
+            return unlockedX + unlockedY + unlockedZ;
+        }
+
         /// <summary>
         /// Reset body part to initial configuration.
         /// </summary>

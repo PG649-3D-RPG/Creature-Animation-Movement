@@ -16,6 +16,8 @@ namespace Config
         [Header("Learning Settings")]
         [Space(10)]
         [SerializeField]
+        public bool CalculateActionSpace = false;
+        [SerializeField]
         public int ContinuousActionSpace = 100;
         [SerializeField]
         public int DiscreteBranches = 0;

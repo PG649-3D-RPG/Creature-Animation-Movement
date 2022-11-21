@@ -16,6 +16,20 @@ using Random = UnityEngine.Random;
 
 public class AgentNew : GenericAgent
 {
+    protected override int CalculateNumberContinuousActions()
+    {
+        var numberActions = 0;
+        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
+        {
+            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
+        }
+        return numberActions;
+    }
+
+    protected override int CalculateNumberDiscreteBranches()
+    {
+        return 0;
+    }
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -76,7 +90,7 @@ public class AgentNew : GenericAgent
     {
         var bpList = _jdController.bodyPartsList;
         var i = -1;
-
+        var numActions = 0;
         var continuousActions = actionBuffers.ContinuousActions;
         // TODO Needs to be reworked for generalization
         foreach (var parts in bpList)
@@ -86,7 +100,9 @@ public class AgentNew : GenericAgent
             var zTarget = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
+            numActions++;
         }
+        Debug.Log($"number of actions = {numActions}");
     }
 
     public void FixedUpdate()

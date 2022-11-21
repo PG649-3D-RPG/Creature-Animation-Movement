@@ -15,6 +15,21 @@ public class AgentNavMesh : GenericAgent
 
     //private GameObject targetBall;
 
+    protected override int CalculateNumberContinuousActions()
+    {
+        var numberActions = 0;
+        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
+        {
+            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
+        }
+        return numberActions;
+    }
+
+    protected override int CalculateNumberDiscreteBranches()
+    {
+        return 0;
+    }
+
     public override void Initialize()
     {
         base.Initialize();
@@ -96,6 +111,7 @@ public class AgentNavMesh : GenericAgent
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
         }
+        Debug.Log($"number of actions = {i+1}");
     }
 
     public void FixedUpdate()

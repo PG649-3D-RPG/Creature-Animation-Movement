@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.MLAgents;
 
@@ -44,7 +45,18 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(GroundTag))
             {
                 TouchingGround = true;
-                if (_creatureConfig.PenaltiesForBodyParts.TryGetValue(_boneScript.category, out var groundContactPenalty)) Agent.SetReward(groundContactPenalty);
+                switch (_boneScript.category)
+                {
+                    case BoneCategory.Leg:
+                    case BoneCategory.Arm:
+                    case BoneCategory.Torso:
+                    case BoneCategory.Head:
+                    case BoneCategory.Hand:
+                    case BoneCategory.Shoulder:
+                    case BoneCategory.Hip:
+                        Agent.SetReward(_creatureConfig.ContactPenalty);
+                        break;
+                }
                 if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
             }
         }

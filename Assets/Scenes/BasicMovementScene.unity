@@ -468,7 +468,7 @@ MonoBehaviour:
   seed: 1
   creatureType: 0
   ContactPenalty: -30
-  ResetOnGroundContactParts: 06000000
+  ResetOnGroundContactParts: 0600000003000000090000000a0000000500000007000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -486,7 +486,7 @@ MonoBehaviour:
   TargetWalkingSpeed: 8
   ContinuousActionSpace: 293
   DiscreteBranches: 0
-  MaxStep: 5000
+  MaxStep: 10000
   ObservationSpace: 293
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5

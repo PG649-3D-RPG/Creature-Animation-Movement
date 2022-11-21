@@ -1,0 +1,65 @@
+{
+    "Walker": {
+        "checkpoints": [
+            {
+                "steps": 198499863,
+                "file_path": "results/Game91_2/Walker/Walker-198499863.onnx",
+                "reward": 587.6443773905436,
+                "creation_time": 1668619939.6608133,
+                "auxillary_file_paths": [
+                    "results/Game91_2/Walker/Walker-198499863.pt"
+                ]
+            },
+            {
+                "steps": 198999536,
+                "file_path": "results/Game91_2/Walker/Walker-198999536.onnx",
+                "reward": 557.07404961586,
+                "creation_time": 1668620230.6741588,
+                "auxillary_file_paths": [
+                    "results/Game91_2/Walker/Walker-198999536.pt"
+                ]
+            },
+            {
+                "steps": 199499830,
+                "file_path": "results/Game91_2/Walker/Walker-199499830.onnx",
+                "reward": 557.0629418308353,
+                "creation_time": 1668620542.4565067,
+                "auxillary_file_paths": [
+                    "results/Game91_2/Walker/Walker-199499830.pt"
+                ]
+            },
+            {
+                "steps": 199999920,
+                "file_path": "results/Game91_2/Walker/Walker-199999920.onnx",
+                "reward": 555.2380809919208,
+                "creation_time": 1668620853.5194132,
+                "auxillary_file_paths": [
+                    "results/Game91_2/Walker/Walker-199999920.pt"
+                ]
+            },
+            {
+                "steps": 200000017,
+                "file_path": "results/Game91_2/Walker/Walker-200000017.onnx",
+                "reward": 553.8723286874724,
+                "creation_time": 1668620853.6879556,
+                "auxillary_file_paths": [
+                    "results/Game91_2/Walker/Walker-200000017.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 200000017,
+            "file_path": "results/Game91_2/Walker.onnx",
+            "reward": 553.8723286874724,
+            "creation_time": 1668620853.6879556,
+            "auxillary_file_paths": [
+                "results/Game91_2/Walker/Walker-200000017.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.10.0a0+git3c15822"
+    }
+}

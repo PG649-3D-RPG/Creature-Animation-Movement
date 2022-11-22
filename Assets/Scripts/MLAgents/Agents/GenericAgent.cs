@@ -78,6 +78,8 @@ public abstract class GenericAgent : Agent
     protected abstract int CalculateNumberContinuousActions();
     protected abstract int CalculateNumberDiscreteBranches();
 
+    protected List<(Rigidbody, Vector3)> test = new();
+
     public override void Initialize()
     {
         var parent = transform.parent;

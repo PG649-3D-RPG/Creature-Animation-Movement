@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
@@ -94,6 +95,10 @@ public class AgentNavMesh : GenericAgent
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
+
+        // Add difference between head height and starting head height
+        // TODO needs to be changed with uneven terrain
+        sensor.AddObservation(Vector3.Distance(_topTransform.position, _topStartingPosition));
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -111,7 +116,6 @@ public class AgentNavMesh : GenericAgent
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
         }
-        Debug.Log($"number of actions = {i+1}");
     }
 
     public void FixedUpdate()
@@ -145,7 +149,7 @@ public class AgentNavMesh : GenericAgent
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            AddReward(Vector3.Distance(_topTransform.position, _topStartingPosition) * matchSpeedReward * lookAtTargetReward);
         }
     }
     

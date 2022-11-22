@@ -488,7 +488,7 @@ MonoBehaviour:
   ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 10000
-  ObservationSpace: 296
+  ObservationSpace: 294
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

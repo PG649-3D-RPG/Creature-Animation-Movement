@@ -417,9 +417,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AgentScriptName: AgentNavMeshRes
+  AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 7723699263755369605, guid: c22ee4bea13cb06449d818f29f6c4635, type: 3}
-  NnModel: {fileID: 5022602860645237092, guid: 1e9626905233fb94fbbe14508f1af660, type: 3}
+  NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}
@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  creatureType: 1
+  creatureType: 0
   ContactPenalty: 0
   ResetOnGroundContactParts: 
 --- !u!114 &1211399394
@@ -485,10 +485,10 @@ MonoBehaviour:
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 8
   CalculateActionSpace: 1
-  ContinuousActionSpace: 318
+  ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 10000
-  ObservationSpace: 318
+  ObservationSpace: 293
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

@@ -111,7 +111,6 @@ public class AgentNavMesh : GenericAgent
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
         }
-        Debug.Log($"number of actions = {i+1}");
     }
 
     public void FixedUpdate()

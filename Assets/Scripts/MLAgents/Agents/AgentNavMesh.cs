@@ -145,7 +145,7 @@ public class AgentNavMesh : GenericAgent
         }
         else
         {
-            AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
+            AddReward(matchSpeedReward * lookAtTargetReward);
         }
     }
     

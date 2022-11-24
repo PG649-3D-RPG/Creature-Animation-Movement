@@ -78,7 +78,7 @@ public class CreatureDebugger : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (ActivateCreatureDebugger)
+        if (ActivateCreatureDebugger && false)
         {
             if (creature != null)
             {
@@ -123,8 +123,8 @@ public class CreatureDebugger : MonoBehaviour
     {
         foreach (var v in creature.GetComponentsInChildren<ConfigurableJoint>())
         {
-            v.enablePreprocessing = false;
-            v.slerpDrive = new JointDrive {maximumForce = 0, positionDamper = 0, positionSpring = 0};
+            //v.enablePreprocessing = false;
+            v.slerpDrive = new JointDrive {maximumForce = 80000, positionDamper = 5000, positionSpring = 60000 };
             v.breakTorque = 10000000;
             v.breakForce = 10000000;
         }

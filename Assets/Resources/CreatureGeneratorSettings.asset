@@ -14,9 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkeletonSettings:
     ConnectHips: 0
+    AngleThreshold: 0
     MassMultiplier: 1
     MinimumDensity: 900
     MaximumDensity: 1100
+    FixedWeights: 1
+    FixedWeight: 50
     BoneDensityOverrides:
     - Category: 0
       MinimumDensity: 0

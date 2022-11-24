@@ -15,7 +15,7 @@ MonoBehaviour:
   HeadSize:
     Mean: 0.15
     StandardDeviation: 0.6
-    Min: 0.1
+    Min: 0.15
     Max: 0.2
   HipThickness:
     Mean: 0.2
@@ -30,7 +30,7 @@ MonoBehaviour:
   NeckThickness:
     Mean: 0.1
     StandardDeviation: 0.2
-    Min: 0.05
+    Min: 0.75
     Max: 0.1
   NeckLength:
     Mean: 0.2
@@ -46,10 +46,10 @@ MonoBehaviour:
     Min: 0.1
     Max: 0.2
   TorsoLength:
-    Mean: 0.4
+    Mean: 0.3
     StandardDeviation: 0.6
-    Min: 0.4
-    Max: 0.5
+    Min: 0.3
+    Max: 0.4
   TorsoBones:
     Min: 3
     Max: 3
@@ -98,9 +98,9 @@ MonoBehaviour:
     Mean: 0.1
     StandardDeviation: 0.2
     Min: 0.1
-    Max: 0.2
+    Max: 0.1
   ShoulderLength:
     Mean: 0.1
     StandardDeviation: 0.25
     Min: 0.1
-    Max: 0.3
+    Max: 0.2

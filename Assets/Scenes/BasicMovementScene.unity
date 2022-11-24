@@ -333,7 +333,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ActivateCreatureDebugger: 0
-  Seed: 11
+  Seed: 1
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 13b70d6fab7f72747a64e7b01777f4f7, type: 2}
   ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 4889c4eaa2ad1a8488b601989b40e49e, type: 2}

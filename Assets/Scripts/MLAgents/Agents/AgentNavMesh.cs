@@ -94,7 +94,6 @@ public class AgentNavMesh : GenericAgent
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
-
         sensor.AddObservation(_topTransform.position.y);
     }
 

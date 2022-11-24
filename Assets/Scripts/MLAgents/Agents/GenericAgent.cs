@@ -68,11 +68,11 @@ public abstract class GenericAgent : Agent
         var mAgent = gameObject.GetComponent<Agent>();
         mAgent.MaxStep = _mlAgentsConfig.MaxStep;
 
-        // Set behavior parameters
-        var bpScript = GetComponent<BehaviorParameters>();
-        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
-        bpScript.BehaviorName = BehaviorName;
-        bpScript.Model = _deg.NnModel;
+        SetUpBodyParts();
+        
+        InitializeBehaviorParameters();
+        
+        
     }
 
     protected abstract int CalculateNumberContinuousActions();
@@ -89,44 +89,7 @@ public abstract class GenericAgent : Agent
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
-
-        //Get Body Parts
-        //and setup each body part
-        var minYBodyPartCoordinate = 0f;
-        foreach (var bone in GetComponentsInChildren<Bone>())
-        {
-            if (!bone.isRoot)
-            {
-                if (bone.transform.GetComponent<GroundContact>() == null) bone.transform.AddComponent<GroundContact>();
-                _jdController.SetupBodyPart(bone.transform);
-            }
-            else
-            {
-                _topTransform = bone.transform;
-                _topTransformRb = bone.transform.GetComponent<Rigidbody>();
-
-                _topStartingRotation = bone.transform.localRotation;
-                _topStartingPosition = bone.transform.position;
-            }
-            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, bone.transform.position.y);
-        }
-
-        foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
-        {
-            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoordinate;
-        }
-
-        var bpScript = GetComponent<BehaviorParameters>();
-        if(_mlAgentsConfig.CalculateActionSpace)
-        {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), new int[CalculateNumberDiscreteBranches()]);
-        }
-        else
-        {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
-        }
         
-        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
         SetWalkerOnGround();
     }
     
@@ -221,5 +184,54 @@ public abstract class GenericAgent : Agent
             }
             yield return new WaitForFixedUpdate();
         }
+    }
+
+    private void InitializeBehaviorParameters()
+    {
+        // Set behavior parameters
+        var bpScript = GetComponent<BehaviorParameters>();
+        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
+        bpScript.BehaviorName = BehaviorName;
+        bpScript.Model = _deg.NnModel;
+
+        if(_mlAgentsConfig.CalculateActionSpace)
+        {
+            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), new int[CalculateNumberDiscreteBranches()]);
+        }
+        else
+        {
+            bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
+        }
+    }
+
+    private void SetUpBodyParts()
+    {
+        //Get Body Parts
+        //and setup each body part
+        var minYBodyPartCoordinate = 0f;
+        foreach (var bone in GetComponentsInChildren<Bone>())
+        {
+            if (!bone.isRoot)
+            {
+                if (bone.transform.GetComponent<GroundContact>() == null) bone.transform.AddComponent<GroundContact>();
+                _jdController.SetupBodyPart(bone.transform);
+            }
+            else
+            {
+                _topTransform = bone.transform;
+                _topTransformRb = bone.transform.GetComponent<Rigidbody>();
+
+                _topStartingRotation = bone.transform.localRotation;
+                _topStartingPosition = bone.transform.position;
+            }
+            minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, bone.transform.position.y);
+        }
+
+        foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
+        {
+            bodyPart.BodyPartHeight = trans.position.y - minYBodyPartCoordinate;
+        }
+
+        _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 }

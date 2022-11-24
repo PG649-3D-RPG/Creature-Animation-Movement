@@ -22,6 +22,8 @@ public abstract class GenericAgent : Agent
     protected Quaternion _topStartingRotation;
     protected Transform _topTransform;
     protected Rigidbody _topTransformRb;
+    protected Transform _headTransform;
+    protected Vector3 _headPosition;
 
     protected long _episodeCounter = 0;
     protected Vector3 _dirToWalk = Vector3.right;
@@ -225,6 +227,13 @@ public abstract class GenericAgent : Agent
                 _topStartingPosition = bone.transform.position;
             }
             minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, bone.transform.position.y);
+   
+
+            if (bone.category == BoneCategory.Head)
+            {
+                _headTransform = bone.transform;
+                _headPosition = _headTransform.position;
+            }
         }
 
         foreach(var (trans, bodyPart) in _jdController.bodyPartsDict)
@@ -234,4 +243,6 @@ public abstract class GenericAgent : Agent
 
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
+
+
 }

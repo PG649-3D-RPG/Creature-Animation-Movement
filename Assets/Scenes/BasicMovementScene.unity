@@ -485,10 +485,10 @@ MonoBehaviour:
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 8
   CalculateActionSpace: 1
-  ContinuousActionSpace: 293
+  ContinuousActionSpace: 294
   DiscreteBranches: 0
   MaxStep: 10000
-  ObservationSpace: 293
+  ObservationSpace: 294
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

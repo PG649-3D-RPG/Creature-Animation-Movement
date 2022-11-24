@@ -94,6 +94,13 @@ public class AgentNavMesh : GenericAgent
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
+
+        sensor.AddObservation(_topTransform.position.y);
+    }
+
+    private float Normalize(float val, float min, float max)
+    {
+        return Math.Clamp((val - min) / (max - min), 0, 1); 
     }
 
     public override void OnActionReceived(ActionBuffers actionBuffers)
@@ -136,15 +143,17 @@ public class AgentNavMesh : GenericAgent
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
         var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
 
+        // TODO works only with flat terrain
+        var normHeadPos = Normalize(_headTransform.position.y, 0f, _headPosition.y);
         if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward)) //throw new ArgumentException($"A reward is NaN. float.");
-            //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
+            float.IsNaN(matchSpeedReward)||
+            float.IsNaN(normHeadPos)) 
         {
             Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            AddReward(normHeadPos * matchSpeedReward * lookAtTargetReward);
         }
     }
     

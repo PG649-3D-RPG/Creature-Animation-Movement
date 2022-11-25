@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.4465785, g: 0.49641252, b: 0.574817, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -418,8 +418,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNavMesh
-  CreaturePrefab: {fileID: 7723699263755369605, guid: c22ee4bea13cb06449d818f29f6c4635, type: 3}
-  NnModel: {fileID: 0}
+  CreaturePrefab: {fileID: 1404998682443377478, guid: ca38d3782edd0c841acfccc937d867e9, type: 3}
+  NnModel: {fileID: 5022602860645237092, guid: 8c1bec5ad503daeb7b2306b7605e0937, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}

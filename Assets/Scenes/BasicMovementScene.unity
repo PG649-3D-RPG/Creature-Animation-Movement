@@ -419,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 1404998682443377478, guid: ca38d3782edd0c841acfccc937d867e9, type: 3}
-  NnModel: {fileID: 5022602860645237092, guid: 8c1bec5ad503daeb7b2306b7605e0937, type: 3}
+  NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}
@@ -506,7 +506,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b9907851a7740e5a1c9f8ab179aaacf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ArenaCount: 16
+  ArenaCount: 1
   EpisodeCountToRandomizeTargetCubePosition: 0
   TargetMaxSecondsInOneDirection: 10
   TargetMovementSpeed: 0

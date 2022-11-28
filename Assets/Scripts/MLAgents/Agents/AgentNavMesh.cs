@@ -1,9 +1,12 @@
 using System;
+using System.Numerics;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
+using Quaternion = UnityEngine.Quaternion;
+using Vector3 = UnityEngine.Vector3;
 
 public class AgentNavMesh : GenericAgent
 {
@@ -95,6 +98,8 @@ public class AgentNavMesh : GenericAgent
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
         }
         sensor.AddObservation(_topTransform.position.y);
+        
+        sensor.AddObservation(CalculateCenterOfMass(_topTransform));
     }
 
     private float Normalize(float val, float min, float max)
@@ -144,15 +149,29 @@ public class AgentNavMesh : GenericAgent
 
         // TODO works only with flat terrain
         var normHeadPos = Normalize(_headTransform.position.y, 0f, _headPosition.y);
+        
+        // TODO This is kinda hacky. It is not assured, that the value is between 0 and 1 and is simply clipped if the difference gets to big
+        var normCenterOfMass = 1 -Math.Clamp(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0, 1);
+        
+        //Debug.Log($"Norm variant {Vector3.Distance(Vector3.Normalize(CalculateCenterOfMass(_topTransform)), Vector3.Normalize(_initialCenterOfMass))} Dot {Vector3.Dot(_initialCenterOfMass, CalculateCenterOfMass(_topTransform))}");
+        //Debug.Log($"CoM {CalculateCenterOfMass(_topTransform)} Init CoM {_initialCenterOfMass} Distance {Vector3.Distance(CalculateCenterOfMass(_topTransform),_initialCenterOfMass )}");
+        //Debug.Log($"Norm {normCenterOfMass} ");
+        
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)||
-            float.IsNaN(normHeadPos)) 
+            float.IsNaN(normHeadPos) ||
+            float.IsNaN(normCenterOfMass)) 
         {
-            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            Debug.LogError(
+                $"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(normHeadPos * matchSpeedReward * lookAtTargetReward);
+            var headToLow = _headPosition.y - _headTransform.position.y;
+            Debug.Log(headToLow);
+            var reward = normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward;
+            //Debug.Log($"Reward {reward}");
+            AddReward(reward);
         }
     }
     

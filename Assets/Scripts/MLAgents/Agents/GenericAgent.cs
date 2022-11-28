@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Schema;
 using Config;
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
@@ -24,11 +25,18 @@ public abstract class GenericAgent : Agent
     protected Rigidbody _topTransformRb;
     protected Transform _headTransform;
     protected Vector3 _headPosition;
-
     protected long _episodeCounter = 0;
     protected Vector3 _dirToWalk = Vector3.right;
-
-
+    protected Vector3 _initialCenterOfMass;
+    protected float _xLength;
+    protected float _yLength;
+    protected float _zLength;
+    protected Vector3 _avgUpOrientation;
+    protected Vector3 _avgForwardOrientation;
+    protected Vector3 _avgRightOrientation;
+    
+    
+    
     // Scripts
     protected DynamicEnvironmentGenerator _deg;
     protected TerrainGenerator _terrainGenerator;
@@ -94,7 +102,6 @@ public abstract class GenericAgent : Agent
         
         SetWalkerOnGround();
     }
-    
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
@@ -118,7 +125,7 @@ public abstract class GenericAgent : Agent
         }
 
         var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
-            _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
+            _topStartingRotation.eulerAngles.z + Random.Range(0, 5));
         while (rotation == Vector3.zero)
         {
             rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
@@ -173,6 +180,77 @@ public abstract class GenericAgent : Agent
     void Start()
     {
         _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
+        _initialCenterOfMass = CalculateCenterOfMass(_topTransform);
+
+        
+        // Creates object aligned bounding box and calcs xyz length
+        var minx = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
+        var maxx = new Vector3(float.MinValue,float.MinValue,float.MinValue );
+        var miny =new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
+        var maxy =  new Vector3(float.MinValue,float.MinValue,float.MinValue );
+        var minz = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
+        var maxz = new Vector3(float.MinValue,float.MinValue,float.MinValue );
+
+        // Saves initial vector orientation
+        int orientationCounter = 0;
+        var avgOrientationUp = Vector3.zero;
+        var avgOrientationForward = Vector3.zero;
+        var avgOrientationRight = Vector3.zero;
+        
+        foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
+        {
+            if (rb.transform.position.x <= minx.x)
+            {
+                minx = rb.transform.position;
+            }
+            if (rb.transform.position.x >= maxx.x)
+            {
+                maxx = rb.transform.position;
+            }
+            
+            if (rb.transform.position.y <= miny.y)
+            {
+                miny = rb.transform.position;
+            }
+            if (rb.transform.position.y >= maxy.y)
+            {
+                maxy = rb.transform.position;
+            }
+            
+            if (rb.transform.position.z <= minz.z)
+            {
+                minz = rb.transform.position;
+            }
+            if (rb.transform.position.z >= maxz.z)
+            {
+                maxz = rb.transform.position;
+            }
+
+            switch (rb.transform.GetComponent<Bone>().category)
+            {
+                case BoneCategory.Torso: // Empty on purpose
+                case BoneCategory.Head:
+                    orientationCounter++;
+                    var transform1 = rb.transform;
+                    avgOrientationForward += transform1.forward;
+                    avgOrientationRight += transform1.right;
+                    avgOrientationUp += transform1.up;
+                    break;
+            }
+
+        }
+
+        _xLength = maxx.x - minx.x;
+        _yLength = maxy.y - miny.y;
+        _zLength = maxz.z - minz.z;
+
+        Debug.Log($"Creature size x {_xLength} y {_yLength} z {_zLength}");
+        
+        _avgForwardOrientation = avgOrientationForward / orientationCounter;
+        _avgRightOrientation = avgOrientationRight / orientationCounter;
+        _avgUpOrientation = avgOrientationUp / orientationCounter;
+        
+        Debug.Log($"Avg up {_avgForwardOrientation} Avg right {_avgRightOrientation} Avg forward {_avgUpOrientation}");
     }
 
 
@@ -244,5 +322,26 @@ public abstract class GenericAgent : Agent
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 
+    protected Vector3 CalculateCenterOfMass(Transform topTransform)
+    {   
+        var absCoM = Vector3.zero;
+        var relativeCoM = Vector3.zero;
+        var c = 0f;
+        
+        if (topTransform is not null)
+        {
+            foreach (var element in topTransform.GetComponentsInChildren<Rigidbody>())
+            {
+                float mass;
+                absCoM += element.worldCenterOfMass * (mass = element.mass);
+                c += mass;
+            }
 
+            absCoM /= c;
+            // This might be a little bit off. Someone might improve it.
+            relativeCoM = absCoM - topTransform.transform.position;
+        }
+
+        return relativeCoM;
+    }
 }

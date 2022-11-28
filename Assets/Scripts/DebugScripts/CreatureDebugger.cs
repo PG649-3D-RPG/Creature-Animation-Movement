@@ -78,22 +78,10 @@ public class CreatureDebugger : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (ActivateCreatureDebugger && false)
+        if (ActivateCreatureDebugger )
         {
-            if (creature != null)
-            {
-                foreach (var v in creature.GetComponentsInChildren<Rigidbody>())
-                {
-                    var force = Vector3.Magnitude(v.velocity) * v.mass;
-                    if (force > max)
-                    {
-                        Debug.Log($"Part {v.transform.name} with force {force}");
-                        max = force;
-                    }
-
-                }
-            }
         }
+        
     }
 
     private void GenCreature()
@@ -109,7 +97,15 @@ public class CreatureDebugger : MonoBehaviour
                 (QuadrupedSettings)ParametricCreatureSettings4Legged, Seed),
             _ => creature
         };
-
+        
+        foreach (var v in creature.GetComponentsInChildren<ConfigurableJoint>())
+        {
+            //v.enablePreprocessing = false;
+            v.slerpDrive = new JointDrive {maximumForce = 80000, positionDamper = 5000, positionSpring = 60000 };
+            v.breakTorque = 10000000;
+            v.breakForce = 10000000;
+        }
+        
         if(EnableStabilityHack) StabilityHack();
         
         debugCreature = new GameObject
@@ -121,12 +117,8 @@ public class CreatureDebugger : MonoBehaviour
 
     private void StabilityHack()
     {
-        foreach (var v in creature.GetComponentsInChildren<ConfigurableJoint>())
-        {
-            //v.enablePreprocessing = false;
-            v.slerpDrive = new JointDrive {maximumForce = 80000, positionDamper = 5000, positionSpring = 60000 };
-            v.breakTorque = 10000000;
-            v.breakForce = 10000000;
-        }
+        
     }
+
+
 }

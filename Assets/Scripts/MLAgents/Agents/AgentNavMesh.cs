@@ -127,6 +127,7 @@ public class AgentNavMesh : GenericAgent
         _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
 
         var reward = CalculateReward();
+        //Debug.Log($"Reward: {reward}");
         AddReward(reward);   
     }
     
@@ -144,8 +145,12 @@ public class AgentNavMesh : GenericAgent
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
         var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
 
+        var heightReward = Mathf.Clamp(_topTransform.position.y, 0, _topStartingPosition.y) / _topStartingPosition.y;
+        //Debug.Log($"HeightReward: {heightReward}; y-pos: {_topTransform.position.y}, starting y-Pos {_topStartingPosition.y}");
+
         if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward)) //throw new ArgumentException($"A reward is NaN. float.");
+            float.IsNaN(matchSpeedReward) ||
+            float.IsNaN(heightReward)) //throw new ArgumentException($"A reward is NaN. float.");
             //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
         {
             Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
@@ -157,7 +162,8 @@ public class AgentNavMesh : GenericAgent
         }
         else
         {
-            return matchSpeedReward * lookAtTargetReward;
+            
+            return heightReward * matchSpeedReward * lookAtTargetReward;
         }
     }
 

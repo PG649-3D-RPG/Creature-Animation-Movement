@@ -223,6 +223,7 @@ public abstract class GenericAgent : Agent
 
                 _topStartingRotation = bone.transform.localRotation;
                 _topStartingPosition = bone.transform.position;
+                //Debug.Log($"Top Starting y Position: {_topStartingPosition.y}");
             }
             minYBodyPartCoordinate = Math.Min(minYBodyPartCoordinate, bone.transform.position.y);
         }

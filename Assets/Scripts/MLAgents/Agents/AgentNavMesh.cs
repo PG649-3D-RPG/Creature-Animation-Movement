@@ -88,6 +88,8 @@ public class AgentNavMesh : GenericAgent
         //Position of target position relative to cube
         sensor.AddObservation(_orientationCube.transform.InverseTransformPoint(_nextPathPoint));
 
+        sensor.AddObservation(_topTransform.position.y);
+
         foreach (var bodyPart in _jdController.bodyPartsList)
         {
             CollectObservationBodyPart(bodyPart, sensor);
@@ -124,6 +126,12 @@ public class AgentNavMesh : GenericAgent
         
         _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
 
+        var reward = CalculateReward();
+        AddReward(reward);   
+    }
+    
+    private float CalculateReward()
+    {
         var cubeForward = _orientationCube.transform.forward;
 
         // Set reward for this step according to mixture of the following elements.
@@ -141,13 +149,18 @@ public class AgentNavMesh : GenericAgent
             //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
         {
             Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            return 0;
+        }
+        else if(_topTransform.position.y < (_topStartingPosition.y/2))
+        {
+            return 0;
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            return matchSpeedReward * lookAtTargetReward;
         }
     }
-    
+
     private Vector3 GetNextPathPoint(Vector3 nextPoint)
     {
         if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
@@ -171,6 +184,6 @@ public class AgentNavMesh : GenericAgent
             //Debug.Log("Increased path corner index");
             _pathCornerIndex++;
         }
-        return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
+        return _path.corners[_pathCornerIndex] + new Vector3(0,  _topStartingPosition.y, 0);
     }
 }

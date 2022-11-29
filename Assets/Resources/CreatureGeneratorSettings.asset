@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkeletonSettings:
     ConnectHips: 0
-    AngleThreshold: 0
+    AngleThreshold: 15
     MassMultiplier: 1
     MinimumDensity: 900
     MaximumDensity: 1100

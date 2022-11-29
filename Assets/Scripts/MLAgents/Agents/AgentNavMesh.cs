@@ -96,6 +96,11 @@ public class AgentNavMesh : GenericAgent
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
             if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
+             sensor.AddObservation(bodyPart.rb.worldCenterOfMass);
+             sensor.AddObservation(bodyPart.rb.transform.forward);
+             sensor.AddObservation(bodyPart.rb.transform.up);
+             sensor.AddObservation(bodyPart.rb.transform.right);
+
         }
         sensor.AddObservation(_topTransform.position.y);
         
@@ -157,19 +162,54 @@ public class AgentNavMesh : GenericAgent
         //Debug.Log($"CoM {CalculateCenterOfMass(_topTransform)} Init CoM {_initialCenterOfMass} Distance {Vector3.Distance(CalculateCenterOfMass(_topTransform),_initialCenterOfMass )}");
         //Debug.Log($"Norm {normCenterOfMass} ");
         
+        // Getting direction vector
+        var orientationCounter = 0;
+        var avgOrientationUp = Vector3.zero;
+        var avgOrientationForward = Vector3.zero;
+        var avgOrientationRight = Vector3.zero;
+
+        foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
+        {
+            switch (rb.transform.GetComponent<Bone>().category)
+            {
+                case BoneCategory.Torso: // Empty on purpose
+                case BoneCategory.Head:
+                    orientationCounter++;
+                    var transform1 = rb.transform;
+                    avgOrientationForward += transform1.forward;
+                    avgOrientationRight += transform1.right;
+                    avgOrientationUp += transform1.up;
+                    break;
+            }
+        }
+        avgOrientationForward /= orientationCounter;
+        avgOrientationRight /= orientationCounter;
+        avgOrientationUp /= orientationCounter;
+        //Debug.Log($"_avgForwardOrientation {_avgForwardOrientation}  _avgRightOrientation{_avgRightOrientation} _avgUpOrientation {_avgUpOrientation}");
+        //Debug.Log($"Dot {Vector3.Dot(avgOrientationForward, _avgForwardOrientation)} Distance {Vector3.Distance(avgOrientationForward, _avgForwardOrientation)}");
+        
+        //Forward reward ist kinda hacky aswell
+        var torsoReward = Normalize(Math.Clamp(Vector3.Dot(avgOrientationForward, _avgForwardOrientation), 0, 1), 0, 1);
+        
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)||
             float.IsNaN(normHeadPos) ||
-            float.IsNaN(normCenterOfMass)) 
+            float.IsNaN(normCenterOfMass)
+            ) 
         {
             Debug.LogError(
                 $"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
+            
             var headToLow = _headPosition.y - _headTransform.position.y;
-            Debug.Log(headToLow);
-            var reward = normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward;
+            // Idea: 
+            // If the head is lower than x percent of the body height, set the reward to null.
+            // Else calculate the reward from matching the torso forward vector, the normalized head pos,
+            // distance from the original center of mass and speed + look at target reward 
+            var reward = torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward;
+            //Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }

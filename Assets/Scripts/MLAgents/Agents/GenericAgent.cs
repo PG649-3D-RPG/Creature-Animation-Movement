@@ -192,7 +192,7 @@ public abstract class GenericAgent : Agent
         var maxz = new Vector3(float.MinValue,float.MinValue,float.MinValue );
 
         // Saves initial vector orientation
-        int orientationCounter = 0;
+        var orientationCounter = 0;
         var avgOrientationUp = Vector3.zero;
         var avgOrientationForward = Vector3.zero;
         var avgOrientationRight = Vector3.zero;

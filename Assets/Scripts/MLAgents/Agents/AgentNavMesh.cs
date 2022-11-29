@@ -126,6 +126,7 @@ public class AgentNavMesh : GenericAgent
         
         _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
 
+        //Debug.Log($"top transform up {_topTransform.localPosition.magnitude}");
         var reward = CalculateReward();
         //Debug.Log($"Reward: {reward}");
         AddReward(reward);   
@@ -167,6 +168,13 @@ public class AgentNavMesh : GenericAgent
         }
     }
 
+    private float CalculateStandUpReward()
+    {
+        var headHeightReward = RewardFunction(_headTransform.position.y, 0.8f* _headStartingPosition.y, float.PositiveInfinity, 0.37f, 0.1f); 
+        return 0f;
+    }
+
+
     private Vector3 GetNextPathPoint(Vector3 nextPoint)
     {
         if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
@@ -191,5 +199,33 @@ public class AgentNavMesh : GenericAgent
             _pathCornerIndex++;
         }
         return _path.corners[_pathCornerIndex] + new Vector3(0,  _topStartingPosition.y, 0);
+    }
+
+    private float RewardFunction(float value, float lowerBound, float higherBound, float margin, float reachingValue)
+    {
+        if(lowerBound <= value && value <= higherBound)
+        {
+            return 1f;
+        }
+        else if ((lowerBound - margin) < value && value < lowerBound)
+        {
+            //Parameter der linearen Funktion bestimmen
+            var m = (1 - reachingValue)/margin;
+            var b = 1 - (m * lowerBound);
+
+            return m * value + b;
+        }
+        else if(higherBound < value && value < (higherBound + margin))
+        {
+            //Parameter der linearen Funktion bestimmen
+            var m = (reachingValue-1)/margin;
+            var b = 1 - (m * higherBound);
+
+            return m * value + b;
+        }
+        else
+        {
+            return reachingValue;
+        }
     }
 }

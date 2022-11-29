@@ -234,7 +234,7 @@ public abstract class GenericAgent : Agent
             {
                 _headTransform = bone.transform;
                 _headStartingPosition = bone.transform.position;
-                Debug.Log($"Head Position: {_headStartingPosition.y}");
+                //Debug.Log($"Head Position: {_headStartingPosition.y}");
             }
         }
 

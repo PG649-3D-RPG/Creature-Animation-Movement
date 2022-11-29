@@ -125,8 +125,8 @@ public class AgentNavMesh : GenericAgent
         _dirToWalk = _nextPathPoint - _topTransform.position;
         
         _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
-
-        //Debug.Log($"top transform up {_topTransform.localPosition.magnitude}");
+ 
+        //Debug.Log($"top transform up {_topTransform.forward}, standup-Reward: {CalculateStandUpReward()}; COM: {_topTransformRb.worldCenterOfMass.y}");
         var reward = CalculateReward();
         //Debug.Log($"Reward: {reward}");
         AddReward(reward);   
@@ -134,36 +134,36 @@ public class AgentNavMesh : GenericAgent
     
     private float CalculateReward()
     {
-        var cubeForward = _orientationCube.transform.forward;
+        if(_topTransform.position.y < (_topStartingPosition.y/2))
+        {
+            return CalculateStandUpReward();
+        }
+        else // Walking Reward
+        {
+            var cubeForward = _orientationCube.transform.forward;
 
-        // Set reward for this step according to mixture of the following elements.
-        // a. Match target speed
-        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
-        var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+            // Set reward for this step according to mixture of the following elements.
+            // a. Match target speed
+            //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+            var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
+            var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
 
-        // b. Rotation alignment with target direction.
-        //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
+            // b. Rotation alignment with target direction.
+            //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
+            var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
 
-        var heightReward = Mathf.Clamp(_topTransform.position.y, 0, _topStartingPosition.y) / _topStartingPosition.y;
-        //Debug.Log($"HeightReward: {heightReward}; y-pos: {_topTransform.position.y}, starting y-Pos {_topStartingPosition.y}");
+            var heightReward = Mathf.Clamp(_topTransform.position.y, 0, _topStartingPosition.y) / _topStartingPosition.y;
+            //Debug.Log($"HeightReward: {heightReward}; y-pos: {_topTransform.position.y}, starting y-Pos {_topStartingPosition.y}");
 
-        if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward) ||
-            float.IsNaN(heightReward)) //throw new ArgumentException($"A reward is NaN. float.");
+            if (float.IsNaN(lookAtTargetReward) ||
+                float.IsNaN(matchSpeedReward) ||
+                float.IsNaN(heightReward)) //throw new ArgumentException($"A reward is NaN. float.");
             //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
-        {
-            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
-            return 0;
-        }
-        else if(_topTransform.position.y < (_topStartingPosition.y/2))
-        {
-            return 0;
-        }
-        else
-        {
-            
+            {
+                Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+                return 0;
+            }
+
             return heightReward * matchSpeedReward * lookAtTargetReward;
         }
     }
@@ -171,7 +171,13 @@ public class AgentNavMesh : GenericAgent
     private float CalculateStandUpReward()
     {
         var headHeightReward = RewardFunction(_headTransform.position.y, 0.8f* _headStartingPosition.y, float.PositiveInfinity, 0.37f, 0.1f); 
-        return 0f;
+        var straightReward = _topTransformRb.worldCenterOfMass.y > 0.5f ? RewardFunction(_topTransform.forward.y, 0.9f, float.PositiveInfinity, 1.9f, 0f) : 1;
+
+        var avgVel = GetAvgVelocityOfCreature();
+        var noWalkingReward = 0.5f * (RewardFunction(avgVel.x, -0.3f, 0.3f, 1.2f, 0.1f) + RewardFunction(avgVel.z, -0.3f, 0.3f, 1.2f, 0.1f));
+
+        //Debug.Log($"head-Reward:{headHeightReward}; straightReward: {straightReward}; noWalkingReward: {noWalkingReward}");
+        return headHeightReward * straightReward * noWalkingReward;
     }
 
 

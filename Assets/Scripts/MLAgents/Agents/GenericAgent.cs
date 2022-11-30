@@ -246,9 +246,9 @@ public abstract class GenericAgent : Agent
 
         Debug.Log($"Creature size x {_xLength} y {_yLength} z {_zLength}");
         
-        _avgForwardOrientation = avgOrientationForward / orientationCounter;
-        _avgRightOrientation = avgOrientationRight / orientationCounter;
-        _avgUpOrientation = avgOrientationUp / orientationCounter;
+            _avgForwardOrientation = avgOrientationForward / orientationCounter;
+            _avgRightOrientation = avgOrientationRight / orientationCounter;
+            _avgUpOrientation = avgOrientationUp / orientationCounter;
         
         Debug.Log($"Avg up {_avgForwardOrientation} Avg right {_avgRightOrientation} Avg forward {_avgUpOrientation}");
     }

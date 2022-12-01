@@ -318,7 +318,6 @@ public abstract class GenericAgent : Agent
             {
                 _footTransforms.Add(bone.transform);
                 _footGCScript.Add(bone.transform.GetComponent<GroundContact>());
-                Debug.Log($"bone.transform.name {bone.transform.name}");
             }
         }
 

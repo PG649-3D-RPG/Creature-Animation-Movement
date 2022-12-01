@@ -181,17 +181,19 @@ public class AgentNavMesh : GenericAgent
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)||
             float.IsNaN(normHeadPos) ||
-            float.IsNaN(normCenterOfMass)
+            float.IsNaN(normCenterOfMass) ||
+            float.IsNaN(torsoReward)
             ) 
         {
             Debug.LogError(
                 $"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            AddReward(0);
         }
         else
         {
             
             var headToLow = _headPosition.y - _headTransform.position.y;
-            var headUpEnough = headToLow < _xLength * 0.2;
+            var headUpEnough = headToLow < _yLength * 0.2;
             var atLestOneFootOnGround = _footGCScript.Any(x => x.TouchingGround);
             var giveReward = headUpEnough & atLestOneFootOnGround;
             // Idea: 
@@ -200,7 +202,7 @@ public class AgentNavMesh : GenericAgent
             // distance from the original center of mass and speed + look at target reward 
             var reward = giveReward ? torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward : 0;
             //Debug.Log($"giveReward {giveReward} headUpEnough {headUpEnough} atLestOneFootOnGround {atLestOneFootOnGround} Num {_footGCScript.Count}");
-            //Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            //Debug.Log($"Reward {reward} giveReward {giveReward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }

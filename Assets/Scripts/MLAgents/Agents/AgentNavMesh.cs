@@ -150,7 +150,7 @@ public class AgentNavMesh : GenericAgent
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
+        var lookAtTargetReward = (Vector3.Dot(cubeForward, _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward) + 1) * 0.5f;
 
         // TODO works only with flat terrain
         var normHeadPos = Normalize(_headTransform.position.y, 0f, _headPosition.y);

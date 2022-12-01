@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.AI;
@@ -20,12 +21,7 @@ public class AgentNavMesh : GenericAgent
 
     protected override int CalculateNumberContinuousActions()
     {
-        var numberActions = 0;
-        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
-        {
-            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
-        }
-        return numberActions;
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
     }
 
     protected override int CalculateNumberDiscreteBranches()
@@ -95,15 +91,14 @@ public class AgentNavMesh : GenericAgent
         {
             CollectObservationBodyPart(bodyPart, sensor);
             //rotation deltas for the head
-            if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head) sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
-             sensor.AddObservation(bodyPart.rb.worldCenterOfMass);
-             sensor.AddObservation(bodyPart.rb.transform.forward);
-             sensor.AddObservation(bodyPart.rb.transform.up);
-             sensor.AddObservation(bodyPart.rb.transform.right);
-
+            if (bodyPart.rb.transform.GetComponent<Bone>().category == BoneCategory.Head)
+            {
+                sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
+            }
+            sensor.AddObservation(bodyPart.rb.transform.forward);
+            sensor.AddObservation(bodyPart.rb.worldCenterOfMass);
         }
         sensor.AddObservation(_topTransform.position.y);
-        
         sensor.AddObservation(CalculateCenterOfMass(_topTransform));
     }
 
@@ -164,27 +159,19 @@ public class AgentNavMesh : GenericAgent
         
         // Getting direction vector
         var orientationCounter = 0;
-        var avgOrientationUp = Vector3.zero;
         var avgOrientationForward = Vector3.zero;
-        var avgOrientationRight = Vector3.zero;
 
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
             switch (rb.transform.GetComponent<Bone>().category)
             {
                 case BoneCategory.Torso: // Empty on purpose
-                case BoneCategory.Head:
                     orientationCounter++;
-                    var transform1 = rb.transform;
-                    avgOrientationForward += transform1.forward;
-                    avgOrientationRight += transform1.right;
-                    avgOrientationUp += transform1.up;
+                    avgOrientationForward += rb.transform.forward;
                     break;
             }
         }
         avgOrientationForward /= orientationCounter;
-        avgOrientationRight /= orientationCounter;
-        avgOrientationUp /= orientationCounter;
         //Debug.Log($"_avgForwardOrientation {_avgForwardOrientation}  _avgRightOrientation{_avgRightOrientation} _avgUpOrientation {_avgUpOrientation}");
         //Debug.Log($"Dot {Vector3.Dot(avgOrientationForward, _avgForwardOrientation)} Distance {Vector3.Distance(avgOrientationForward, _avgForwardOrientation)}");
         
@@ -204,12 +191,16 @@ public class AgentNavMesh : GenericAgent
         {
             
             var headToLow = _headPosition.y - _headTransform.position.y;
+            var headUpEnough = headToLow < _xLength * 0.2;
+            var atLestOneFootOnGround = _footGCScript.Any(x => x.TouchingGround);
+            var giveReward = headUpEnough & atLestOneFootOnGround;
             // Idea: 
             // If the head is lower than x percent of the body height, set the reward to null.
             // Else calculate the reward from matching the torso forward vector, the normalized head pos,
             // distance from the original center of mass and speed + look at target reward 
-            var reward = torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward;
-            Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            var reward = giveReward ? torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward : 0;
+            //Debug.Log($"giveReward {giveReward} headUpEnough {headUpEnough} atLestOneFootOnGround {atLestOneFootOnGround} Num {_footGCScript.Count}");
+            //Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }
@@ -221,7 +212,7 @@ public class AgentNavMesh : GenericAgent
         {   
             _timeElapsed = 0;
             var oldPath = _path;
-            bool pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
             if (!pathValid)
             {
                 _path = oldPath;

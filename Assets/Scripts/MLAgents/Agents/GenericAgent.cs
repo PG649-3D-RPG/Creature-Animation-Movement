@@ -34,9 +34,10 @@ public abstract class GenericAgent : Agent
     protected Vector3 _avgUpOrientation;
     protected Vector3 _avgForwardOrientation;
     protected Vector3 _avgRightOrientation;
-    
-    
-    
+    protected List<Transform> _footTransforms = new();
+    protected List<GroundContact> _footGCScript = new();
+
+
     // Scripts
     protected DynamicEnvironmentGenerator _deg;
     protected TerrainGenerator _terrainGenerator;
@@ -246,9 +247,9 @@ public abstract class GenericAgent : Agent
 
         Debug.Log($"Creature size x {_xLength} y {_yLength} z {_zLength}");
         
-            _avgForwardOrientation = avgOrientationForward / orientationCounter;
-            _avgRightOrientation = avgOrientationRight / orientationCounter;
-            _avgUpOrientation = avgOrientationUp / orientationCounter;
+        _avgForwardOrientation = avgOrientationForward / orientationCounter;
+        _avgRightOrientation = avgOrientationRight / orientationCounter;
+        _avgUpOrientation = avgOrientationUp / orientationCounter;
         
         Debug.Log($"Avg up {_avgForwardOrientation} Avg right {_avgRightOrientation} Avg forward {_avgUpOrientation}");
     }
@@ -311,6 +312,13 @@ public abstract class GenericAgent : Agent
             {
                 _headTransform = bone.transform;
                 _headPosition = _headTransform.position;
+            }
+
+            if (bone.category == BoneCategory.Foot)
+            {
+                _footTransforms.Add(bone.transform);
+                _footGCScript.Add(bone.transform.GetComponent<GroundContact>());
+                Debug.Log($"bone.transform.name {bone.transform.name}");
             }
         }
 

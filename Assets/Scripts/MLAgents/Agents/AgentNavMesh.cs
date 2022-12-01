@@ -88,7 +88,8 @@ public class AgentNavMesh : GenericAgent
         //Position of target position relative to cube
         sensor.AddObservation(_orientationCube.transform.InverseTransformPoint(_nextPathPoint));
 
-        sensor.AddObservation(_topTransform.position.y);
+        sensor.AddObservation(_headTransform.position.y);
+        sensor.AddObservation(_topTransformRb.worldCenterOfMass.y);
 
         foreach (var bodyPart in _jdController.bodyPartsList)
         {
@@ -134,12 +135,14 @@ public class AgentNavMesh : GenericAgent
     
     private float CalculateReward()
     {
-        if(_topTransform.position.y < (_topStartingPosition.y/2))
+        if(_headTransform.position.y < (_headStartingPosition.y * 0.5f))
         {
+            //Debug.Log("StandUp - Reward");
             return CalculateStandUpReward();
         }
         else // Walking Reward
         {
+            //Debug.Log("Walking Reward");
             var cubeForward = _orientationCube.transform.forward;
 
             // Set reward for this step according to mixture of the following elements.
@@ -152,8 +155,8 @@ public class AgentNavMesh : GenericAgent
             //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
             var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
 
-            var heightReward = Mathf.Clamp(_topTransform.position.y, 0, _topStartingPosition.y) / _topStartingPosition.y;
-            //Debug.Log($"HeightReward: {heightReward}; y-pos: {_topTransform.position.y}, starting y-Pos {_topStartingPosition.y}");
+            var heightReward = Mathf.Clamp(_headTransform.position.y, 0, _headStartingPosition.y) / _headStartingPosition.y;
+            //Debug.Log($"SpeedReward: {matchSpeedReward}; lookReward: {lookAtTargetReward}; HeightReward: {heightReward}; y-pos: {_topTransform.position.y}, starting y-Pos {_topStartingPosition.y}");
 
             if (float.IsNaN(lookAtTargetReward) ||
                 float.IsNaN(matchSpeedReward) ||

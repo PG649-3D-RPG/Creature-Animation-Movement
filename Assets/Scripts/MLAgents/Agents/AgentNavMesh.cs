@@ -209,8 +209,8 @@ public class AgentNavMesh : GenericAgent
             // Else calculate the reward from matching the torso forward vector, the normalized head pos,
             // distance from the original center of mass and speed + look at target reward 
             var reward = torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward;
-            //Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
-            //aDebug.Log($"Reward {reward}");
+            Debug.Log($"Reward {reward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }
     }

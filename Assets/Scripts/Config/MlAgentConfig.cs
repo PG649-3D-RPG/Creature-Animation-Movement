@@ -28,7 +28,7 @@ namespace Config
         [SerializeField]
         public bool TakeActionsBetweenDecisions = false;
         [SerializeField]
-        public int DecisionPeriod = 0;
+        public int DecisionPeriod = 5;
         [Header("Joint Settings")]
         [Space(10)]
         [SerializeField]

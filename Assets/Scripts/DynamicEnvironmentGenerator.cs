@@ -12,7 +12,7 @@ using Quaternion = UnityEngine.Quaternion;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
-public class DynamicEnvironmentGenerator : MonoBehaviour
+public class DynamicEnvironmentGenerator : GenericEnvironmentGenerator
 {
     public const int TerrainSize = 128;
     private const string GroundTag = "ground";
@@ -21,8 +21,6 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
     public string AgentScriptName = "WalkerAgent";
 
     [SerializeField] private GameObject CreaturePrefab;
-
-    [SerializeField] public NNModel NnModel;
 
     [HideInInspector] public GameObject TargetCubePrefab;
     [HideInInspector] public GameObject WallPrefab;
@@ -61,7 +59,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
     private void Start()
     {
         // Only generate Training Arena if we don't want to use the creature debugger
-        if(!FindObjectOfType<CreatureDebugger>().ActivateCreatureDebugger) GenerateTrainingEnvironment();
+        if(!FindObjectOfType<CreatureDebugger>().ActivateCreatureDebugger || !Application.isEditor) GenerateTrainingEnvironment();
     }
 
     private void GenerateTrainingEnvironment()
@@ -93,7 +91,7 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
             }
         };
 
-        var terrainObj = new GameObject
+        TerrainObject = new GameObject
         {
             name = $"Terrain {i}",
             transform =
@@ -104,11 +102,11 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         };
 
 
-        var terrain = terrainObj.AddComponent<Terrain>();
+        var terrain = TerrainObject.AddComponent<Terrain>();
         var navMeshSurface = terrain.AddComponent<NavMeshSurface>();
         navMeshSurface.agentTypeID = NavMesh.GetSettingsByIndex(_arenaConfig.NavMeshBuildSettingIndex).agentTypeID;
         navMeshSurface.collectObjects = _arenaConfig.NavMeshSurfaceCollectObjects;
-        terrain.AddComponent<TerrainGenerator>();
+        terrain.AddComponent<SimpleTerrainGenerator>();
         var colliderObj = terrain.AddComponent<TerrainCollider>();
         terrain.terrainData = new TerrainData();
         terrain.tag = GroundTag;

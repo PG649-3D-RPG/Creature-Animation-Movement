@@ -351,4 +351,28 @@ public abstract class GenericAgent : Agent
 
         return relativeCoM;
     }
+    
+    protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)
+    {   
+        var absCoM = Vector3.zero;
+        var relativeCoM = Vector3.zero;
+        var c = 0f;
+        
+        if (topTransform is not null)
+        {
+            foreach (var element in topTransform.GetComponentsInChildren<Rigidbody>())
+            {
+                float mass;
+                absCoM += element.worldCenterOfMass * (mass = element.mass);
+                c += mass;
+            }
+
+            absCoM /= c;
+            // This might be a little bit off. Someone might improve it.
+            relativeCoM = absCoM - topTransform.transform.position;
+        }
+        abs = absCoM;
+
+        return relativeCoM;
+    }
 }

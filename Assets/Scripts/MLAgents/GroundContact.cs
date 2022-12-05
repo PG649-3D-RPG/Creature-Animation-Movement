@@ -45,19 +45,11 @@ namespace Unity.MLAgentsExamples
             if (col.transform.CompareTag(GroundTag))
             {
                 TouchingGround = true;
-                switch (_boneScript.category)
-                {
-                    case BoneCategory.Leg:
-                    case BoneCategory.Arm:
-                    case BoneCategory.Torso:
-                    case BoneCategory.Head:
-                    case BoneCategory.Hand:
-                    case BoneCategory.Shoulder:
-                    case BoneCategory.Hip:
-                        Agent.SetReward(_creatureConfig.ContactPenalty);
-                        break;
-                }
-                if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
+                if (_boneScript.category is BoneCategory.Leg or BoneCategory.Arm or BoneCategory.Torso
+                    or BoneCategory.Head or BoneCategory.Hand or BoneCategory.Shoulder or BoneCategory.Hip)
+                    Agent.SetReward(_creatureConfig.ContactPenalty);
+
+                //if (_boneScript.category != BoneCategory.Foot && Agent.CompletedEpisodes < 100000000) Agent.EndEpisode();
             }
         }
 

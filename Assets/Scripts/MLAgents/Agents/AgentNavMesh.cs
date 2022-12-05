@@ -17,10 +17,8 @@ public class AgentNavMesh : GenericAgent
     private int _pathCornerIndex;
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
-
-    private float[] _rewardBuffer = new float[1000];
-    private int _bufferPos = 0;
     //private GameObject targetBall;
+    private GameObject posCube;
 
     protected override int CalculateNumberContinuousActions()
     {
@@ -34,7 +32,10 @@ public class AgentNavMesh : GenericAgent
 
     public override void Initialize()
     {
-        _rewardBuffer = _rewardBuffer.Select(x => x = float.NaN).ToArray();
+        posCube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+        posCube.transform.localScale = new Vector3(0.01f, 1, 0.01f);
+        Destroy(posCube.GetComponent<BoxCollider>());
+        
         base.Initialize();
         _path = new NavMeshPath();
         _timeElapsed = 1f;
@@ -99,7 +100,7 @@ public class AgentNavMesh : GenericAgent
             {
                 sensor.AddObservation(Quaternion.FromToRotation(bodyPart.rb.transform.forward, cubeForward));
             }
-            sensor.AddObservation(bodyPart.rb.transform.forward);
+            sensor.AddObservation(bodyPart.rb.transform.up);
             sensor.AddObservation(bodyPart.rb.worldCenterOfMass);
         }
         sensor.AddObservation(_topTransform.position.y);
@@ -108,6 +109,7 @@ public class AgentNavMesh : GenericAgent
 
     private float Normalize(float val, float min, float max)
     {
+        val = Mathf.Clamp(val, min, max);
         return Math.Clamp((val - min) / (max - min), 0, 1); 
     }
 
@@ -155,15 +157,18 @@ public class AgentNavMesh : GenericAgent
         var normHeadPos = Normalize(_headTransform.position.y, 0f, _headPosition.y);
         
         // TODO This is kinda hacky. It is not assured, that the value is between 0 and 1 and is simply clipped if the difference gets to big
-        var normCenterOfMass = 1 -Math.Clamp(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0, 1);
+        float normCenterOfMass = 1 -Mathf.Clamp(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0f, _xLength * 0.5f);
+
+        CalculateCenterOfMass(_topTransform, out Vector3 abs);
+        posCube.transform.position = abs;
         
         //Debug.Log($"Norm variant {Vector3.Distance(Vector3.Normalize(CalculateCenterOfMass(_topTransform)), Vector3.Normalize(_initialCenterOfMass))} Dot {Vector3.Dot(_initialCenterOfMass, CalculateCenterOfMass(_topTransform))}");
         //Debug.Log($"CoM {CalculateCenterOfMass(_topTransform)} Init CoM {_initialCenterOfMass} Distance {Vector3.Distance(CalculateCenterOfMass(_topTransform),_initialCenterOfMass )}");
-        //Debug.Log($"Norm {normCenterOfMass} ");
+            Debug.Log($"Norm {normCenterOfMass} ");
         
         // Getting direction vector
         var orientationCounter = 0;
-        var avgOrientationForward = Vector3.zero;
+        var avgUp = Vector3.zero;
 
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
@@ -171,23 +176,27 @@ public class AgentNavMesh : GenericAgent
             {
                 case BoneCategory.Torso: // Empty on purpose
                     orientationCounter++;
-                    avgOrientationForward += rb.transform.forward;
+                    avgUp += rb.transform.forward;
                     break;
             }
         }
-        avgOrientationForward /= orientationCounter;
-        //Debug.Log($"_avgForwardOrientation {_avgForwardOrientation}  _avgRightOrientation{_avgRightOrientation} _avgUpOrientation {_avgUpOrientation}");
-        //Debug.Log($"Dot {Vector3.Dot(avgOrientationForward, _avgForwardOrientation)} Distance {Vector3.Distance(avgOrientationForward, _avgForwardOrientation)}");
+        avgUp /= orientationCounter;
+
+        // This reward should approach 0 if the angle between the forward (blue vector up) gets zero
+        var torsoReward = 1 - Normalize(
+            Mathf.Acos(
+                Vector3.Dot(Vector3.Normalize(avgUp),Vector3.up)) / (avgUp.magnitude * Vector3.up.magnitude), 0, 1.8f);
         
-        //Forward reward ist kinda hacky aswell
-        var torsoReward = Normalize(Math.Clamp(Vector3.Dot(avgOrientationForward, _avgForwardOrientation), 0, 1), 0, 1);
-        
+        // Check if at least one foot is on the ground
+        var atLestOneFootOnGround = _footGCScript.Any(x => x.TouchingGround) ? 1 : 0;
+
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)||
             float.IsNaN(normHeadPos) ||
             float.IsNaN(normCenterOfMass) ||
-            float.IsNaN(torsoReward)
-            ) 
+            float.IsNaN(torsoReward) ||
+            float.IsNaN(atLestOneFootOnGround)
+           ) 
         {
             Debug.LogError(
                 $"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
@@ -196,41 +205,21 @@ public class AgentNavMesh : GenericAgent
         else
         {
             
-            var headToLow = _headPosition.y - _headTransform.position.y;
-            var headUpEnough = headToLow < _yLength * 0.2;
-            var atLestOneFootOnGround = _footGCScript.Any(x => x.TouchingGround);
-            var giveReward = headUpEnough & atLestOneFootOnGround;
-            // Idea: 
-            // If the head is lower than x percent of the body height, set the reward to null.
-            // Else calculate the reward from matching the torso forward vector, the normalized head pos,
-            // distance from the original center of mass and speed + look at target reward 
-            var reward = giveReward ? torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward : 0;
+            // Idea:
+            // Reset the game for the first 100 mio Episodes if the walker falls.
+            // Otherwise give him reward, as long as one foot touches the ground
+            // Reward assumes the up vector to be (0,1,0) at the beginning for the torso
+            // Also use center of mass and head height (normalized) and match the speed as well as looking at the target
+            var reward = atLestOneFootOnGround * torsoReward * normHeadPos *
+                         normCenterOfMass * matchSpeedReward * lookAtTargetReward ;
             
             // Stable reward is weighted by old rewards which are decreased by position 
-            var stableReward = 0f;
-            if (_bufferPos >= _rewardBuffer.Length) _bufferPos = 0;
-            _rewardBuffer[_bufferPos] = reward;
-            var size = _rewardBuffer.Select(x => !float.IsNaN(x)).Count();
 
-            // TODO Implement and test
-            for (var index = 0; index < _bufferPos; index++)
-            {
-                var r = _rewardBuffer[index];
-                stableReward += r;
-                
-                // (Size + (Pos  - Index)) % 5 -> Priority
-            }
-            for (var index = _bufferPos + 1; index < _rewardBuffer.Length; index++)
-            {
-                var r = _rewardBuffer[index];
-                stableReward += r;
-                // (Size + (Pos - Index) + 1 -> Priority
-            }
-            
-            //Debug.Log($"giveReward {giveReward} headUpEnough {headUpEnough} atLestOneFootOnGround {atLestOneFootOnGround} Num {_footGCScript.Count}");
-            //Debug.Log($"Reward {reward} giveReward {giveReward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            //Debug.Log($"Reward {reward} atLestOneFootOnGround {atLestOneFootOnGround} " +
+            //          $"torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} " +
+            //          $"matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
-            AddReward(stableReward);
+            AddReward(reward);
         }
     }
     

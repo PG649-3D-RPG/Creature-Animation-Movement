@@ -49,7 +49,7 @@ namespace Unity.MLAgentsExamples
                     or BoneCategory.Head or BoneCategory.Hand or BoneCategory.Shoulder or BoneCategory.Hip)
                     Agent.SetReward(_creatureConfig.ContactPenalty);
 
-                //if (_boneScript.category != BoneCategory.Foot && Agent.CompletedEpisodes < 100000000) Agent.EndEpisode();
+                if (_boneScript.category != BoneCategory.Foot && Agent.CompletedEpisodes < 100000000) Agent.EndEpisode();
             }
         }
 

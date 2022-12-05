@@ -13,6 +13,9 @@ public class AgentNavMesh : GenericAgent
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
 
+    private int _standUpCounter = 0;
+    private int _standUpRewardFaktor = 1;
+
     //private GameObject targetBall;
 
     protected override int CalculateNumberContinuousActions()
@@ -137,12 +140,20 @@ public class AgentNavMesh : GenericAgent
     {
         if(_headTransform.position.y < (_headStartingPosition.y * 0.5f))
         {
+            _standUpCounter++;
+            if(_standUpCounter == 120)
+            {
+                _standUpRewardFaktor++;
+                _standUpCounter = 0;
+            }
             //Debug.Log("StandUp - Reward");
-            return CalculateStandUpReward();
+            return (1f/(float) _standUpRewardFaktor) * CalculateStandUpReward();
         }
         else // Walking Reward
         {
             //Debug.Log("Walking Reward");
+            _standUpCounter = 0;
+            _standUpRewardFaktor = 1;
             var cubeForward = _orientationCube.transform.forward;
 
             // Set reward for this step according to mixture of the following elements.

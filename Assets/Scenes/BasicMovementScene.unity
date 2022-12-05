@@ -419,7 +419,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 7723699263755369605, guid: c22ee4bea13cb06449d818f29f6c4635, type: 3}
-  NnModel: {fileID: 5022602860645237092, guid: 7206eabb2a9997d46b7fbf468b87772e, type: 3}
+  NnModel: {fileID: 5022602860645237092, guid: 80c1f6f5fbc87634bac467d1282188b5, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}

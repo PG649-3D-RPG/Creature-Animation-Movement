@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Numerics;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
@@ -17,6 +18,8 @@ public class AgentNavMesh : GenericAgent
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
 
+    private float[] _rewardBuffer = new float[1000];
+    private int _bufferPos = 0;
     //private GameObject targetBall;
 
     protected override int CalculateNumberContinuousActions()
@@ -31,6 +34,7 @@ public class AgentNavMesh : GenericAgent
 
     public override void Initialize()
     {
+        _rewardBuffer = _rewardBuffer.Select(x => x = float.NaN).ToArray();
         base.Initialize();
         _path = new NavMeshPath();
         _timeElapsed = 1f;
@@ -201,10 +205,32 @@ public class AgentNavMesh : GenericAgent
             // Else calculate the reward from matching the torso forward vector, the normalized head pos,
             // distance from the original center of mass and speed + look at target reward 
             var reward = giveReward ? torsoReward * normHeadPos * normCenterOfMass * matchSpeedReward * lookAtTargetReward : 0;
+            
+            // Stable reward is weighted by old rewards which are decreased by position 
+            var stableReward = 0f;
+            if (_bufferPos >= _rewardBuffer.Length) _bufferPos = 0;
+            _rewardBuffer[_bufferPos] = reward;
+            var size = _rewardBuffer.Select(x => !float.IsNaN(x)).Count();
+
+            // TODO Implement and test
+            for (var index = 0; index < _bufferPos; index++)
+            {
+                var r = _rewardBuffer[index];
+                stableReward += r;
+                
+                // (Size + (Pos  - Index)) % 5 -> Priority
+            }
+            for (var index = _bufferPos + 1; index < _rewardBuffer.Length; index++)
+            {
+                var r = _rewardBuffer[index];
+                stableReward += r;
+                // (Size + (Pos - Index) + 1 -> Priority
+            }
+            
             //Debug.Log($"giveReward {giveReward} headUpEnough {headUpEnough} atLestOneFootOnGround {atLestOneFootOnGround} Num {_footGCScript.Count}");
             //Debug.Log($"Reward {reward} giveReward {giveReward} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
-            AddReward(reward);
+            AddReward(stableReward);
         }
     }
     

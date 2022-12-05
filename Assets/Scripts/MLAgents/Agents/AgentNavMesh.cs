@@ -157,14 +157,12 @@ public class AgentNavMesh : GenericAgent
         var normHeadPos = Normalize(_headTransform.position.y, 0f, _headPosition.y);
         
         // TODO This is kinda hacky. It is not assured, that the value is between 0 and 1 and is simply clipped if the difference gets to big
-        float normCenterOfMass = 1 -Mathf.Clamp(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0f, _xLength * 0.5f);
+        var normCenterOfMass = 1 -  Normalize(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0f, 0.45f);
 
         CalculateCenterOfMass(_topTransform, out Vector3 abs);
         posCube.transform.position = abs;
         
-        //Debug.Log($"Norm variant {Vector3.Distance(Vector3.Normalize(CalculateCenterOfMass(_topTransform)), Vector3.Normalize(_initialCenterOfMass))} Dot {Vector3.Dot(_initialCenterOfMass, CalculateCenterOfMass(_topTransform))}");
         //Debug.Log($"CoM {CalculateCenterOfMass(_topTransform)} Init CoM {_initialCenterOfMass} Distance {Vector3.Distance(CalculateCenterOfMass(_topTransform),_initialCenterOfMass )}");
-            Debug.Log($"Norm {normCenterOfMass} ");
         
         // Getting direction vector
         var orientationCounter = 0;
@@ -215,9 +213,7 @@ public class AgentNavMesh : GenericAgent
             
             // Stable reward is weighted by old rewards which are decreased by position 
 
-            //Debug.Log($"Reward {reward} atLestOneFootOnGround {atLestOneFootOnGround} " +
-            //          $"torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} " +
-            //          $"matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            //Debug.Log($"Reward {reward} atLestOneFootOnGround {atLestOneFootOnGround} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }

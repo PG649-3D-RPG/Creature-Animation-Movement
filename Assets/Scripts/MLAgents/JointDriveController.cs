@@ -156,6 +156,9 @@ namespace Unity.MLAgentsExamples
             };
             bp.rb.maxAngularVelocity = k_MaxAngularVelocity;
 
+            //SetAllJointLimitsToFree(bp.joint);
+            SetLimitedJointLimitsToFree(bp.joint);
+
             // Add & setup the ground contact script
             bp.groundContact = t.GetComponent<GroundContact>();
             if (!bp.groundContact) // == Null
@@ -210,6 +213,29 @@ namespace Unity.MLAgentsExamples
                     bodyPart.jointForceCurve.AddKey(Time.time, bodyPart.currentJointForceSqrMag);
                     bodyPart.jointTorqueCurve.AddKey(Time.time, bodyPart.currentJointTorqueSqrMag);
                 }
+            }
+        }
+
+        private void SetAllJointLimitsToFree(ConfigurableJoint cJoint)
+        {
+            cJoint.angularXMotion = ConfigurableJointMotion.Free;
+            cJoint.angularYMotion = ConfigurableJointMotion.Free;
+            cJoint.angularZMotion = ConfigurableJointMotion.Free;
+        }
+
+        private void SetLimitedJointLimitsToFree(ConfigurableJoint cJoint)
+        {
+            if(cJoint.angularXMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularXMotion = ConfigurableJointMotion.Free;
+            }
+            if(cJoint.angularYMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularYMotion = ConfigurableJointMotion.Free;
+            }
+            if(cJoint.angularZMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularZMotion = ConfigurableJointMotion.Free;
             }
         }
     }

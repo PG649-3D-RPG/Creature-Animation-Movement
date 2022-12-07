@@ -214,7 +214,7 @@ public class AgentNavMesh : GenericAgent
             // Stable reward is weighted by old rewards which are decreased by position 
 
             //Debug.Log($"Reward {reward} atLestOneFootOnGround {atLestOneFootOnGround} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
-            //Debug.Log($"Reward {reward}");
+            Debug.Log($"Reward {reward}");
             AddReward(reward);
         }
     }

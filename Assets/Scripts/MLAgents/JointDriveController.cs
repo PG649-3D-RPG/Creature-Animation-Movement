@@ -95,6 +95,8 @@ namespace Unity.MLAgentsExamples
             y = (y + 1f) * 0.5f;
             z = (z + 1f) * 0.5f;
 
+            //Debug.Log($"bodypart: {rb.gameObject.name}; x-limit-low: {joint.lowAngularXLimit.limit}; x-limit-high: {joint.highAngularXLimit.limit}, y-limti: {joint.angularYLimit.limit}, z-limit: {joint.angularZLimit.limit}");
+
             var xRot = Mathf.Lerp(joint.lowAngularXLimit.limit, joint.highAngularXLimit.limit, x);
             var yRot = Mathf.Lerp(-joint.angularYLimit.limit, joint.angularYLimit.limit, y);
             var zRot = Mathf.Lerp(-joint.angularZLimit.limit, joint.angularZLimit.limit, z);
@@ -156,6 +158,9 @@ namespace Unity.MLAgentsExamples
             };
             bp.rb.maxAngularVelocity = k_MaxAngularVelocity;
 
+            SetAllJointLimitsToFree(bp.joint);
+            //SetLimitedJointLimitsToFree(bp.joint);
+
             // Add & setup the ground contact script
             bp.groundContact = t.GetComponent<GroundContact>();
             if (!bp.groundContact) // == Null
@@ -212,5 +217,28 @@ namespace Unity.MLAgentsExamples
                 }
             }
         }
+
+        private void SetAllJointLimitsToFree(ConfigurableJoint cJoint)
+        {
+            cJoint.angularXMotion = ConfigurableJointMotion.Free;
+            cJoint.angularYMotion = ConfigurableJointMotion.Free;
+            cJoint.angularZMotion = ConfigurableJointMotion.Free;
+        }
+
+        private void SetLimitedJointLimitsToFree(ConfigurableJoint cJoint)
+        {
+            if(cJoint.angularXMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularXMotion = ConfigurableJointMotion.Free;
+            }
+            if(cJoint.angularYMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularYMotion = ConfigurableJointMotion.Free;
+            }
+            if(cJoint.angularZMotion != ConfigurableJointMotion.Locked)
+            {
+                cJoint.angularZMotion = ConfigurableJointMotion.Free;
+            }
+	    }
     }
 }

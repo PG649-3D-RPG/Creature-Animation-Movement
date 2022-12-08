@@ -158,6 +158,7 @@ namespace Unity.MLAgentsExamples
 
             //SetAllJointLimitsToFree(bp.joint);
             SetLimitedJointLimitsToFree(bp.joint);
+            SetJoinLimitValuesToMax(bp.joint);
 
             // Add & setup the ground contact script
             bp.groundContact = t.GetComponent<GroundContact>();
@@ -236,6 +237,34 @@ namespace Unity.MLAgentsExamples
             if(cJoint.angularZMotion != ConfigurableJointMotion.Locked)
             {
                 cJoint.angularZMotion = ConfigurableJointMotion.Free;
+            }
+        }
+
+        private void SetJoinLimitValuesToMax(ConfigurableJoint cJoint)
+        {
+            if(cJoint.angularXMotion != ConfigurableJointMotion.Locked)
+            {
+                var lowXLimit = new SoftJointLimit();
+                lowXLimit.limit = -177f;
+                cJoint.lowAngularXLimit = lowXLimit ;
+
+                var highXLimit = new SoftJointLimit();
+                highXLimit.limit = 177f;
+                cJoint.highAngularXLimit = highXLimit;
+            }
+            
+            if(cJoint.angularYMotion != ConfigurableJointMotion.Locked)
+            {
+                var YLimit = new SoftJointLimit();
+                YLimit.limit = 177;
+                cJoint.angularYLimit = YLimit;
+            }
+            
+            if(cJoint.angularZMotion != ConfigurableJointMotion.Locked)
+            {
+                var ZLimit = new SoftJointLimit();
+                ZLimit.limit = 177;
+                cJoint.angularZLimit = ZLimit;
             }
         }
     }

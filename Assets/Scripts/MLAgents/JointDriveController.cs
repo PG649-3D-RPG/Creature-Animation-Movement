@@ -158,8 +158,8 @@ namespace Unity.MLAgentsExamples
             };
             bp.rb.maxAngularVelocity = k_MaxAngularVelocity;
 
-            SetAllJointLimitsToFree(bp.joint);
-            //SetLimitedJointLimitsToFree(bp.joint);
+            //SetAllJointLimitsToFree(bp.joint);
+            SetLimitedJointLimitsToFree(bp.joint);
             SetJoinLimitValuesToMax(bp.joint);
 
             // Add & setup the ground contact script

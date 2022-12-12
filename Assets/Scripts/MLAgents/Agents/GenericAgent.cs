@@ -185,12 +185,12 @@ public abstract class GenericAgent : Agent
 
         
         // Creates object aligned bounding box and calcs xyz length
-        var minx = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
-        var maxx = new Vector3(float.MinValue,float.MinValue,float.MinValue );
-        var miny =new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
-        var maxy =  new Vector3(float.MinValue,float.MinValue,float.MinValue );
-        var minz = new Vector3(float.MaxValue,float.MaxValue,float.MaxValue );
-        var maxz = new Vector3(float.MinValue,float.MinValue,float.MinValue );
+        var minx = new Rigidbody();
+        var maxx = new Rigidbody();
+        var miny = new Rigidbody();
+        var maxy = new Rigidbody();
+        var minz = new Rigidbody();
+        var maxz = new Rigidbody();
 
         // Saves initial vector orientation
         var orientationCounter = 0;
@@ -200,31 +200,31 @@ public abstract class GenericAgent : Agent
         
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
-            if (rb.transform.position.x <= minx.x)
+            if (rb.transform.position.x <= minx.position.x)
             {
-                minx = rb.transform.position;
+                minx = rb;
             }
-            if (rb.transform.position.x >= maxx.x)
+            if (rb.transform.position.x >= maxx.position.x)
             {
-                maxx = rb.transform.position;
-            }
-            
-            if (rb.transform.position.y <= miny.y)
-            {
-                miny = rb.transform.position;
-            }
-            if (rb.transform.position.y >= maxy.y)
-            {
-                maxy = rb.transform.position;
+                maxx = rb;
             }
             
-            if (rb.transform.position.z <= minz.z)
+            if (rb.transform.position.y <= miny.position.y)
             {
-                minz = rb.transform.position;
+                miny = rb;
             }
-            if (rb.transform.position.z >= maxz.z)
+            if (rb.transform.position.y >= maxy.position.y)
             {
-                maxz = rb.transform.position;
+                maxy = rb;
+            }
+            
+            if (rb.transform.position.z <= minz.position.z)
+            {
+                minz = rb;
+            }
+            if (rb.transform.position.z >= maxz.position.z)
+            {
+                maxz = rb;
             }
 
             switch (rb.transform.GetComponent<Bone>().category)
@@ -241,9 +241,9 @@ public abstract class GenericAgent : Agent
 
         }
 
-        _xLength = maxx.x - minx.x;
-        _yLength = maxy.y - miny.y;
-        _zLength = maxz.z - minz.z;
+        _xLength = maxx.position.x - minx.position.x;
+        _yLength = maxy.position.y - miny.position.y;
+        _zLength = maxz.position.z - minz.position.z;
 
         Debug.Log($"Creature size x {_xLength} y {_yLength} z {_zLength}");
         

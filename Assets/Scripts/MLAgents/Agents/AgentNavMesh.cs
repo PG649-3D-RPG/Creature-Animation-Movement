@@ -159,7 +159,7 @@ public class AgentNavMesh : GenericAgent
         // TODO This is kinda hacky. It is not assured, that the value is between 0 and 1 and is simply clipped if the difference gets to big
         var normCenterOfMass = 1 -  Normalize(Vector3.Distance(CalculateCenterOfMass(_topTransform),  _initialCenterOfMass), 0f, 0.45f);
 
-        CalculateCenterOfMass(_topTransform, out Vector3 abs);
+        CalculateCenterOfMass(_topTransform, out var abs);
         posCube.transform.position = abs;
         
         //Debug.Log($"CoM {CalculateCenterOfMass(_topTransform)} Init CoM {_initialCenterOfMass} Distance {Vector3.Distance(CalculateCenterOfMass(_topTransform),_initialCenterOfMass )}");
@@ -208,12 +208,12 @@ public class AgentNavMesh : GenericAgent
             // Otherwise give him reward, as long as one foot touches the ground
             // Reward assumes the up vector to be (0,1,0) at the beginning for the torso
             // Also use center of mass and head height (normalized) and match the speed as well as looking at the target
-            var reward = atLestOneFootOnGround * torsoReward * normHeadPos *
+            var reward = torsoReward * normHeadPos *
                          normCenterOfMass * matchSpeedReward * lookAtTargetReward ;
             
             // Stable reward is weighted by old rewards which are decreased by position 
 
-            //Debug.Log($"Reward {reward} atLestOneFootOnGround {atLestOneFootOnGround} torso {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
+            //Debug.Log($"Reward {reward} torsoReward {torsoReward} normHeadPos {normHeadPos} normCenterOfMass {normCenterOfMass} matchSpeedReward {matchSpeedReward} lookAtTargetReward {lookAtTargetReward}");
             //Debug.Log($"Reward {reward}");
             AddReward(reward);
         }

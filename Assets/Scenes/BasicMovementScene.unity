@@ -418,7 +418,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AgentScriptName: AgentNavMesh
-  CreaturePrefab: {fileID: 1404998682443377478, guid: ca38d3782edd0c841acfccc937d867e9, type: 3}
+  CreaturePrefab: {fileID: 5629117491005145406, guid: 7983cc34924c9d1628a70b37bb67f0f3, type: 3}
   NnModel: {fileID: 5022602860645237092, guid: dc4b973795d5d590692c651e6d7e6273, type: 3}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}

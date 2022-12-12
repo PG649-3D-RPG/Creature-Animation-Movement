@@ -210,6 +210,8 @@ public class DynamicEnvironmentGenerator : MonoBehaviour
         if (Application.isEditor && creatureContainer.GetComponent<DebugScript>() == null ) creatureContainer.AddComponent<DebugScript>();
     }
 
+
+
     private void GenerateObstacles(Transform parent)
     {
         List<Vector3> takenSpawnPositions = new();

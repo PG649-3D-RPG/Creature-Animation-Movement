@@ -3,7 +3,7 @@ using UnityEngine;
 using Unity.AI.Navigation;
 using Random = UnityEngine.Random;
 
-public class TerrainGenerator : MonoBehaviour
+public class SimpleTerrainGenerator : MonoBehaviour
 {
     private Terrain _terrain;
     private  DynamicEnvironmentGenerator Deg { get; set; }
@@ -50,16 +50,6 @@ public class TerrainGenerator : MonoBehaviour
 
         if (!_arenaSettings.BakeNavMesh) return; // Skipp Nav Mesh generation
         NavMeshSurface.BuildNavMesh();
-    }
-
-    /// <summary>
-    /// Gets height (y) of terrain at Vector x.
-    /// </summary>
-    /// <param name="position">Position vector of object on terrain</param>
-    /// <returns></returns>
-    public float GetTerrainHeight(Vector3 position)
-    {
-        return _terrain.SampleHeight(position);
     }
 
     /// <summary>

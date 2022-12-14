@@ -417,9 +417,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f94607adcdd98b9f599977e502098874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  NnModel: {fileID: 0}
+  TerrainObject: {fileID: 0}
   AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 7723699263755369605, guid: c22ee4bea13cb06449d818f29f6c4635, type: 3}
-  NnModel: {fileID: 0}
   TargetCubePrefab: {fileID: 0}
   WallPrefab: {fileID: 5058601990868265176, guid: b4916bc73a0586da3b25bb47e3028696, type: 3}
   ObstaclePrefab: {fileID: 0}
@@ -468,7 +469,7 @@ MonoBehaviour:
   seed: 1
   creatureType: 0
   ContactPenalty: 0
-  ResetOnGroundContactParts: 
+  ResetOnGroundContactParts: 06000000
 --- !u!114 &1211399394
 MonoBehaviour:
   m_ObjectHideFlags: 0

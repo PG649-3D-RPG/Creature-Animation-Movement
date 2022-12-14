@@ -28,8 +28,7 @@ public abstract class GenericAgent : Agent
 
 
     // Scripts
-    protected DynamicEnvironmentGenerator _deg;
-    protected TerrainGenerator _terrainGenerator;
+    protected GenericEnvironmentGenerator _deg;
     protected WalkTargetScript _walkTargetScript;
     protected Transform _target;
     protected OrientationCubeController _orientationCube;
@@ -45,7 +44,7 @@ public abstract class GenericAgent : Agent
 
     public void Awake()
     {
-        _deg = FindObjectOfType<DynamicEnvironmentGenerator>();
+        _deg = FindObjectOfType<GenericEnvironmentGenerator>();
         if(GetComponent<JointDriveController>() != null) Destroy(GetComponent<DecisionRequester>());
         if (GetComponent<DecisionRequester>() != null) Destroy(GetComponent<JointDriveController>());
 
@@ -81,10 +80,9 @@ public abstract class GenericAgent : Agent
     public override void Initialize()
     {
         var parent = transform.parent;
-        _terrainGenerator = parent.GetComponentInChildren<TerrainGenerator>();
         _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
         _agent = gameObject.GetComponent<Agent>();
-        _target = parent.Find("Creature Target").transform;
+        _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
@@ -92,14 +90,14 @@ public abstract class GenericAgent : Agent
         
         SetWalkerOnGround();
     }
-    
+
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
     protected void SetWalkerOnGround()
     {
         var position = _topTransform.position;
-        var terrainHeight = _terrainGenerator.GetTerrainHeight(position);
+        var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(position);
 
         position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z);
         _topTransform.position = position;
@@ -134,17 +132,6 @@ public abstract class GenericAgent : Agent
     public override void OnEpisodeBegin()
     {
         _episodeCounter++;
-
-        // Order is important. First regenerate terrain -> than place cube!
-        if (_arenaSettings.RegenerateTerrainAfterXEpisodes > 0 && _episodeCounter % _arenaSettings.RegenerateTerrainAfterXEpisodes == 0)
-        {
-            _terrainGenerator.RegenerateTerrain();
-        }
-
-        if (_arenaSettings.EpisodeCountToRandomizeTargetCubePosition > 0 && _episodeCounter % _arenaSettings.EpisodeCountToRandomizeTargetCubePosition == 0)
-        {
-            _walkTargetScript.PlaceTargetCubeRandomly();
-        }
 
         SetWalkerOnGround();
 

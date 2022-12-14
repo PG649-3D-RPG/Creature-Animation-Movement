@@ -68,6 +68,7 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
         creatureContainer = new GameObject("Creature Container");
 
         // Choose Random Spawn Points
+        amountCreatures = Math.Min(amountCreatures, miscTerrainData.SpawnPoints.Count - 1);
         List<System.Tuple<Vector3Int, int>> chosenSpawnPoints = miscTerrainData.SpawnPoints.OrderBy(x => UnityEngine.Random.value).Take(amountCreatures + 1).ToList();
         AddTarget(chosenSpawnPoints.First().Item1);
         chosenSpawnPoints.RemoveAt(0);

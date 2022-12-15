@@ -14,53 +14,43 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HeadSize:
     Mean: 0.15
-    StandardDeviation: 0.6
-    Min: 0.1
+    StandardDeviation: 0
+    Min: 0.15
     Max: 0.2
-  HipThickness:
-    Mean: 0.2
-    StandardDeviation: 0.6
-    Min: 0.2
-    Max: 0.3
-  HipLength:
-    Mean: 0.2
-    StandardDeviation: 0.5
-    Min: 0.2
-    Max: 0.4
   NeckThickness:
     Mean: 0.1
-    StandardDeviation: 0.2
-    Min: 0.05
+    StandardDeviation: 0
+    Min: 0.75
     Max: 0.1
   NeckLength:
     Mean: 0.2
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 0.2
     Max: 0.3
   NeckBones:
     Min: 1
     Max: 1
-  TorsoThickness:
-    Mean: 0.2
-    StandardDeviation: 0.5
-    Min: 0.1
-    Max: 0.2
-  TorsoLength:
-    Mean: 0.4
-    StandardDeviation: 0.6
-    Min: 0.4
+  TorsoWidth:
+    Mean: 0.5
+    StandardDeviation: 0
+    Min: 0
     Max: 0.5
+  TorsoLength:
+    Mean: 0.15
+    StandardDeviation: 0
+    Min: 0.1
+    Max: 0.4
   TorsoBones:
-    Min: 3
-    Max: 3
+    Min: 2
+    Max: 2
   ArmThickness:
     Mean: 0.3
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 0.05
     Max: 0.1
   ArmLength:
     Mean: 0.3
-    StandardDeviation: 1
+    StandardDeviation: 0
     Min: 0.25
     Max: 0.35
   ArmBones:
@@ -68,12 +58,12 @@ MonoBehaviour:
     Max: 2
   LegLength:
     Mean: 0.35
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 0.3
     Max: 0.5
   LegThickness:
     Mean: 0.2
-    StandardDeviation: 0.2
+    StandardDeviation: 0
     Min: 0.05
     Max: 0.1
   LegBones:
@@ -81,26 +71,16 @@ MonoBehaviour:
     Max: 2
   FeetWidth:
     Mean: 0.2
-    StandardDeviation: 0.5
+    StandardDeviation: 0
     Min: 0.1
     Max: 0.2
   FeetLength:
     Mean: 0.2
-    StandardDeviation: 0.5
+    StandardDeviation: 0
     Min: 0.4
     Max: 0.4
   HandRadius:
-    Mean: 0.05
-    StandardDeviation: 0.25
+    Mean: 0.1
+    StandardDeviation: 0
     Min: 0.05
     Max: 0.1
-  ShoulderThickness:
-    Mean: 0.1
-    StandardDeviation: 0.2
-    Min: 0.1
-    Max: 0.2
-  ShoulderLength:
-    Mean: 0.1
-    StandardDeviation: 0.25
-    Min: 0.1
-    Max: 0.3

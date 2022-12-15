@@ -125,7 +125,7 @@ public class AgentNavMeshRes : GenericAgent
         targetBall.transform.position = _nextPathPoint;
 
         //Update OrientationCube and DirectionIndicator
-        _dirToWalk = _nextPathPoint - _topTransform.position;
+        var _dirToWalk = _nextPathPoint - _topTransform.position;
         
         _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
 

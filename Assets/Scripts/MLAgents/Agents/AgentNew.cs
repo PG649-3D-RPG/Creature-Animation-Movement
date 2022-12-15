@@ -108,7 +108,7 @@ public class AgentNew : GenericAgent
     public void FixedUpdate()
     {
         //Update OrientationCube and DirectionIndicator
-        _dirToWalk = _target.position - _topTransform.position;
+        var _dirToWalk = _target.position - _topTransform.position;
         _orientationCube.UpdateOrientation(_topTransform, _target);
 
         var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;

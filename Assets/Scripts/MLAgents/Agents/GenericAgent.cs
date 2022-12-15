@@ -13,7 +13,6 @@ using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
 {
-
     private const string BehaviorName = "Walker";
 
     // Internal values
@@ -22,10 +21,8 @@ public abstract class GenericAgent : Agent
     protected Quaternion _topStartingRotation;
     protected Transform _topTransform;
     protected Rigidbody _topTransformRb;
-
-    protected long _episodeCounter = 0;
-    protected Vector3 _dirToWalk = Vector3.right;
-
+    protected Vector3 _initialCenterOfMass;
+    protected float _creatureHeight;
 
     // Scripts
     protected GenericEnvironmentGenerator _deg;
@@ -70,8 +67,6 @@ public abstract class GenericAgent : Agent
         SetUpBodyParts();
         
         InitializeBehaviorParameters();
-        
-        
     }
 
     protected abstract int CalculateNumberContinuousActions();
@@ -131,8 +126,6 @@ public abstract class GenericAgent : Agent
     /// </summary>
     public override void OnEpisodeBegin()
     {
-        _episodeCounter++;
-
         SetWalkerOnGround();
 
         //Set our goal walking speed
@@ -158,9 +151,80 @@ public abstract class GenericAgent : Agent
     void Start()
     {
         _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
+        CalculateInitialValues();
     }
 
+    private void CalculateInitialValues()
+    {
+        _initialCenterOfMass = CalculateCenterOfMass(_topTransform, out var _);
+        
+        Rigidbody minx, maxx, miny, maxy, minz, maxz; 
+        minx = maxx = miny = maxy = minz = maxz = _topTransform.GetComponentInChildren<Rigidbody>();
+        
+        foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
+        {
+            if (rb.transform.position.x <= minx.position.x)
+            {
+                minx = rb;
+            }
+            if (rb.transform.position.x >= maxx.position.x)
+            {
+                maxx = rb;
+            }
+            
+            if (rb.transform.position.y <= miny.position.y)
+            {
+                miny = rb;
+            }
+            if (rb.transform.position.y >= maxy.position.y)
+            {
+                maxy = rb;
+            }
+            
+            if (rb.transform.position.z <= minz.position.z)
+            {
+                minz = rb;
+            }
+            if (rb.transform.position.z >= maxz.position.z)
+            {
+                maxz = rb;
+            }
+        }
 
+        // This seems to only work for the height. 
+        //var width = maxx.transform.GetComponent<Collider>().bounds.max.x -
+        //            minx.transform.GetComponent<Collider>().bounds.min.x;
+        _creatureHeight = maxy.transform.GetComponent<Collider>().bounds.max.y -
+                     miny.transform.GetComponent<Collider>().bounds.min.y;
+        //var depth = maxz.transform.GetComponent<Collider>().bounds.max.z -
+        //            minz.transform.GetComponent<Collider>().bounds.min.z;
+    }
+
+    protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)
+    {   
+        var absCoM = Vector3.zero;
+        var relativeCoM = Vector3.zero;
+        var c = 0f;
+        
+        if (topTransform is not null)
+        {
+            foreach (var element in topTransform.GetComponentsInChildren<Rigidbody>())
+            {
+                float mass;
+                absCoM += element.worldCenterOfMass * (mass = element.mass);
+                c += mass;
+            }
+
+            absCoM /= c;
+            // This might be a little bit off. Someone might improve it.
+            relativeCoM = absCoM - topTransform.transform.position;
+        }
+        abs = absCoM;
+
+        return relativeCoM;
+    }
+    
+    
     private IEnumerator CheckWalkerOutOfArea()
     {
         while (true)

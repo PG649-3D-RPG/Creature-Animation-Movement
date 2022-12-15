@@ -107,7 +107,7 @@ public class AgentGenTests : GenericAgent
     public void FixedUpdate()
     {
         //Update OrientationCube and DirectionIndicator
-        _dirToWalk = _target.position - _topTransform.position;
+        var _dirToWalk = _target.position - _topTransform.position;
         _orientationCube.UpdateOrientation(_topTransform, _target);
 
         var cubeForward = _orientationCube.transform.forward;

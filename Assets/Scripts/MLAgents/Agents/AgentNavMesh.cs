@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
@@ -17,12 +18,7 @@ public class AgentNavMesh : GenericAgent
 
     protected override int CalculateNumberContinuousActions()
     {
-        var numberActions = 0;
-        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
-        {
-            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
-        }
-        return numberActions;
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
     }
 
     protected override int CalculateNumberDiscreteBranches()
@@ -36,9 +32,6 @@ public class AgentNavMesh : GenericAgent
         _path = new NavMeshPath();
         _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
-
-        //targetBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        //Destroy(targetBall.GetComponent<Collider>());
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -120,7 +113,6 @@ public class AgentNavMesh : GenericAgent
         
         //Update OrientationCube and DirectionIndicator
         var position = _topTransform.position;
-        _dirToWalk = _nextPathPoint - position;
         _orientationCube.UpdateOrientation(position, _nextPathPoint);
         var cubeForward = _orientationCube.transform.forward;
         var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
@@ -152,7 +144,7 @@ public class AgentNavMesh : GenericAgent
         {   
             _timeElapsed = 0;
             var oldPath = _path;
-            bool pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
             if (!pathValid)
             {
                 _path = oldPath;

@@ -17,7 +17,10 @@ public class WalkTargetScript : MonoBehaviour
 
     private Rigidbody ThisRigidbody { get; set; }
 
-    //private SimpleTerrainGenerator TerrainGenerator { get; set; }
+    public NavMeshAgent navAgent;
+    public float timer = -1;
+    public float wanderTimer = 30;
+    public float wanderRadius = 1500;
 
     private const string TagToDetect = "Agent";
 
@@ -33,8 +36,19 @@ public class WalkTargetScript : MonoBehaviour
         
         Rng = new Random();
         var parent = transform.parent;
-        //TerrainGenerator = parent.GetComponentInChildren<SimpleTerrainGenerator>();
+        var terrainGenerator = GameObject.Find("Generator").GetComponent<AdvancedEnvironmentGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
+
+        if(terrainGenerator != null)
+        {
+            navAgent = GetComponent<NavMeshAgent>();
+            navAgent.speed = terrainGenerator.TargetWanderTimer;
+            wanderTimer = terrainGenerator.TargetWanderTimer;
+            wanderRadius = terrainGenerator.TargetWanderRadius;
+            navAgent.angularSpeed = 0;
+            timer = wanderTimer;
+        }
+
 
         // const int x = 64;
         // const int z = 80;
@@ -63,10 +77,24 @@ public class WalkTargetScript : MonoBehaviour
             //Debug.Log("Not on NavMesh");
             PlaceTargetCubeRandomly();
         }
+
+        if(timer != -1)
+        {
+            timer += Time.deltaTime;
+        }
+
+        if (timer >= wanderTimer)
+        {
+            Vector3 newPos = RandomNavSphere(transform.position, wanderRadius, -1);
+            navAgent.SetDestination(newPos);
+            timer = 0;
+        }
         
         var localPosition = transform.localPosition;
         var x = localPosition.x;
         var z = localPosition.z;
+
+
         // var terrainHeight = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z));
         // Safeguard if target is outside of arena
         //if (transform.localPosition.y < terrainHeight -1 || transform.localPosition.y> 40 || transform.localPosition.x is < -1 or > 129 || transform.localPosition.z is < -1 or > 129)
@@ -122,5 +150,18 @@ public class WalkTargetScript : MonoBehaviour
         {
             TargetDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(60,170), Vector3.up) * TargetDirection;
         }
+    }
+
+    public static Vector3 RandomNavSphere(Vector3 origin, float dist, int layermask)
+    {
+        Vector3 randDirection = UnityEngine.Random.insideUnitSphere * dist;
+
+        randDirection += origin;
+
+        NavMeshHit navHit;
+
+        NavMesh.SamplePosition(randDirection, out navHit, dist, layermask);
+
+        return navHit.position;
     }
 }

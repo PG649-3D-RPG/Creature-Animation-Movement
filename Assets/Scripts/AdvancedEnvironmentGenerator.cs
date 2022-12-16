@@ -6,6 +6,7 @@ using System.Linq;
 using Unity.Barracuda;
 using Unity.MLAgentsExamples;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
 {
@@ -14,6 +15,11 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
     [SerializeField] private GameObject CreaturePrefab;
 
     [SerializeField] public int amountCreatures = 1;
+
+    [Header("Target Settings")]
+    [SerializeField] public int TargetSpeed = 15;
+    [SerializeField] public float TargetWanderTimer = 30;
+    [SerializeField] public float TargetWanderRadius = 1500;
 
     [HideInInspector] public GameObject TargetCubePrefab;
     [HideInInspector] private ScriptableObject CreatureGeneratorSettings;
@@ -137,5 +143,9 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
         var target = Instantiate(TargetCubePrefab, spawnPosition, Quaternion.identity);
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
+        target.AddComponent<NavMeshAgent>();
     }
+
 }
+
+

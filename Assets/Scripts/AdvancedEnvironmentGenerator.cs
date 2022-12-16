@@ -24,7 +24,9 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
     [HideInInspector] public GameObject TargetCubePrefab;
     [HideInInspector] private ScriptableObject CreatureGeneratorSettings;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings2Legged;
+    [HideInInspector] private ScriptableObject BipedJointLimitOverrides;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings4Legged;
+    [HideInInspector] private ScriptableObject QuadrupedJointLimitOverrides;
     [HideInInspector] private ScriptableObject _worldGenertorSettingsConfig;
 
     [HideInInspector] private SPTC_WG sptc_wg;
@@ -41,8 +43,12 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
             Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings2Legged =
             Resources.Load("BipedSettings", typeof(ScriptableObject)) as ScriptableObject;
+        BipedJointLimitOverrides =
+            Resources.Load("BipedJointLimitOverrides", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings4Legged =
             Resources.Load("QuadrupedSettings", typeof(ScriptableObject)) as ScriptableObject;
+        QuadrupedJointLimitOverrides =
+            Resources.Load("QuadrupedJointLimitOverrides", typeof(ScriptableObject)) as ScriptableObject;
         _worldGenertorSettingsConfig =
             Resources.Load("WorldGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
 
@@ -109,10 +115,12 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
             {
                 CreatureType.Biped => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (BipedSettings)ParametricCreatureSettings2Legged,
-                                        creatureConfig.seed),
+                                        creatureConfig.seed,
+                                        (JointLimitOverrides) BipedJointLimitOverrides),
                 CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (QuadrupedSettings)ParametricCreatureSettings4Legged,
-                                        creatureConfig.seed),
+                                        creatureConfig.seed,
+                                        (JointLimitOverrides) QuadrupedJointLimitOverrides),
                 _ => throw new ArgumentException("No creature type selected"),
             };
             newCreature.transform.parent = creatureContainer.transform;

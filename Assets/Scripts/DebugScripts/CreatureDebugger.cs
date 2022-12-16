@@ -11,7 +11,9 @@ public class CreatureDebugger : MonoBehaviour
     [SerializeField] public int Seed = 0;
     [SerializeField] public ScriptableObject CreatureGeneratorSettings;
     [SerializeField] public ScriptableObject ParametricCreatureSettings2Legged;
+    [SerializeField] public ScriptableObject BipedJointLimitOverrides;
     [SerializeField] public ScriptableObject ParametricCreatureSettings4Legged;
+    [SerializeField] public ScriptableObject QuadrupedJointLimitOverrides;
     [SerializeField] public bool DisablePhysics;
     [SerializeField] public bool EnableStabilityHack;
     [SerializeField] public CreatureType CreatureType;
@@ -103,10 +105,12 @@ public class CreatureDebugger : MonoBehaviour
         {
             CreatureType.Biped => CreatureGenerator.ParametricBiped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (BipedSettings)ParametricCreatureSettings2Legged, Seed),
+                (BipedSettings)ParametricCreatureSettings2Legged, Seed,
+                (JointLimitOverrides) BipedJointLimitOverrides),
             CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped(
                 (CreatureGeneratorSettings)CreatureGeneratorSettings,
-                (QuadrupedSettings)ParametricCreatureSettings4Legged, Seed),
+                (QuadrupedSettings)ParametricCreatureSettings4Legged, Seed,
+                (JointLimitOverrides) QuadrupedJointLimitOverrides),
             _ => creature
         };
 

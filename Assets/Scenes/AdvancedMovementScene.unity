@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.3731193, g: 0.38073996, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -175,6 +175,9 @@ MonoBehaviour:
   AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 0}
   amountCreatures: 8
+  TargetSpeed: 15
+  TargetWanderTimer: 30
+  TargetWanderRadius: 1500
   TargetCubePrefab: {fileID: 0}
 --- !u!114 &1841552181
 MonoBehaviour:
@@ -208,7 +211,9 @@ MonoBehaviour:
   Seed: 0
   CreatureGeneratorSettings: {fileID: 0}
   ParametricCreatureSettings2Legged: {fileID: 0}
+  BipedJointLimitOverrides: {fileID: 0}
   ParametricCreatureSettings4Legged: {fileID: 0}
+  QuadrupedJointLimitOverrides: {fileID: 0}
   DisablePhysics: 0
   EnableStabilityHack: 0
   CreatureType: 0

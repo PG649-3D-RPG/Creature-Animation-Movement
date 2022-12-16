@@ -27,7 +27,9 @@ public class DynamicEnvironmentGenerator : GenericEnvironmentGenerator
     [HideInInspector] public GameObject ObstaclePrefab;
     [HideInInspector] private ScriptableObject CreatureGeneratorSettings;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings2Legged;
+    [HideInInspector] private ScriptableObject BipedJointLimitOverrides;
     [HideInInspector] private ScriptableObject ParametricCreatureSettings4Legged;
+    [HideInInspector] private ScriptableObject QuadrupedJointLimitOverrides;
     [HideInInspector] private ArenaConfig _arenaConfig;
 
     void Awake()
@@ -40,8 +42,12 @@ public class DynamicEnvironmentGenerator : GenericEnvironmentGenerator
             Resources.Load("CreatureGeneratorSettings", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings2Legged =
             Resources.Load("BipedSettings", typeof(ScriptableObject)) as ScriptableObject;
+        BipedJointLimitOverrides =
+            Resources.Load("BipedJointLimitOverrides", typeof(ScriptableObject)) as ScriptableObject;
         ParametricCreatureSettings4Legged =
             Resources.Load("QuadrupedSettings", typeof(ScriptableObject)) as ScriptableObject;
+        QuadrupedJointLimitOverrides =
+            Resources.Load("QuadrupedJointLimitOverrides", typeof(ScriptableObject)) as ScriptableObject;
 
         // Small hack which assures, that the Config is really loaded before usage. Otherwise config values might be skipped. 
         // If someone finds a better method to do this, please change!
@@ -178,10 +184,12 @@ public class DynamicEnvironmentGenerator : GenericEnvironmentGenerator
             {
                 CreatureType.Biped => CreatureGenerator.ParametricBiped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (BipedSettings)ParametricCreatureSettings2Legged,
-                                        creatureConfig.seed),
+                                        creatureConfig.seed,
+                                        (JointLimitOverrides) BipedJointLimitOverrides),
                 CreatureType.Quadruped => CreatureGenerator.ParametricQuadruped((CreatureGeneratorSettings)CreatureGeneratorSettings,
                                         (QuadrupedSettings)ParametricCreatureSettings4Legged,
-                                        creatureConfig.seed),
+                                        creatureConfig.seed,
+                                        (JointLimitOverrides) QuadrupedJointLimitOverrides),
                 _ => throw new ArgumentException("No creature type selected"),
             };
         }

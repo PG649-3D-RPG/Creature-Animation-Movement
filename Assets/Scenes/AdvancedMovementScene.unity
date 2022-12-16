@@ -174,7 +174,7 @@ MonoBehaviour:
   TerrainObject: {fileID: 0}
   AgentScriptName: AgentNavMesh
   CreaturePrefab: {fileID: 0}
-  amountCreatures: 8
+  amountCreatures: 16
   TargetSpeed: 15
   TargetWanderTimer: 30
   TargetWanderRadius: 1500
@@ -194,7 +194,7 @@ MonoBehaviour:
   seed: 1
   creatureType: 0
   ContactPenalty: 0
-  ResetOnGroundContactParts: 06000000
+  ResetOnGroundContactParts: 0600000000000000030000000700000005000000090000000a0000000b000000
 --- !u!114 &1841552182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +236,7 @@ MonoBehaviour:
   ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 0
-  ObservationSpace: 293
+  ObservationSpace: 263
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

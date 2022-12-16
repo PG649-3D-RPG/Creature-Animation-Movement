@@ -332,14 +332,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88cca73200eedb7478782f70ea0dfbf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ActivateCreatureDebugger: 0
+  ActivateCreatureDebugger: 1
   Seed: 11
   CreatureGeneratorSettings: {fileID: 11400000, guid: 793145753393264428ddcc08c178b15e, type: 2}
   ParametricCreatureSettings2Legged: {fileID: 11400000, guid: 13b70d6fab7f72747a64e7b01777f4f7, type: 2}
   BipedJointLimitOverrides: {fileID: 11400000, guid: cbf3ada3aae40eb4c84cb902a1315657, type: 2}
   ParametricCreatureSettings4Legged: {fileID: 11400000, guid: 4889c4eaa2ad1a8488b601989b40e49e, type: 2}
-  QuadrupedJointLimitOverrides: {fileID: 11400000, guid: db3cf7b4a9be2524fb7eb6021bc7169a, type: 2}
-  DisablePhysics: 0
+  DisablePhysics: 1
   EnableStabilityHack: 1
   CreatureType: 0
 --- !u!4 &855681737

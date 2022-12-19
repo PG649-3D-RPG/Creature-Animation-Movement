@@ -36,7 +36,7 @@ public class WalkTargetScript : MonoBehaviour
         
         Rng = new Random();
         var parent = transform.parent;
-        var terrainGenerator = GameObject.Find("Generator").GetComponent<AdvancedEnvironmentGenerator>();
+        var terrainGenerator = GameObject.Find("Generator")?.GetComponent<AdvancedEnvironmentGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
 
         if(terrainGenerator != null)

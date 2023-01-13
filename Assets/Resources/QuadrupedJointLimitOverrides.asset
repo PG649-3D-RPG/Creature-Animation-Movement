@@ -19,3 +19,57 @@ MonoBehaviour:
     XAxisMax: 0
     YAxisSymmetric: 0
     ZAxisSymmetric: 0
+  - parentBone: 10
+    childBone: 12
+    XAxisMin: -90
+    XAxisMax: 90
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0
+  - parentBone: 12
+    childBone: 11
+    XAxisMin: -95
+    XAxisMax: 10
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0
+  - parentBone: 10
+    childBone: 15
+    XAxisMin: -90
+    XAxisMax: 90
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0
+  - parentBone: 15
+    childBone: 11
+    XAxisMin: -10
+    XAxisMax: 95
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0
+  - parentBone: 5
+    childBone: 10
+    XAxisMin: -15
+    XAxisMax: 15
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 20
+  - parentBone: 12
+    childBone: 13
+    XAxisMin: -90
+    XAxisMax: 10
+    YAxisSymmetric: 20
+    ZAxisSymmetric: 0
+  - parentBone: 13
+    childBone: 11
+    XAxisMin: -95
+    XAxisMax: 10
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0
+  - parentBone: 15
+    childBone: 16
+    XAxisMin: -10
+    XAxisMax: 90
+    YAxisSymmetric: 20
+    ZAxisSymmetric: 0
+  - parentBone: 16
+    childBone: 11
+    XAxisMin: -10
+    XAxisMax: 95
+    YAxisSymmetric: 30
+    ZAxisSymmetric: 0

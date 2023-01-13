@@ -24,13 +24,14 @@ MonoBehaviour:
   frontBackMaxMargin: 16
   levelPlacementProbability: 60
   numberOfTypes: 1
-  spawnPointsPerRoom: 25
+  spawnPointsPerRoom: 10
   spawnPointSize: 1
   minCorridorWidth: 10
   maxCorridorWidth: 15
   minCorridorHeight: 2
   maxCorridorHeight: 3
-  maxDistance: 32
+  maxDistance: 12
   placeObjects: 1
   cubesPerRoom: 24
-  freeSpaceBetweenObjects: 3
+  freeSpaceBetweenObjects: 4
+  agentRadius: 2.25

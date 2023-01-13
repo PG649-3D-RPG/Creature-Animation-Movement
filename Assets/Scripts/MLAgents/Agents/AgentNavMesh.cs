@@ -32,8 +32,6 @@ public class AgentNavMesh : GenericAgent
         _path = new NavMeshPath();
         _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
-
-        StartCoroutine(SwitchModel(DetermineModel));
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -138,6 +136,8 @@ public class AgentNavMesh : GenericAgent
         {
             AddReward(matchSpeedReward * lookAtTargetReward);
         }
+
+        SwitchModel(DetermineModel);
     }
     
     private Vector3 GetNextPathPoint(Vector3 nextPoint)
@@ -168,6 +168,12 @@ public class AgentNavMesh : GenericAgent
 
     private int DetermineModel()
     {
+        if(_topTransform.position.y > 0.5)
+        {
+
+            return 1;
+        }
+
         return 0;
     }
 }

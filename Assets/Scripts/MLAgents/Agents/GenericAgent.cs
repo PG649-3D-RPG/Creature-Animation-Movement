@@ -293,7 +293,7 @@ public abstract class GenericAgent : Agent
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 
-    protected IEnumerator SwitchModel(Func<int> f)
+    protected void SwitchModel(Func<int> f)
     {
         int new_network_index = f();
 
@@ -307,7 +307,6 @@ public abstract class GenericAgent : Agent
             }
         }
 
-        yield return new WaitForSeconds(.1f);
     }
 
 }

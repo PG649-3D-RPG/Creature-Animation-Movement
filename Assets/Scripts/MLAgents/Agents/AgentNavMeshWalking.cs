@@ -184,12 +184,6 @@ public class AgentNavMeshWalking : GenericAgent
 
     private int DetermineModel()
     {
-        if(_topTransform.position.y > 0.5)
-        {
-
-            return 1;
-        }
-
         return 0;
     }
 }

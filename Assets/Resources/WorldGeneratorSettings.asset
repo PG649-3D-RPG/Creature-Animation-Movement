@@ -24,10 +24,13 @@ MonoBehaviour:
   frontBackMaxMargin: 16
   levelPlacementProbability: 60
   numberOfTypes: 1
-  spawnPointsPerRoom: 1
+  spawnPointsPerRoom: 25
   spawnPointSize: 1
-  minCorridorWidth: 6
-  maxCorridorWidth: 10
+  minCorridorWidth: 10
+  maxCorridorWidth: 15
   minCorridorHeight: 2
   maxCorridorHeight: 3
   maxDistance: 32
+  placeObjects: 1
+  cubesPerRoom: 24
+  freeSpaceBetweenObjects: 3

@@ -1,11 +1,14 @@
 using System;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshRes : GenericAgent
+public class AgentNavMeshWalking : GenericAgent
 {
     
     private NavMeshPath _path;
@@ -13,20 +16,11 @@ public class AgentNavMeshRes : GenericAgent
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
 
-    private GameObject targetBall;
+    //private GameObject targetBall;
 
-    public bool resilience_training = true;
-    private float last_bump = 0;
-
-    //Must be changed, if the OnActionReceived method uses more actions
     protected override int CalculateNumberContinuousActions()
     {
-        var numberActions = 0;
-        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
-        {
-            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
-        }
-        return numberActions;
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
     }
 
     protected override int CalculateNumberDiscreteBranches()
@@ -40,9 +34,6 @@ public class AgentNavMeshRes : GenericAgent
         _path = new NavMeshPath();
         _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
-
-        targetBall = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        Destroy(targetBall.GetComponent<Collider>());
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -117,19 +108,30 @@ public class AgentNavMeshRes : GenericAgent
         }
     }
 
+
+
+
     public void FixedUpdate()
     {
-        float deltaTime = Time.deltaTime;
-        _timeElapsed += deltaTime;
+        _timeElapsed += Time.deltaTime;
         _nextPathPoint = GetNextPathPoint(_nextPathPoint);
-        targetBall.transform.position = _nextPathPoint;
+
+        if (Application.isEditor)
+        {
+            Debug.Log($"Episode Step {_agent.StepCount}");
+            var lv = GameObject.FindObjectOfType<PathVisualizer>();
+            if (_path != null)
+            {
+                lv.DrawPath(_path);
+                lv.DrawPoint(_nextPathPoint);
+            }
+        }
 
         //Update OrientationCube and DirectionIndicator
-        var _dirToWalk = _nextPathPoint - _topTransform.position;
-        
-        _orientationCube.UpdateOrientation(_topTransform.position, _nextPathPoint);
-
+        var position = _topTransform.position;
+        _orientationCube.UpdateOrientation(position, _nextPathPoint);
         var cubeForward = _orientationCube.transform.forward;
+        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
 
         // Set reward for this step according to mixture of the following elements.
         // a. Match target speed
@@ -139,35 +141,19 @@ public class AgentNavMeshRes : GenericAgent
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        var lookAtTargetReward = (Vector3.Dot(cubeForward, _topTransform.forward) + 1) * 0.5f;
+        var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
 
         if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward)) //throw new ArgumentException($"A reward is NaN. float.");
-            //Debug.Log($"matchSpeedReward {Math.Max(matchSpeedReward, 0.1f)} lookAtTargetReward {Math.Max(lookAtTargetReward, 0.1f)}");
+            float.IsNaN(matchSpeedReward)) 
         {
             Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
+            AddReward(matchSpeedReward * lookAtTargetReward);
         }
 
-        if (resilience_training)
-        {
-            last_bump += deltaTime;
-
-            if (last_bump > 15)
-            {
-                if (UnityEngine.Random.Range(0, 1000) < 4)
-                {
-                    //Debug.Log("Bump after " + (last_bump) + "seconds");
-                    last_bump = 0;
-
-                    BodyPart randomBodyPart = _jdController.bodyPartsList[UnityEngine.Random.Range(0, _jdController.bodyPartsList.Count)];
-                    randomBodyPart.rb.AddForce(0, 1500, 0, ForceMode.Impulse);
-                }
-            }
-        }
+        SwitchModel(DetermineModel);
     }
     
     private Vector3 GetNextPathPoint(Vector3 nextPoint)
@@ -176,12 +162,11 @@ public class AgentNavMeshRes : GenericAgent
         {   
             _timeElapsed = 0;
             var oldPath = _path;
-            bool pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
             if (!pathValid)
             {
                 _path = oldPath;
-                _walkTargetScript.PlaceTargetCubeRandomly();
-                Debug.Log($"Path invalid for {gameObject.name}");
+                //Debug.Log($"Path invalid for {gameObject.name}");
                 return nextPoint;
             }
             else
@@ -191,9 +176,20 @@ public class AgentNavMeshRes : GenericAgent
         }
         if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
         {
-            Debug.Log("Increased path corner index");
+            //Debug.Log("Increased path corner index");
             _pathCornerIndex++;
         }
         return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
+    }
+
+    private int DetermineModel()
+    {
+        if(_topTransform.position.y > 0.5)
+        {
+
+            return 1;
+        }
+
+        return 0;
     }
 }

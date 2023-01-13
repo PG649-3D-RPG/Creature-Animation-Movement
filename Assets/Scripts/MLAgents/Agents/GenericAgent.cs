@@ -131,7 +131,7 @@ public abstract class GenericAgent : Agent
     public override void OnEpisodeBegin()
     {
         SetWalkerOnGround();
-
+        if(Application.isEditor) Debug.Log($"A new Episode has just begun");
         //Set our goal walking speed
         MTargetWalkingSpeed =
             _mlAgentsConfig.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;

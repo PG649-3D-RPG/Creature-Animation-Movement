@@ -14,9 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SkeletonSettings:
     ConnectHips: 0
+    AngleThreshold: 0
+    ShockAbsorbers: 1
+    ShockAbsorberMovement: 0.02
+    ShockAbsorberSpring: 60000
+    ShockAbsorberDamper: 5000
+    ShockAbsorberMaxForce: 80000
     MassMultiplier: 1
     MinimumDensity: 900
     MaximumDensity: 1100
+    FixedWeights: 1
+    FixedWeight: 10
     BoneDensityOverrides:
     - Category: 0
       MinimumDensity: 0

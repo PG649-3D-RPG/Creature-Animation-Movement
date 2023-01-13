@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMesh : GenericAgent
+public class AgentNavMeshWalking : GenericAgent
 {
     
     private NavMeshPath _path;
@@ -106,11 +108,25 @@ public class AgentNavMesh : GenericAgent
         }
     }
 
+
+
+
     public void FixedUpdate()
     {
         _timeElapsed += Time.deltaTime;
         _nextPathPoint = GetNextPathPoint(_nextPathPoint);
-        
+
+        if (Application.isEditor)
+        {
+            Debug.Log($"Episode Step {_agent.StepCount}");
+            var lv = GameObject.FindObjectOfType<PathVisualizer>();
+            if (_path != null)
+            {
+                lv.DrawPath(_path);
+                lv.DrawPoint(_nextPathPoint);
+            }
+        }
+
         //Update OrientationCube and DirectionIndicator
         var position = _topTransform.position;
         _orientationCube.UpdateOrientation(position, _nextPathPoint);

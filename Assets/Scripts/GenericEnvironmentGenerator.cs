@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GenericEnvironmentGenerator : MonoBehaviour
 {
-    [SerializeField] public NNModel NnModel;
+    [SerializeField] public List<NNModel> NnModels;
     [HideInInspector] public GameObject TerrainObject;
 
 }

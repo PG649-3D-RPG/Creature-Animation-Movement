@@ -57,7 +57,14 @@ namespace Unity.MLAgentsExamples
                         Agent.SetReward(_creatureConfig.ContactPenalty);
                         break;
                 }
-                if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category)) Agent.EndEpisode();
+                if (_creatureConfig.ResetOnGroundContactParts.Contains(_boneScript.category))
+                {
+
+                    Agent.EndEpisode();
+                    if(Application.isEditor) Debug.LogError($"{_boneScript.transform.name} touched the ground");
+
+                }
+
             }
         }
 

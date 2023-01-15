@@ -35,6 +35,7 @@ public abstract class GenericAgent : Agent
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
     protected CreatureConfig _creatureConfig;
+    protected BehaviorParameters bpScript;
 
     public float MTargetWalkingSpeed;
     public const float YHeightOffset = 0.1f;
@@ -50,6 +51,8 @@ public abstract class GenericAgent : Agent
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         _creatureConfig = FindObjectOfType<CreatureConfig>();
+        bpScript = GetComponent<BehaviorParameters>();
+
 
         // Config decision requester
         _decisionRequester.DecisionPeriod = _mlAgentsConfig.DecisionPeriod;
@@ -84,6 +87,7 @@ public abstract class GenericAgent : Agent
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
         SetWalkerOnGround();
+
     }
 
     /// <summary>
@@ -127,7 +131,7 @@ public abstract class GenericAgent : Agent
     public override void OnEpisodeBegin()
     {
         SetWalkerOnGround();
-
+        if(Application.isEditor) Debug.Log($"A new Episode has just begun");
         //Set our goal walking speed
         MTargetWalkingSpeed =
             _mlAgentsConfig.RandomizeWalkSpeedEachEpisode ? Random.Range(0.1f, _mlAgentsConfig.MaxWalkingSpeed) : MTargetWalkingSpeed;
@@ -240,10 +244,13 @@ public abstract class GenericAgent : Agent
     private void InitializeBehaviorParameters()
     {
         // Set behavior parameters
-        var bpScript = GetComponent<BehaviorParameters>();
         bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
         bpScript.BehaviorName = BehaviorName;
-        bpScript.Model = _deg.NnModel;
+
+        if(_deg.NnModels.Count > 0)
+        {
+            bpScript.Model = _deg.NnModels[0];
+        }
 
         if(_mlAgentsConfig.CalculateActionSpace)
         {
@@ -285,4 +292,21 @@ public abstract class GenericAgent : Agent
 
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
+
+    protected void SwitchModel(Func<int> f)
+    {
+        int new_network_index = f();
+
+        if(new_network_index < _deg.NnModels.Count)
+        {
+            var new_network = _deg.NnModels[new_network_index];
+
+            if (bpScript.Model != new_network)
+            {
+                bpScript.Model = new_network;
+            }
+        }
+
+    }
+
 }

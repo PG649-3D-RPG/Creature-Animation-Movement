@@ -23,7 +23,7 @@ MonoBehaviour:
     MassMultiplier: 1
     MinimumDensity: 900
     MaximumDensity: 1100
-    FixedWeights: 0
+    FixedWeights: 1
     FixedWeight: 10
     BoneDensityOverrides:
     - Category: 0

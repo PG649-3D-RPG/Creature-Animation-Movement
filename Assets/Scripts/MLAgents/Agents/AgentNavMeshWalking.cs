@@ -150,7 +150,9 @@ public class AgentNavMeshWalking : GenericAgent
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            var reward = matchSpeedReward * lookAtTargetReward;
+            if(Application.isEditor) Debug.Log($"Current reward: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            AddReward(reward);
         }
 
         SwitchModel(DetermineModel);

@@ -61,7 +61,7 @@ namespace Unity.MLAgentsExamples
                 {
 
                     Agent.EndEpisode();
-                    if(Application.isEditor) Debug.LogError($"{_boneScript.transform.name} touched the ground");
+                    if(Application.isEditor) Debug.Log($"{_boneScript.transform.name} touched the ground");
 
                 }
 

@@ -15,6 +15,7 @@ public class AgentNavMeshWalking : GenericAgent
     private int _pathCornerIndex;
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
+    private Transform top;
 
     //private GameObject targetBall;
 
@@ -34,6 +35,8 @@ public class AgentNavMeshWalking : GenericAgent
         _path = new NavMeshPath();
         _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
+        top = this.gameObject.transform.GetChild(0).transform;
+        Debug.Log($"top is on {top.name}");
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -108,6 +111,17 @@ public class AgentNavMeshWalking : GenericAgent
         }
     }
 
+    protected override void SetWalkerOnGround(){
+        base.SetWalkerOnGround();
+        PutCreatureOnSide();
+    }
+
+    public void PutCreatureOnSide(){
+        if(top == null) return;
+        top.position = new Vector3(top.position.x, 0.4f, top.position.z);
+        top.rotation = Quaternion.Euler(new Vector3(UnityEngine.Random.Range(-195, -165), UnityEngine.Random.Range(-180, 180), 90));
+    }
+
 
 
 
@@ -118,7 +132,9 @@ public class AgentNavMeshWalking : GenericAgent
 
         if (Application.isEditor)
         {
-            Debug.Log($"Episode Step {_agent.StepCount}");
+            #if UNITY_EDITOR
+            //Debug.Log($"Episode Step {_agent.StepCount}");
+            #endif
             var lv = GameObject.FindObjectOfType<PathVisualizer>();
             if (_path != null)
             {
@@ -133,6 +149,9 @@ public class AgentNavMeshWalking : GenericAgent
         var cubeForward = _orientationCube.transform.forward;
         var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
 
+        //// Rewards
+
+        /// Walking rewards
         // Set reward for this step according to mixture of the following elements.
         // a. Match target speed
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
@@ -152,6 +171,9 @@ public class AgentNavMeshWalking : GenericAgent
         {
             AddReward(matchSpeedReward * lookAtTargetReward);
         }
+
+        /// Standup rewards
+        
 
         SwitchModel(DetermineModel);
     }

@@ -78,7 +78,8 @@ public abstract class GenericAgent : Agent
     public override void Initialize()
     {
         var parent = transform.parent;
-        _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
+        _walkTargetScript = FindObjectOfType<WalkTargetScript>();
+        Debug.Log($"Walk Target script: {_walkTargetScript}");
         _agent = gameObject.GetComponent<Agent>();
         _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
@@ -93,7 +94,7 @@ public abstract class GenericAgent : Agent
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
-    protected void SetWalkerOnGround()
+    protected virtual void SetWalkerOnGround()
     {
         var position = _topTransform.position;
         var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(position);

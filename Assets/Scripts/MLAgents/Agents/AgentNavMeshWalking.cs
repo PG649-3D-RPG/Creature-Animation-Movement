@@ -106,7 +106,6 @@ public class AgentNavMeshWalking : GenericAgent
 
         if (Application.isEditor)
         {
-            Debug.Log($"Episode Step {_agent.StepCount}");
             var lv = GameObject.FindObjectOfType<PathVisualizer>();
             if (_path != null)
             {
@@ -139,7 +138,7 @@ public class AgentNavMeshWalking : GenericAgent
         else
         {
             var reward = matchSpeedReward * lookAtTargetReward;
-            if (Application.isEditor) Debug.Log($"Current reward: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
             AddReward(reward);
         }
 

@@ -9,6 +9,7 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
@@ -23,6 +24,9 @@ public abstract class GenericAgent : Agent
     protected Rigidbody _topTransformRb;
     protected Vector3 _initialCenterOfMass;
     protected float _creatureHeight;
+    protected NavMeshPath _path;
+    protected Vector3 _nextPathPoint;
+
 
     // Scripts
     protected GenericEnvironmentGenerator _deg;
@@ -73,12 +77,10 @@ public abstract class GenericAgent : Agent
     }
 
     protected abstract int CalculateNumberContinuousActions();
-    protected abstract int CalculateNumberDiscreteBranches();
 
     public override void Initialize()
     {
-        var parent = transform.parent;
-        _walkTargetScript = parent.GetComponentInChildren<WalkTargetScript>();
+        _walkTargetScript = FindObjectOfType<WalkTargetScript>(); 
         _agent = gameObject.GetComponent<Agent>();
         _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
@@ -87,7 +89,6 @@ public abstract class GenericAgent : Agent
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
         SetWalkerOnGround();
-
     }
 
     /// <summary>
@@ -154,7 +155,6 @@ public abstract class GenericAgent : Agent
 
     void Start()
     {
-        _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
         CalculateInitialValues();
     }
 
@@ -195,13 +195,9 @@ public abstract class GenericAgent : Agent
             }
         }
 
-        // This seems to only work for the height. 
-        //var width = maxx.transform.GetComponent<Collider>().bounds.max.x -
-        //            minx.transform.GetComponent<Collider>().bounds.min.x;
+        // Will only work for the biped
         _creatureHeight = maxy.transform.GetComponent<Collider>().bounds.max.y -
                      miny.transform.GetComponent<Collider>().bounds.min.y;
-        //var depth = maxz.transform.GetComponent<Collider>().bounds.max.z -
-        //            minz.transform.GetComponent<Collider>().bounds.min.z;
     }
 
     protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)
@@ -227,19 +223,6 @@ public abstract class GenericAgent : Agent
 
         return relativeCoM;
     }
-    
-    
-    private IEnumerator CheckWalkerOutOfArea()
-    {
-        while (true)
-        {
-            if (_topTransform.position.y is < -10 or > 40)
-            {
-                _agent.EndEpisode();
-            }
-            yield return new WaitForFixedUpdate();
-        }
-    }
 
     private void InitializeBehaviorParameters()
     {
@@ -254,7 +237,8 @@ public abstract class GenericAgent : Agent
 
         if(_mlAgentsConfig.CalculateActionSpace)
         {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), new int[CalculateNumberDiscreteBranches()]);
+            // Will assume no discrete branches
+            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), Array.Empty<int>());
         }
         else
         {
@@ -295,18 +279,39 @@ public abstract class GenericAgent : Agent
 
     protected void SwitchModel(Func<int> f)
     {
-        int new_network_index = f();
+        var newNetworkIndex = f();
 
-        if(new_network_index < _deg.NnModels.Count)
+        if(newNetworkIndex < _deg.NnModels.Count)
         {
-            var new_network = _deg.NnModels[new_network_index];
+            var newNetwork = _deg.NnModels[newNetworkIndex];
 
-            if (bpScript.Model != new_network)
+            if (bpScript.Model != newNetwork)
             {
-                bpScript.Model = new_network;
+                bpScript.Model = newNetwork;
             }
         }
 
     }
 
+    protected Vector3 GetNextPathPoint()
+    {
+        var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+
+        if (_path.corners.Length == 0 || !pathValid)
+        {
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
+            {
+                return hitIndicator.position;
+            }
+
+            Debug.LogError("Could not find close NavMesh edge.");
+        }
+
+        return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
+    }
+
+    protected virtual int DetermineModel()
+    {
+        return 0;
+    }
 }

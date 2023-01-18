@@ -10,11 +10,6 @@ using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
 public class AgentNavMeshWalking : GenericAgent
 {
-    
-    private NavMeshPath _path;
-    private int _pathCornerIndex;
-    private float _timeElapsed;
-    private Vector3 _nextPathPoint;
 
     //private GameObject targetBall;
 
@@ -23,16 +18,10 @@ public class AgentNavMeshWalking : GenericAgent
         return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
     }
 
-    protected override int CalculateNumberDiscreteBranches()
-    {
-        return 0;
-    }
-
     public override void Initialize()
     {
         base.Initialize();
         _path = new NavMeshPath();
-        _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
     }
     /// <summary>
@@ -113,12 +102,10 @@ public class AgentNavMeshWalking : GenericAgent
 
     public void FixedUpdate()
     {
-        _timeElapsed += Time.deltaTime;
-        _nextPathPoint = GetNextPathPoint(_nextPathPoint);
+        _nextPathPoint = GetNextPathPoint();
 
         if (Application.isEditor)
         {
-            Debug.Log($"Episode Step {_agent.StepCount}");
             var lv = GameObject.FindObjectOfType<PathVisualizer>();
             if (_path != null)
             {
@@ -146,44 +133,15 @@ public class AgentNavMeshWalking : GenericAgent
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)) 
         {
-            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            Debug.LogError($"Reward contain NaN: lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            var reward = matchSpeedReward * lookAtTargetReward;
+            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            AddReward(reward);
         }
 
         SwitchModel(DetermineModel);
-    }
-    
-    private Vector3 GetNextPathPoint(Vector3 nextPoint)
-    {
-        if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
-        {   
-            _timeElapsed = 0;
-            var oldPath = _path;
-            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
-            if (!pathValid)
-            {
-                _path = oldPath;
-                //Debug.Log($"Path invalid for {gameObject.name}");
-                return nextPoint;
-            }
-            else
-            {
-                _pathCornerIndex = 1;
-            }
-        }
-        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
-        {
-            //Debug.Log("Increased path corner index");
-            _pathCornerIndex++;
-        }
-        return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
-    }
-
-    private int DetermineModel()
-    {
-        return 0;
     }
 }

@@ -68,8 +68,8 @@ MonoBehaviour:
     FixIdenticalBonePositions: 1
   MeshSettings:
     GenerateMetaballMesh: 0
-    RigSolver: 0
-    Mode: 1
+    RigSolver: 1
+    Mode: 0
     Material: {fileID: 0}
     SmoothNormals: 0
     enableDQSkinner: 0

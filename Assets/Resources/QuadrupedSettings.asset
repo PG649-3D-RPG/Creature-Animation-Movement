@@ -13,70 +13,60 @@ MonoBehaviour:
   m_Name: QuadrupedSettings
   m_EditorClassIdentifier: 
   HeadSize:
-    Mean: 0.9
-    StandardDeviation: 0.6
+    Mean: 0.2
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
-  HipThickness:
-    Mean: 1
-    StandardDeviation: 0.6
-    Min: 0
-    Max: 3.4028235e+38
-  HipLength:
-    Mean: 1.5
-    StandardDeviation: 0.5
-    Min: 0
-    Max: 3.4028235e+38
+    Max: 0.5
   NeckThickness:
-    Mean: 0.3
-    StandardDeviation: 0.2
+    Mean: 0.1
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 1
   NeckLength:
-    Mean: 0.8
-    StandardDeviation: 0.2
+    Mean: 0.3
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 1
   NeckBones:
     Min: 1
-    Max: 4
-  TorsoThickness:
-    Mean: 1
-    StandardDeviation: 0.5
+    Max: 1
+  TorsoWidth:
+    Mean: 0.5
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 1
   TorsoLength:
-    Mean: 2
-    StandardDeviation: 1
+    Mean: 0.8
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 3
   TorsoBones:
     Min: 1
-    Max: 3
+    Max: 1
   FrontLegLength:
-    Mean: 3
-    StandardDeviation: 2
+    Mean: 0.2
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 5
   FrontLegThickness:
-    Mean: 0.3
-    StandardDeviation: 0.2
+    Mean: 0.1
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 1
   FrontLegBones:
     Min: 2
-    Max: 4
+    Max: 2
   MirrorFrontLegs: 1
   HindLegLength:
-    Mean: 3
-    StandardDeviation: 2
+    Mean: 0.2
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 5
   HindLegThickness:
-    Mean: 0.3
-    StandardDeviation: 0.2
+    Mean: 0.1
+    StandardDeviation: 0
     Min: 0
-    Max: 3.4028235e+38
+    Max: 1
   HindLegBones:
     Min: 2
-    Max: 4
+    Max: 2

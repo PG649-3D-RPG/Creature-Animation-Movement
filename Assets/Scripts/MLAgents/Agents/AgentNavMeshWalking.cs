@@ -10,11 +10,6 @@ using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
 public class AgentNavMeshWalking : GenericAgent
 {
-    
-    private NavMeshPath _path;
-    private int _pathCornerIndex;
-    private float _timeElapsed;
-    private Vector3 _nextPathPoint;
 
     //private GameObject targetBall;
 
@@ -32,7 +27,6 @@ public class AgentNavMeshWalking : GenericAgent
     {
         base.Initialize();
         _path = new NavMeshPath();
-        _timeElapsed = 1f;
         _nextPathPoint = _topTransform.position;
     }
     /// <summary>
@@ -113,7 +107,6 @@ public class AgentNavMeshWalking : GenericAgent
 
     public void FixedUpdate()
     {
-        _timeElapsed += Time.deltaTime;
         _nextPathPoint = GetNextPathPoint(_nextPathPoint);
 
         if (Application.isEditor)
@@ -156,31 +149,6 @@ public class AgentNavMeshWalking : GenericAgent
         SwitchModel(DetermineModel);
     }
     
-    private Vector3 GetNextPathPoint(Vector3 nextPoint)
-    {
-        if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
-        {   
-            _timeElapsed = 0;
-            var oldPath = _path;
-            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
-            if (!pathValid)
-            {
-                _path = oldPath;
-                //Debug.Log($"Path invalid for {gameObject.name}");
-                return nextPoint;
-            }
-            else
-            {
-                _pathCornerIndex = 1;
-            }
-        }
-        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
-        {
-            //Debug.Log("Increased path corner index");
-            _pathCornerIndex++;
-        }
-        return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
-    }
 
     private int DetermineModel()
     {

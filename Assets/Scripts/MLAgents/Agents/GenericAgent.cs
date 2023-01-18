@@ -9,6 +9,7 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
@@ -23,6 +24,10 @@ public abstract class GenericAgent : Agent
     protected Rigidbody _topTransformRb;
     protected Vector3 _initialCenterOfMass;
     protected float _creatureHeight;
+    protected NavMeshPath _path;
+    protected int _pathCornerIndex;
+    protected Vector3 _nextPathPoint;
+
 
     // Scripts
     protected GenericEnvironmentGenerator _deg;
@@ -307,6 +312,23 @@ public abstract class GenericAgent : Agent
             }
         }
 
+    }
+
+    protected Vector3 GetNextPathPoint(Vector3 nextPoint)
+    {
+        var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+
+        if (_path.corners.Length == 0 || !pathValid)
+        {
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
+            {
+                return hitIndicator.position;
+            }
+
+            Debug.LogError("Could not find close NavMesh edge.");
+        }
+
+        return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
     }
 
 }

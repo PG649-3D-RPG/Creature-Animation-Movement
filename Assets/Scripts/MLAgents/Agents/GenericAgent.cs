@@ -310,7 +310,7 @@ public abstract class GenericAgent : Agent
         return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
     }
 
-    protected int DetermineModel()
+    protected virtual int DetermineModel()
     {
         return 0;
     }

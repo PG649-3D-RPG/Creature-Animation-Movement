@@ -158,28 +158,19 @@ public class AgentNavMeshWalking : GenericAgent
     
     private Vector3 GetNextPathPoint(Vector3 nextPoint)
     {
-        if(_timeElapsed >= 1.0f || _path.status == NavMeshPathStatus.PathInvalid)
-        {   
-            _timeElapsed = 0;
-            var oldPath = _path;
-            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
-            if (!pathValid)
-            {
-                _path = oldPath;
-                //Debug.Log($"Path invalid for {gameObject.name}");
-                return nextPoint;
-            }
-            else
-            {
-                _pathCornerIndex = 1;
-            }
-        }
-        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
+        var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+
+        if (_path.corners.Length == 0 || !pathValid)
         {
-            //Debug.Log("Increased path corner index");
-            _pathCornerIndex++;
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20 ,NavMesh.AllAreas))
+            {
+                return hitIndicator.position;
+            }
+
+            Debug.LogError("Could not find close NavMesh edge.");
         }
-        return _path.corners[_pathCornerIndex] + new Vector3(0, 2 * _topStartingPosition.y, 0);
+
+        return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
     }
 
     private int DetermineModel()

@@ -144,4 +144,12 @@ public class AgentNavMeshWalking : GenericAgent
 
         SwitchModel(DetermineModel);
     }
+
+    protected override int DetermineModel()
+    {
+        if(_topTransform.position.y < 0.47){
+            return 1;
+        }
+        return 0;
+    }
 }

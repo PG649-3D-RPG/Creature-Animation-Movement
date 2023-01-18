@@ -347,11 +347,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2d9b44d4011ff4cb0029985c64b988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NnModels: []
+  NnModels:
+  - {fileID: 5022602860645237092, guid: dcb2c4e2a6fa95fe4ae9f6b7391eb9c7, type: 3}
   TerrainObject: {fileID: 0}
   AgentScriptName: AgentNavMeshWalking
   CreaturePrefab: {fileID: 0}
-  amountCreatures: 20
+  amountCreatures: 1
   TargetSpeed: 15
   TargetWanderTimer: 30
   TargetWanderRadius: 1500

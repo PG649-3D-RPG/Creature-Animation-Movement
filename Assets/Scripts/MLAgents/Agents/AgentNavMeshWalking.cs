@@ -18,11 +18,6 @@ public class AgentNavMeshWalking : GenericAgent
         return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
     }
 
-    protected override int CalculateNumberDiscreteBranches()
-    {
-        return 0;
-    }
-
     public override void Initialize()
     {
         base.Initialize();
@@ -107,11 +102,10 @@ public class AgentNavMeshWalking : GenericAgent
 
     public void FixedUpdate()
     {
-        _nextPathPoint = GetNextPathPoint(_nextPathPoint);
+        _nextPathPoint = GetNextPathPoint();
 
         if (Application.isEditor)
         {
-            Debug.Log($"Episode Step {_agent.StepCount}");
             var lv = GameObject.FindObjectOfType<PathVisualizer>();
             if (_path != null)
             {
@@ -139,19 +133,15 @@ public class AgentNavMeshWalking : GenericAgent
         if (float.IsNaN(lookAtTargetReward) ||
             float.IsNaN(matchSpeedReward)) 
         {
-            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            Debug.LogError($"Reward contain NaN: lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(matchSpeedReward * lookAtTargetReward);
+            var reward = matchSpeedReward * lookAtTargetReward;
+            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            AddReward(reward);
         }
 
         SwitchModel(DetermineModel);
-    }
-    
-
-    private int DetermineModel()
-    {
-        return 0;
     }
 }

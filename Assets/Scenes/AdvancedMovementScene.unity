@@ -348,8 +348,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NnModels:
-  - {fileID: 5022602860645237092, guid: 0c24fd2e2bf16353ab4dde0178d5f06d, type: 3}
-  - {fileID: 5022602860645237092, guid: dcb2c4e2a6fa95fe4ae9f6b7391eb9c7, type: 3}
+  - {fileID: 5022602860645237092, guid: b04c225f1237b6468928cacd9bb00103, type: 3}
+  - {fileID: 5022602860645237092, guid: 982ccd64ab7b78105b0b5ecafb79fed9, type: 3}
   TerrainObject: {fileID: 0}
   AgentScriptName: AgentNavMeshWalking
   CreaturePrefab: {fileID: 0}

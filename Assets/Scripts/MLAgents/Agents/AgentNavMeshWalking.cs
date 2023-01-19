@@ -13,6 +13,9 @@ public class AgentNavMeshWalking : GenericAgent
 
     //private GameObject targetBall;
 
+    private float topTransformStartRotation;
+    private float topTransformStartHeight;
+
     protected override int CalculateNumberContinuousActions()
     {
         return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
@@ -21,9 +24,12 @@ public class AgentNavMeshWalking : GenericAgent
     public override void Initialize()
     {
         base.Initialize();
+        topTransformStartRotation = this._topTransform.rotation.eulerAngles.z;
+        topTransformStartHeight = this._topTransform.position.y;
         _path = new NavMeshPath();
         _nextPathPoint = _topTransform.position;
     }
+
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -138,18 +144,33 @@ public class AgentNavMeshWalking : GenericAgent
         else
         {
             var reward = matchSpeedReward * lookAtTargetReward;
-            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            //if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
             AddReward(reward);
         }
 
         SwitchModel(DetermineModel);
     }
 
+    int lastModel = 0;
     protected override int DetermineModel()
     {
-        if(_topTransform.position.y < 0.47){
+        if(_topTransform.position.y < 2*topTransformStartHeight/3 || (Mathf.Abs((_topTransform.rotation.eulerAngles.z % 360) - (topTransformStartRotation % 360)) > 30) ){
+
+            if(lastModel != 1){
+                //Debug.Log($"Switching to Model 1. 1st condition {_topTransform.position.y < topTransformStartHeight/2}, cur {_topTransform.position.y}, init {topTransformStartHeight}, 2nd condition {(Mathf.Abs((_topTransform.rotation.eulerAngles.z % 360) - (topTransformStartRotation % 360)) > 30)}, cur {_topTransform.rotation.eulerAngles.z}, init {topTransformStartRotation}");
+            }
+
+            lastModel = 1;
             return 1;
         }
-        return 0;
+        else{
+
+            if(lastModel != 0){
+                //Debug.Log($"Switching to Model 0. 1st condition {_topTransform.position.y < topTransformStartHeight/2}, cur {_topTransform.position.y}, init {topTransformStartHeight}, 2nd condition {(Mathf.Abs((_topTransform.rotation.eulerAngles.z % 360) - (topTransformStartRotation % 360)) > 30)}, cur {_topTransform.rotation.eulerAngles.z}, init {topTransformStartRotation}");
+            }
+
+            lastModel = 0;
+            return 0;
+        }
     }
 }

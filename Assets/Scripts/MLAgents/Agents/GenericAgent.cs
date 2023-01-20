@@ -39,7 +39,8 @@ public abstract class GenericAgent : Agent
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
     protected CreatureConfig _creatureConfig;
-    protected BehaviorParameters bpScript;
+    protected BehaviorParameters _bpScript;
+    protected MiscTerrainData _miscTerrainData;
 
     public float MTargetWalkingSpeed;
     public const float YHeightOffset = 0.1f;
@@ -55,7 +56,8 @@ public abstract class GenericAgent : Agent
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         _creatureConfig = FindObjectOfType<CreatureConfig>();
-        bpScript = GetComponent<BehaviorParameters>();
+        _bpScript = GetComponent<BehaviorParameters>();
+        _miscTerrainData = FindObjectOfType<MiscTerrainData>();
 
 
         // Config decision requester
@@ -96,14 +98,9 @@ public abstract class GenericAgent : Agent
     /// </summary>
     protected void SetWalkerOnGround()
     {
-        var position = _topTransform.position;
-        var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(position);
-
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z);
-        _topTransform.position = position;
+        var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(_topTransform.position);
+        _topTransform.position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z); ;
         _topTransform.localRotation = _topStartingRotation;
-
-
         _topTransformRb.velocity = Vector3.zero;
         _topTransformRb.angularVelocity = Vector3.zero;
 
@@ -113,15 +110,17 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, YHeightOffset);
         }
 
-        var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
-            _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
-        while (rotation == Vector3.zero)
+        Vector3 rotation;
+        while ((rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+                   _topStartingRotation.eulerAngles.z + Random.Range(-5, 5))) == Vector3.zero)
         {
-            rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
-                _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
             Debug.LogError("Fixing zero vector rotation!");
         }
+
+        // Generate a random new spawn position
+        var first = _miscTerrainData.SpawnPoints.OrderBy(x => UnityEngine.Random.value).First().Item1;
         _topTransform.localRotation = Quaternion.Euler(rotation);
+        _topTransform.position = new Vector3(first.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, first.z); ;
     }
 
     /// <summary>
@@ -227,22 +226,22 @@ public abstract class GenericAgent : Agent
     private void InitializeBehaviorParameters()
     {
         // Set behavior parameters
-        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
-        bpScript.BehaviorName = BehaviorName;
+        _bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
+        _bpScript.BehaviorName = BehaviorName;
 
         if(_deg.NnModels.Count > 0)
         {
-            bpScript.Model = _deg.NnModels[0];
+            _bpScript.Model = _deg.NnModels[0];
         }
 
         if(_mlAgentsConfig.CalculateActionSpace)
         {
             // Will assume no discrete branches
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), Array.Empty<int>());
+            _bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), Array.Empty<int>());
         }
         else
         {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
+            _bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
         }
     }
 
@@ -285,9 +284,9 @@ public abstract class GenericAgent : Agent
         {
             var newNetwork = _deg.NnModels[newNetworkIndex];
 
-            if (bpScript.Model != newNetwork)
+            if (_bpScript.Model != newNetwork)
             {
-                bpScript.Model = newNetwork;
+                _bpScript.Model = newNetwork;
             }
         }
 

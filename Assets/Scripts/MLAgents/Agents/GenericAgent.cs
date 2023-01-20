@@ -31,7 +31,7 @@ public abstract class GenericAgent : Agent
     // Scripts
     protected GenericEnvironmentGenerator _deg;
     protected WalkTargetScript _walkTargetScript;
-    protected Transform _target;
+    public Transform _target;
     protected OrientationCubeController _orientationCube;
     protected JointDriveController _jdController;
     protected DecisionRequester _decisionRequester;
@@ -84,13 +84,17 @@ public abstract class GenericAgent : Agent
     {
         _walkTargetScript = FindObjectOfType<WalkTargetScript>(); 
         _agent = gameObject.GetComponent<Agent>();
-        _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
         SetWalkerOnGround();
+    }
+
+    public void SetTarget(Transform target)
+    {
+        _target = target;
     }
 
     /// <summary>

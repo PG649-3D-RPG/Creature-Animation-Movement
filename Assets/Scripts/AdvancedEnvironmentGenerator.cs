@@ -30,9 +30,10 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
     [HideInInspector] private ScriptableObject _worldGenertorSettingsConfig;
 
     [HideInInspector] private SPTC_WG sptc_wg;
-    [HideInInspector] private MiscTerrainData miscTerrainData;
+    [HideInInspector] public MiscTerrainData miscTerrainData;
 
     [HideInInspector] private GameObject creatureContainer;
+    [HideInInspector] private GameObject targetContainer;
 
     void Awake()
     {
@@ -78,21 +79,20 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
         miscTerrainData = TerrainObject.GetComponent<MiscTerrainData>();
 
         creatureContainer = new GameObject("Creature Container");
+        targetContainer = new GameObject("Target Container");
 
         // Choose Random Spawn Points
         amountCreatures = Math.Min(amountCreatures, miscTerrainData.SpawnPoints.Count - 1);
-        List<System.Tuple<Vector3Int, int>> chosenSpawnPoints = miscTerrainData.SpawnPoints.OrderBy(x => UnityEngine.Random.value).Take(amountCreatures + 1).ToList();
-        AddTarget(chosenSpawnPoints.First().Item1);
-        chosenSpawnPoints.RemoveAt(0);
+        List<System.Tuple<Vector3Int, int>> chosenSpawnPoints = miscTerrainData.SpawnPoints.OrderBy(x => UnityEngine.Random.value).Take(2 * amountCreatures).ToList();
 
-        foreach (System.Tuple<Vector3Int, int> spawnPoint in chosenSpawnPoints)
+        for(int i = 0; i < chosenSpawnPoints.Count; i = i+2)
         {
-            GenerateCreature(spawnPoint.Item1);
+            GenerateCreature(chosenSpawnPoints[i].Item1, AddTarget(chosenSpawnPoints[i+1].Item1));
         }
     }
 
 
-    private void GenerateCreature(Vector3Int spawnPosition)
+    private void GenerateCreature(Vector3Int spawnPosition, Transform target)
     {
         var creatureConfig = FindObjectOfType<CreatureConfig>();
         GameObject newCreature;
@@ -139,19 +139,25 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
         newCreature.name = "Creature";
         newCreature.transform.localPosition = spawnPosition;
 
+        GenericAgent agentScript = (GenericAgent) newCreature.AddComponent(Type.GetType(AgentScriptName));
 
-        if (newCreature.AddComponent(Type.GetType(AgentScriptName)) == null)
+        if (agentScript == null)
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
         if (newCreature.GetComponent<ModelOverrider>() == null) newCreature.AddComponent<ModelOverrider>();
         if (Application.isEditor && newCreature.GetComponent<DebugScript>() == null) newCreature.AddComponent<DebugScript>();
+
+        agentScript.SetTarget(target);
     }
 
-    private void AddTarget(Vector3Int spawnPosition)
+    private Transform AddTarget(Vector3Int spawnPosition)
     {
         var target = Instantiate(TargetCubePrefab, spawnPosition, Quaternion.identity);
+        target.transform.parent = targetContainer.transform;
         target.name = "Creature Target";
         target.AddComponent<WalkTargetScript>();
         target.AddComponent<NavMeshAgent>();
+
+        return target.transform;
     }
 
 }

@@ -158,16 +158,11 @@ public abstract class GenericAgent : Agent
 
     void Start()
     {
-        CalculateInitialValues();
-    }
-
-    private void CalculateInitialValues()
-    {
         _initialCenterOfMass = CalculateCenterOfMass(_topTransform, out var _);
-        
-        Rigidbody minx, maxx, miny, maxy, minz, maxz; 
+
+        Rigidbody minx, maxx, miny, maxy, minz, maxz;
         minx = maxx = miny = maxy = minz = maxz = _topTransform.GetComponentInChildren<Rigidbody>();
-        
+
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
             if (rb.transform.position.x <= minx.position.x)
@@ -178,7 +173,7 @@ public abstract class GenericAgent : Agent
             {
                 maxx = rb;
             }
-            
+
             if (rb.transform.position.y <= miny.position.y)
             {
                 miny = rb;
@@ -187,7 +182,7 @@ public abstract class GenericAgent : Agent
             {
                 maxy = rb;
             }
-            
+
             if (rb.transform.position.z <= minz.position.z)
             {
                 minz = rb;
@@ -200,7 +195,7 @@ public abstract class GenericAgent : Agent
 
         // Will only work for the biped
         _creatureHeight = maxy.transform.GetComponent<Collider>().bounds.max.y -
-                     miny.transform.GetComponent<Collider>().bounds.min.y;
+                          miny.transform.GetComponent<Collider>().bounds.min.y;
     }
 
     protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)

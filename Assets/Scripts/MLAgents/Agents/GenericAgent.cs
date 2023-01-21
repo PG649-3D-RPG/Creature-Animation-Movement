@@ -309,8 +309,8 @@ public abstract class GenericAgent : Agent
 
             Debug.LogError("Could not find close NavMesh edge.");
         }
-
-        return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
+        var pointToGo = _path.corners.Length == 1 ? _path.corners[0] : _path.corners[1];
+        return pointToGo + new Vector3(0, 2 * _topStartingPosition.y, 0); 
     }
 
     protected virtual int DetermineModel()

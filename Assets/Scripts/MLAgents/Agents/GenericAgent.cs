@@ -16,6 +16,9 @@ public abstract class GenericAgent : Agent
 {
     private const string BehaviorName = "Walker";
 
+    //Properties
+    public Transform _target { get; set; }
+
     // Internal values
     protected float _otherBodyPartHeight = 1f;
     protected Vector3 _topStartingPosition;
@@ -31,7 +34,6 @@ public abstract class GenericAgent : Agent
     // Scripts
     protected GenericEnvironmentGenerator _deg;
     protected WalkTargetScript _walkTargetScript;
-    public Transform _target;
     protected OrientationCubeController _orientationCube;
     protected JointDriveController _jdController;
     protected DecisionRequester _decisionRequester;
@@ -92,10 +94,6 @@ public abstract class GenericAgent : Agent
         SetWalkerOnGround();
     }
 
-    public void SetTarget(Transform target)
-    {
-        _target = target;
-    }
 
     /// <summary>
     /// Set the walker on the terrain.

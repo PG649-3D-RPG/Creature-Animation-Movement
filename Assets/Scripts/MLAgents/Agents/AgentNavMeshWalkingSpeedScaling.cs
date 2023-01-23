@@ -8,7 +8,7 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshWalking : GenericAgent
+public class AgentNavMeshWalkingSpeedScaling : GenericAgent
 {
     
     /// <summary>
@@ -108,7 +108,7 @@ public class AgentNavMeshWalking : GenericAgent
         // a. Match target speed
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
         var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
-        var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        var matchSpeedReward = 1 - velDeltaMagnitude / MTargetWalkingSpeed;
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.38073987, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -349,7 +349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NnModels: []
   TerrainObject: {fileID: 0}
-  AgentScriptName: AgentNavMeshWalking
+  AgentScriptName: AgentNavMeshWalkingSpeedScaling
   CreaturePrefab: {fileID: 2503996874053077374, guid: 50be17ba8d5c0d543aadaed37f0afd82, type: 3}
   amountCreatures: 16
   TargetSpeed: 1
@@ -392,7 +392,7 @@ MonoBehaviour:
   ContinuousActionSpace: 293
   DiscreteBranches: 0
   MaxStep: 0
-  ObservationSpace: 280
+  ObservationSpace: 263
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5
   JointDampen: 5000

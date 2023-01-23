@@ -80,7 +80,10 @@ public abstract class GenericAgent : Agent
         InitializeBehaviorParameters();
     }
 
-    protected abstract int CalculateNumberContinuousActions();
+    protected virtual int CalculateNumberContinuousActions()
+    {
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
+    }
 
     public override void Initialize()
     {
@@ -91,6 +94,9 @@ public abstract class GenericAgent : Agent
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
+        _path = new NavMeshPath();
+        _nextPathPoint = _topTransform.position;
+
         SetWalkerOnGround();
     }
 
@@ -273,6 +279,26 @@ public abstract class GenericAgent : Agent
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 
+    protected Vector3 GetNextPathPoint()
+    {
+        if (_path.corners.Length == 0 || !NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path))
+        {
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
+            {
+                return hitIndicator.position;
+            }
+
+            Debug.LogError("Could not find close NavMesh edge.");
+        }
+        
+        return _path.corners[_path.corners.Length == 1 ? 0 : 1] + new Vector3(0, 2 * _topStartingPosition.y, 0); 
+    }
+
+    protected virtual int DetermineModel()
+    {
+        return 0;
+    }
+    
     protected void SwitchModel(Func<int> f)
     {
         var newNetworkIndex = f();
@@ -286,28 +312,5 @@ public abstract class GenericAgent : Agent
                 _bpScript.Model = newNetwork;
             }
         }
-
-    }
-
-    protected Vector3 GetNextPathPoint()
-    {
-        var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
-
-        if (_path.corners.Length == 0 || !pathValid)
-        {
-            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
-            {
-                return hitIndicator.position;
-            }
-
-            Debug.LogError("Could not find close NavMesh edge.");
-        }
-        var pointToGo = _path.corners.Length == 1 ? _path.corners[0] : _path.corners[1];
-        return pointToGo + new Vector3(0, 2 * _topStartingPosition.y, 0); 
-    }
-
-    protected virtual int DetermineModel()
-    {
-        return 0;
     }
 }

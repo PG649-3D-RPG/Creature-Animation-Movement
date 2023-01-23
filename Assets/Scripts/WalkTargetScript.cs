@@ -10,6 +10,7 @@ using Random = System.Random;
 public class WalkTargetScript : MonoBehaviour
 {
     private GameObject ArenaTerrain { get; set; }
+    private AdvancedEnvironmentGenerator terrainGenerator;
 
     private Random Rng { get; set; }
 
@@ -36,7 +37,7 @@ public class WalkTargetScript : MonoBehaviour
         
         Rng = new Random();
         var parent = transform.parent;
-        var terrainGenerator = GameObject.Find("Generator")?.GetComponent<AdvancedEnvironmentGenerator>();
+        terrainGenerator = GameObject.Find("Generator")?.GetComponent<AdvancedEnvironmentGenerator>();
         ThisRigidbody = transform.GetComponentInChildren<Rigidbody>();
 
         if(terrainGenerator != null)
@@ -109,10 +110,8 @@ public class WalkTargetScript : MonoBehaviour
     /// </summary>
     /// <returns></returns>
     public void PlaceTargetCubeRandomly(){
-        var x = UnityEngine.Random.Range(4 , DynamicEnvironmentGenerator.TerrainSize - 4);
-        var z = UnityEngine.Random.Range(4, DynamicEnvironmentGenerator.TerrainSize  - 4);
-        //var y = TerrainGenerator.GetTerrainHeight(new Vector3(x, 0, z)) + + transform.localScale.y/2;
-        transform.localPosition = new Vector3(x, 0, z);
+        var newPos = terrainGenerator.miscTerrainData.SpawnPoints[UnityEngine.Random.Range(0, terrainGenerator.miscTerrainData.SpawnPoints.Count)].Item1;
+        transform.localPosition = newPos;
     }
     
     /// <summary> 

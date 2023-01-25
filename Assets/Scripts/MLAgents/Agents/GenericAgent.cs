@@ -281,7 +281,9 @@ public abstract class GenericAgent : Agent
 
     protected Vector3 GetNextPathPoint()
     {
-        if (_path.corners.Length == 0 || !NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path))
+        var isPathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
+
+        if (_path.corners.Length == 0 || !isPathValid)
         {
             if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
             {

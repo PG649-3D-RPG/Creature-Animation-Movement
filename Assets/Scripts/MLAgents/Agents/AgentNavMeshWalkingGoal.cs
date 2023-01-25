@@ -8,8 +8,10 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshWalking : GenericAgent
+public class AgentNavMeshWalkingGoal : GenericAgent
 {
+    private int _goalsReached = 0;
+    private int _maxGoalsReached = 1;
     
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -84,8 +86,22 @@ public class AgentNavMeshWalking : GenericAgent
         }
     }
 
+    public override void OnEpisodeBegin()
+    {
+        base.OnEpisodeBegin();
+        _goalsReached = 0;
+    }
+
     public void FixedUpdate()
     {
+        var TOLERANCE = 1;
+        if (Math.Abs(transform.position.x - _nextPathPoint.x) < TOLERANCE &&
+            Math.Abs(transform.position.z - _nextPathPoint.z) < TOLERANCE)
+        {
+            _goalsReached++;
+            if (_goalsReached > _maxGoalsReached) _maxGoalsReached = _goalsReached + 1;
+        }
+
         _nextPathPoint = GetNextPathPoint();
 
         if (Application.isEditor)

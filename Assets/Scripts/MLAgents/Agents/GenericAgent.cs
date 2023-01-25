@@ -16,6 +16,9 @@ public abstract class GenericAgent : Agent
 {
     private const string BehaviorName = "Walker";
 
+    //Properties
+    public Transform _target { get; set; }
+
     // Internal values
     protected float _otherBodyPartHeight = 1f;
     protected Vector3 _topStartingPosition;
@@ -31,7 +34,6 @@ public abstract class GenericAgent : Agent
     // Scripts
     protected GenericEnvironmentGenerator _deg;
     protected WalkTargetScript _walkTargetScript;
-    public Transform _target;
     protected OrientationCubeController _orientationCube;
     protected JointDriveController _jdController;
     protected DecisionRequester _decisionRequester;
@@ -78,7 +80,10 @@ public abstract class GenericAgent : Agent
         InitializeBehaviorParameters();
     }
 
-    protected abstract int CalculateNumberContinuousActions();
+    protected virtual int CalculateNumberContinuousActions()
+    {
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
+    }
 
     public override void Initialize()
     {
@@ -89,13 +94,12 @@ public abstract class GenericAgent : Agent
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
+        _path = new NavMeshPath();
+        _nextPathPoint = _topTransform.position;
+
         SetWalkerOnGround();
     }
 
-    public void SetTarget(Transform target)
-    {
-        _target = target;
-    }
 
     /// <summary>
     /// Set the walker on the terrain.
@@ -158,16 +162,11 @@ public abstract class GenericAgent : Agent
 
     void Start()
     {
-        CalculateInitialValues();
-    }
-
-    private void CalculateInitialValues()
-    {
         _initialCenterOfMass = CalculateCenterOfMass(_topTransform, out var _);
-        
-        Rigidbody minx, maxx, miny, maxy, minz, maxz; 
+
+        Rigidbody minx, maxx, miny, maxy, minz, maxz;
         minx = maxx = miny = maxy = minz = maxz = _topTransform.GetComponentInChildren<Rigidbody>();
-        
+
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
             if (rb.transform.position.x <= minx.position.x)
@@ -178,7 +177,7 @@ public abstract class GenericAgent : Agent
             {
                 maxx = rb;
             }
-            
+
             if (rb.transform.position.y <= miny.position.y)
             {
                 miny = rb;
@@ -187,7 +186,7 @@ public abstract class GenericAgent : Agent
             {
                 maxy = rb;
             }
-            
+
             if (rb.transform.position.z <= minz.position.z)
             {
                 minz = rb;
@@ -200,7 +199,7 @@ public abstract class GenericAgent : Agent
 
         // Will only work for the biped
         _creatureHeight = maxy.transform.GetComponent<Collider>().bounds.max.y -
-                     miny.transform.GetComponent<Collider>().bounds.min.y;
+                          miny.transform.GetComponent<Collider>().bounds.min.y;
     }
 
     protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)
@@ -280,6 +279,26 @@ public abstract class GenericAgent : Agent
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 
+    protected Vector3 GetNextPathPoint()
+    {
+        if (_path.corners.Length == 0 || !NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path))
+        {
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
+            {
+                return hitIndicator.position;
+            }
+
+            Debug.LogError("Could not find close NavMesh edge.");
+        }
+        
+        return _path.corners[_path.corners.Length == 1 ? 0 : 1] + new Vector3(0, 2 * _topStartingPosition.y, 0); 
+    }
+
+    protected virtual int DetermineModel()
+    {
+        return 0;
+    }
+    
     protected void SwitchModel(Func<int> f)
     {
         var newNetworkIndex = f();
@@ -293,28 +312,5 @@ public abstract class GenericAgent : Agent
                 _bpScript.Model = newNetwork;
             }
         }
-
-    }
-
-    protected Vector3 GetNextPathPoint()
-    {
-        var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
-
-        if (_path.corners.Length == 0 || !pathValid)
-        {
-            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
-            {
-                return hitIndicator.position;
-            }
-
-            Debug.LogError("Could not find close NavMesh edge.");
-        }
-
-        return _path.corners[1] + new Vector3(0, 2 * _topStartingPosition.y, 0);
-    }
-
-    protected virtual int DetermineModel()
-    {
-        return 0;
     }
 }

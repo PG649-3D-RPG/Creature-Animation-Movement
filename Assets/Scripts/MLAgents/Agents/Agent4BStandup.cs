@@ -12,8 +12,6 @@ public class Agent4BStandup : GenericAgent
 {
 
     private float _timeElapsed;
-    private Vector3 _nextPathPoint;
-
     /// Attributes for reward function based on head and top transform
     private GameObject head;
     private float standingHeadHeight;
@@ -27,11 +25,6 @@ public class Agent4BStandup : GenericAgent
     protected override int CalculateNumberContinuousActions()
     {
         return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
-    }
-
-    protected override int CalculateNumberDiscreteBranches()
-    {
-        return 0;
     }
 
     public override void Initialize()
@@ -189,11 +182,6 @@ public class Agent4BStandup : GenericAgent
         }
 
         SwitchModel(DetermineModel);
-    }
-
-    private int DetermineModel()
-    {
-        return 0;
     }
 
 }

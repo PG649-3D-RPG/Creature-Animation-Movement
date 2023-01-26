@@ -12,7 +12,7 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
 {
     public string AgentScriptName = "AgentNavMesh";
 
-    [SerializeField] private GameObject CreaturePrefab;
+    [SerializeField] public GameObject CreaturePrefab;
 
     [SerializeField] public int amountCreatures = 1;
 

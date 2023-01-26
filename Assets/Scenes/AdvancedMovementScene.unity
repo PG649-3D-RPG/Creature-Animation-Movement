@@ -347,8 +347,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca2d9b44d4011ff4cb0029985c64b988, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NnModels:
-  - {fileID: 5022602860645237092, guid: dcb2c4e2a6fa95fe4ae9f6b7391eb9c7, type: 3}
+  NnModels: []
   TerrainObject: {fileID: 0}
   AgentScriptName: AgentNavMeshWalking
   CreaturePrefab: {fileID: 0}
@@ -370,9 +369,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  creatureType: 1
+  creatureType: 0
   ContactPenalty: 0
-  ResetOnGroundContactParts: 
+  ResetOnGroundContactParts: 06000000030000000700000005000000090000000a0000000b000000
 --- !u!114 &1841552183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,7 +390,7 @@ MonoBehaviour:
   CalculateActionSpace: 1
   ContinuousActionSpace: 293
   DiscreteBranches: 0
-  MaxStep: 1000
+  MaxStep: 0
   ObservationSpace: 263
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5

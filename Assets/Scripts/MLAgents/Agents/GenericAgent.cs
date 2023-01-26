@@ -79,7 +79,6 @@ public abstract class GenericAgent : Agent
     {
         var parent = transform.parent;
         _walkTargetScript = FindObjectOfType<WalkTargetScript>();
-        Debug.Log($"Walk Target script: {_walkTargetScript}");
         _agent = gameObject.GetComponent<Agent>();
         _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;

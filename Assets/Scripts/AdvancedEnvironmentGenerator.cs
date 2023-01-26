@@ -144,7 +144,6 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
             throw new ArgumentException("Agent class name is wrong or does not exits in this context.");
         if (newCreature.GetComponent<ModelOverrider>() == null) newCreature.AddComponent<ModelOverrider>();
         if (Application.isEditor && newCreature.GetComponent<DebugScript>() == null) newCreature.AddComponent<DebugScript>();
-        //newCreature.AddComponent<CreaturePusher>();
     }
 
     private void AddTarget(Vector3Int spawnPosition)

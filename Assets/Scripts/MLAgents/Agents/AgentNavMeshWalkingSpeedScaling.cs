@@ -1,35 +1,16 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using Config;
-using JetBrains.Annotations;
 using UnityEngine;
-using Unity.MLAgents;
+using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
-using Unity.MLAgents.Policies;
-using Unity.MLAgentsExamples;
 using Unity.MLAgents.Sensors;
-using Unity.VisualScripting;
+using UnityEngine.Experimental.Rendering;
+using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
-using Random = UnityEngine.Random;
 
-public class AgentNew : GenericAgent
+public class AgentNavMeshWalkingSpeedScaling : GenericAgent
 {
-    protected override int CalculateNumberContinuousActions()
-    {
-        var numberActions = 0;
-        foreach(BodyPart bodyPart in _jdController.bodyPartsList)
-        {
-            numberActions += 1 + bodyPart.GetNumberUnlockedAngularMotions();
-        }
-        return numberActions;
-    }
-
-    protected override int CalculateNumberDiscreteBranches()
-    {
-        return 0;
-    }
+    
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -76,7 +57,7 @@ public class AgentNew : GenericAgent
         sensor.AddObservation(Quaternion.FromToRotation(_topTransform.forward, cubeForward));
 
         //Position of target position relative to cube
-        sensor.AddObservation(_orientationCube.transform.InverseTransformPoint(_target.transform.position));
+        sensor.AddObservation(_orientationCube.transform.InverseTransformPoint(_nextPathPoint));
 
         foreach (var bodyPart in _jdController.bodyPartsList)
         {
@@ -90,7 +71,7 @@ public class AgentNew : GenericAgent
     {
         var bpList = _jdController.bodyPartsList;
         var i = -1;
-        var numActions = 0;
+
         var continuousActions = actionBuffers.ContinuousActions;
         // TODO Needs to be reworked for generalization
         foreach (var parts in bpList)
@@ -100,40 +81,51 @@ public class AgentNew : GenericAgent
             var zTarget = parts.joint.angularZMotion == ConfigurableJointMotion.Locked ? 0 : continuousActions[++i];
             parts.SetJointTargetRotation(xTarget, yTarget, zTarget);
             parts.SetJointStrength(continuousActions[++i]);
-            numActions++;
         }
-        Debug.Log($"number of actions = {numActions}");
     }
 
     public void FixedUpdate()
     {
+        _nextPathPoint = GetNextPathPoint();
+
+        if (Application.isEditor)
+        {
+            var lv = GameObject.FindObjectOfType<PathVisualizer>();
+            if (_path != null)
+            {
+                lv.DrawPath(_path);
+                lv.DrawPoint(_nextPathPoint);
+            }
+        }
+
         //Update OrientationCube and DirectionIndicator
-        var _dirToWalk = _target.position - _topTransform.position;
-        _orientationCube.UpdateOrientation(_topTransform, _target);
-
-        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
-
+        var position = _topTransform.position;
+        _orientationCube.UpdateOrientation(position, _nextPathPoint);
         var cubeForward = _orientationCube.transform.forward;
+        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
 
         // Set reward for this step according to mixture of the following elements.
         // a. Match target speed
         //This reward will approach 1 if it matches perfectly and approach zero as it deviates
         var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
-        var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        var matchSpeedReward = 1 - velDeltaMagnitude / MTargetWalkingSpeed;
 
         // b. Rotation alignment with target direction.
         //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
         var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
 
         if (float.IsNaN(lookAtTargetReward) ||
-            float.IsNaN(matchSpeedReward))  //throw new ArgumentException($"A reward is NaN. float.");
+            float.IsNaN(matchSpeedReward)) 
         {
-            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
+            Debug.LogError($"Reward contain NaN: lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
         else
         {
-            AddReward(Math.Max(matchSpeedReward, 0.1f) * Math.Max(lookAtTargetReward, 0.1f));
+            var reward = matchSpeedReward * lookAtTargetReward;
+            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            AddReward(reward);
         }
+
+        SwitchModel(DetermineModel);
     }
-    
 }

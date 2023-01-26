@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311926, g: 0.38073996, b: 0.35872683, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311918, g: 0.38073987, b: 0.35872698, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -352,10 +352,11 @@ MonoBehaviour:
   AgentScriptName: AgentNavMeshWalking
   CreaturePrefab: {fileID: 0}
   amountCreatures: 1
-  TargetSpeed: 15
+  TargetSpeed: 1
   TargetWanderTimer: 30
   TargetWanderRadius: 1500
   TargetCubePrefab: {fileID: 0}
+  miscTerrainData: {fileID: 0}
 --- !u!114 &1841552181
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +385,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3324768aa3a347daba1c965af3dbc12f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RandomizeWalkSpeedEachEpisode: 0
+  RandomizeWalkSpeedEachEpisode: 1
   MaxWalkingSpeed: 10
   TargetWalkingSpeed: 8
   CalculateActionSpace: 1

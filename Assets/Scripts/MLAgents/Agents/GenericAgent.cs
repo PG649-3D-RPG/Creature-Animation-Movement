@@ -9,11 +9,15 @@ using Unity.MLAgents.Policies;
 using Unity.MLAgentsExamples;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public abstract class GenericAgent : Agent
 {
     private const string BehaviorName = "Walker";
+
+    //Properties
+    public Transform _target { get; set; }
 
     // Internal values
     protected float _otherBodyPartHeight = 1f;
@@ -23,11 +27,13 @@ public abstract class GenericAgent : Agent
     protected Rigidbody _topTransformRb;
     protected Vector3 _initialCenterOfMass;
     protected float _creatureHeight;
+    protected NavMeshPath _path;
+    protected Vector3 _nextPathPoint;
+
 
     // Scripts
     protected GenericEnvironmentGenerator _deg;
     protected WalkTargetScript _walkTargetScript;
-    protected Transform _target;
     protected OrientationCubeController _orientationCube;
     protected JointDriveController _jdController;
     protected DecisionRequester _decisionRequester;
@@ -35,7 +41,8 @@ public abstract class GenericAgent : Agent
     protected MlAgentConfig _mlAgentsConfig;
     protected ArenaConfig _arenaSettings;
     protected CreatureConfig _creatureConfig;
-    protected BehaviorParameters bpScript;
+    protected BehaviorParameters _bpScript;
+    protected MiscTerrainData _miscTerrainData;
 
     public float MTargetWalkingSpeed;
     public const float YHeightOffset = 0.1f;
@@ -51,7 +58,8 @@ public abstract class GenericAgent : Agent
         _mlAgentsConfig = FindObjectOfType<MlAgentConfig>();
         _arenaSettings = FindObjectOfType<ArenaConfig>();
         _creatureConfig = FindObjectOfType<CreatureConfig>();
-        bpScript = GetComponent<BehaviorParameters>();
+        _bpScript = GetComponent<BehaviorParameters>();
+        _miscTerrainData = FindObjectOfType<MiscTerrainData>();
 
 
         // Config decision requester
@@ -72,37 +80,35 @@ public abstract class GenericAgent : Agent
         InitializeBehaviorParameters();
     }
 
-    protected abstract int CalculateNumberContinuousActions();
-    protected abstract int CalculateNumberDiscreteBranches();
+    protected virtual int CalculateNumberContinuousActions()
+    {
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
+    }
 
     public override void Initialize()
     {
-        var parent = transform.parent;
-        _walkTargetScript = FindObjectOfType<WalkTargetScript>();
+        _walkTargetScript = FindObjectOfType<WalkTargetScript>(); 
         _agent = gameObject.GetComponent<Agent>();
-        _target = GameObject.Find("Creature Target").transform;
         MTargetWalkingSpeed = _mlAgentsConfig.TargetWalkingSpeed;
         var oCube = transform.Find("Orientation Cube");
         _orientationCube = oCube.GetComponent<OrientationCubeController>();
         if(_orientationCube == null) _orientationCube = oCube.AddComponent<OrientationCubeController>();
         
-        SetWalkerOnGround();
+        _path = new NavMeshPath();
+        _nextPathPoint = _topTransform.position;
 
+        SetWalkerOnGround();
     }
+
 
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
     protected virtual void SetWalkerOnGround()
     {
-        var position = _topTransform.position;
-        var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(position);
-
-        position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z);
-        _topTransform.position = position;
+        var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(_topTransform.position);
+        _topTransform.position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z); ;
         _topTransform.localRotation = _topStartingRotation;
-
-
         _topTransformRb.velocity = Vector3.zero;
         _topTransformRb.angularVelocity = Vector3.zero;
 
@@ -112,15 +118,17 @@ public abstract class GenericAgent : Agent
             bodyPart.Reset(bodyPart, terrainHeight, YHeightOffset);
         }
 
-        var rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
-            _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
-        while (rotation == Vector3.zero)
+        Vector3 rotation;
+        while ((rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
+                   _topStartingRotation.eulerAngles.z + Random.Range(-5, 5))) == Vector3.zero)
         {
-            rotation = new Vector3(_topStartingRotation.eulerAngles.x, Random.Range(0.0f, 360.0f),
-                _topStartingRotation.eulerAngles.z + Random.Range(-5, 5));
             Debug.LogError("Fixing zero vector rotation!");
         }
+
+        // Generate a random new spawn position
+        var first = _miscTerrainData.SpawnPoints.OrderBy(x => UnityEngine.Random.value).First().Item1;
         _topTransform.localRotation = Quaternion.Euler(rotation);
+        _topTransform.position = new Vector3(first.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, first.z); ;
     }
 
     /// <summary>
@@ -154,17 +162,11 @@ public abstract class GenericAgent : Agent
 
     void Start()
     {
-        _ = StartCoroutine(nameof(CheckWalkerOutOfArea));
-        CalculateInitialValues();
-    }
-
-    private void CalculateInitialValues()
-    {
         _initialCenterOfMass = CalculateCenterOfMass(_topTransform, out var _);
-        
-        Rigidbody minx, maxx, miny, maxy, minz, maxz; 
+
+        Rigidbody minx, maxx, miny, maxy, minz, maxz;
         minx = maxx = miny = maxy = minz = maxz = _topTransform.GetComponentInChildren<Rigidbody>();
-        
+
         foreach (var rb in _topTransform.GetComponentsInChildren<Rigidbody>())
         {
             if (rb.transform.position.x <= minx.position.x)
@@ -175,7 +177,7 @@ public abstract class GenericAgent : Agent
             {
                 maxx = rb;
             }
-            
+
             if (rb.transform.position.y <= miny.position.y)
             {
                 miny = rb;
@@ -184,7 +186,7 @@ public abstract class GenericAgent : Agent
             {
                 maxy = rb;
             }
-            
+
             if (rb.transform.position.z <= minz.position.z)
             {
                 minz = rb;
@@ -195,13 +197,9 @@ public abstract class GenericAgent : Agent
             }
         }
 
-        // This seems to only work for the height. 
-        //var width = maxx.transform.GetComponent<Collider>().bounds.max.x -
-        //            minx.transform.GetComponent<Collider>().bounds.min.x;
+        // Will only work for the biped
         _creatureHeight = maxy.transform.GetComponent<Collider>().bounds.max.y -
-                     miny.transform.GetComponent<Collider>().bounds.min.y;
-        //var depth = maxz.transform.GetComponent<Collider>().bounds.max.z -
-        //            minz.transform.GetComponent<Collider>().bounds.min.z;
+                          miny.transform.GetComponent<Collider>().bounds.min.y;
     }
 
     protected Vector3 CalculateCenterOfMass(Transform topTransform, out Vector3 abs)
@@ -227,38 +225,26 @@ public abstract class GenericAgent : Agent
 
         return relativeCoM;
     }
-    
-    
-    private IEnumerator CheckWalkerOutOfArea()
-    {
-        while (true)
-        {
-            if (_topTransform.position.y is < -10 or > 40)
-            {
-                _agent.EndEpisode();
-            }
-            yield return new WaitForFixedUpdate();
-        }
-    }
 
     private void InitializeBehaviorParameters()
     {
         // Set behavior parameters
-        bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
-        bpScript.BehaviorName = BehaviorName;
+        _bpScript.BrainParameters.VectorObservationSize = _mlAgentsConfig.ObservationSpace;
+        _bpScript.BehaviorName = BehaviorName;
 
         if(_deg.NnModels.Count > 0)
         {
-            bpScript.Model = _deg.NnModels[0];
+            _bpScript.Model = _deg.NnModels[0];
         }
 
         if(_mlAgentsConfig.CalculateActionSpace)
         {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), new int[CalculateNumberDiscreteBranches()]);
+            // Will assume no discrete branches
+            _bpScript.BrainParameters.ActionSpec = new ActionSpec(CalculateNumberContinuousActions(), Array.Empty<int>());
         }
         else
         {
-            bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
+            _bpScript.BrainParameters.ActionSpec = new ActionSpec(_mlAgentsConfig.ContinuousActionSpace, new int[_mlAgentsConfig.DiscreteBranches]);
         }
     }
 
@@ -293,20 +279,40 @@ public abstract class GenericAgent : Agent
         _otherBodyPartHeight = _topTransform.position.y - minYBodyPartCoordinate;
     }
 
-    protected void SwitchModel(Func<int> f)
+    protected Vector3 GetNextPathPoint()
     {
-        int new_network_index = f();
+        var isPathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
 
-        if(new_network_index < _deg.NnModels.Count)
+        if (_path.corners.Length == 0 || !isPathValid)
         {
-            var new_network = _deg.NnModels[new_network_index];
-
-            if (bpScript.Model != new_network)
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
             {
-                bpScript.Model = new_network;
+                return hitIndicator.position;
             }
-        }
 
+            Debug.LogError("Could not find close NavMesh edge.");
+        }
+        
+        return _path.corners[_path.corners.Length == 1 ? 0 : 1] + new Vector3(0, 2 * _topStartingPosition.y, 0); 
     }
 
+    protected virtual int DetermineModel()
+    {
+        return 0;
+    }
+    
+    protected void SwitchModel(Func<int> f)
+    {
+        var newNetworkIndex = f();
+
+        if(newNetworkIndex < _deg.NnModels.Count)
+        {
+            var newNetwork = _deg.NnModels[newNetworkIndex];
+
+            if (_bpScript.Model != newNetwork)
+            {
+                _bpScript.Model = newNetwork;
+            }
+        }
+    }
 }

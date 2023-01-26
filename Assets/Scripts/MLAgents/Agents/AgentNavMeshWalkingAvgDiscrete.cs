@@ -8,9 +8,24 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshWalking : GenericAgent
+public class AgentNavMeshWalkingAvgDiscrete : GenericAgent
 {
-    
+
+    //private GameObject targetBall;
+    private float[] _speed;
+
+    protected override int CalculateNumberContinuousActions()
+    {
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _path = new NavMeshPath();
+        _nextPathPoint = _topTransform.position;
+        _speed = new float[7200];
+    }
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -84,6 +99,13 @@ public class AgentNavMeshWalking : GenericAgent
         }
     }
 
+
+    public override void OnEpisodeBegin()
+    {
+        base.OnEpisodeBegin();
+        _speed = new float[7200];
+    }
+
     public void FixedUpdate()
     {
         _nextPathPoint = GetNextPathPoint();
@@ -121,7 +143,9 @@ public class AgentNavMeshWalking : GenericAgent
         }
         else
         {
-            var reward = matchSpeedReward * lookAtTargetReward;
+            _speed[_agent.StepCount / 7200] = matchSpeedReward;
+            var avgSpeedReward = _speed.Where(x => x != 0).Average();
+            var reward = avgSpeedReward * lookAtTargetReward;
             if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
             AddReward(reward);
         }

@@ -8,9 +8,23 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshWalking : GenericAgent
+public class AgentNavMeshWalkingSurvive : GenericAgent
 {
-    
+
+    //private GameObject targetBall;
+    private int maxSteps = 1;
+
+    protected override int CalculateNumberContinuousActions()
+    {
+        return _jdController.bodyPartsList.Sum(bodyPart => 1 + bodyPart.GetNumberUnlockedAngularMotions());
+    }
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _path = new NavMeshPath();
+        _nextPathPoint = _topTransform.position;
+    }
     /// <summary>
     /// Add relevant information on each body part to observations.
     /// </summary>
@@ -26,6 +40,9 @@ public class AgentNavMeshWalking : GenericAgent
 
         //Get position relative to hips in the context of our orientation cube's space
         sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.position - _topTransform.position));
+
+        sensor.AddObservation(_agent.StepCount);
+
 
         if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
         {
@@ -84,6 +101,9 @@ public class AgentNavMeshWalking : GenericAgent
         }
     }
 
+
+
+
     public void FixedUpdate()
     {
         _nextPathPoint = GetNextPathPoint();
@@ -121,8 +141,10 @@ public class AgentNavMeshWalking : GenericAgent
         }
         else
         {
-            var reward = matchSpeedReward * lookAtTargetReward;
-            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
+            maxSteps = maxSteps < _agent.StepCount ? _agent.StepCount : maxSteps;
+            var survivalReward = (_agent.StepCount) /(float) maxSteps;
+            var reward = survivalReward *  matchSpeedReward * lookAtTargetReward;
+            if (Application.isEditor) Debug.Log($"Current reward in episode {_agent.StepCount}: {reward} survivalReward {survivalReward} matchSpeedReward {matchSpeedReward} und lookAtTargetReward {lookAtTargetReward}");
             AddReward(reward);
         }
 

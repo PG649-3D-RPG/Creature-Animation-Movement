@@ -15,10 +15,6 @@ public class AgentNavMeshWalking : GenericAgent
     private int _pathCornerIndex;
     private float _timeElapsed;
     private Vector3 _nextPathPoint;
-    private GameObject head;
-    private float standingHeadHeight;
-    private float initialHeadHeight;
-    private float episodeMaxHeadHeight;
 
     //private GameObject targetBall;
 
@@ -34,12 +30,10 @@ public class AgentNavMeshWalking : GenericAgent
 
     public override void Initialize()
     {
-        head = this.gameObject.GetComponentsInChildren<Bone>().Where( it => it.category == BoneCategory.Head).First().gameObject;
-        standingHeadHeight = head.transform.position.y;
         base.Initialize();
         _path = new NavMeshPath();
         _timeElapsed = 1f;
-        _nextPathPoint = base._topTransform.position;
+        _nextPathPoint = _topTransform.position;
     }
     /// <summary>
     /// Add relevant information on each body part to observations.
@@ -55,7 +49,7 @@ public class AgentNavMeshWalking : GenericAgent
         sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.angularVelocity));
 
         //Get position relative to hips in the context of our orientation cube's space
-        sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.position - base._topTransform.position));
+        sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(bp.rb.position - _topTransform.position));
 
         if (bp.rb.transform.GetComponent<Bone>().category != BoneCategory.Hand)
         {
@@ -84,7 +78,7 @@ public class AgentNavMeshWalking : GenericAgent
         sensor.AddObservation(_orientationCube.transform.InverseTransformDirection(velGoal));
 
         //rotation deltas
-        sensor.AddObservation(Quaternion.FromToRotation(base._topTransform.forward, cubeForward));
+        sensor.AddObservation(Quaternion.FromToRotation(_topTransform.forward, cubeForward));
 
         //Position of target position relative to cube
         sensor.AddObservation(_orientationCube.transform.InverseTransformPoint(_nextPathPoint));
@@ -114,37 +108,9 @@ public class AgentNavMeshWalking : GenericAgent
         }
     }
 
-    public override void OnEpisodeBegin()
-    {
-        base.OnEpisodeBegin();
-        initialHeadHeight = this.head.transform.position.y;
-        episodeMaxHeadHeight = initialHeadHeight;
-        lastUpdateHeadHeight = initialHeadHeight;
-
-        float topHeightDiff = Mathf.Abs(_topStartingPosition.y - _topTransform.position.y);
-        Vector3 temp = (_topStartingRotation.eulerAngles - _topTransform.rotation.eulerAngles);
-        float topRotationDiff = (new Vector3(temp.x % 360, 0, temp.z % 360)).magnitude;
-
-        minTopHeightDiff = topHeightDiff;
-        minTopRotationDiff = topRotationDiff;
-    }
-
-    protected override void SetWalkerOnGround(){
-        base.SetWalkerOnGround();
-        PutCreatureOnSide();
-    }
-
-    public void PutCreatureOnSide(){
-        if(_topTransform == null) return;
-        _topTransform.position = new Vector3(_topTransform.position.x, 0.3f, _topTransform.position.z);
-        _topTransform.rotation = Quaternion.Euler(new Vector3(UnityEngine.Random.Range(-195, -165), UnityEngine.Random.Range(-180, 180), 90));
-    }
 
 
 
-    private float lastUpdateHeadHeight;
-    private float minTopRotationDiff;
-    private float minTopHeightDiff;
     public void FixedUpdate()
     {
         _timeElapsed += Time.deltaTime;
@@ -152,9 +118,7 @@ public class AgentNavMeshWalking : GenericAgent
 
         if (Application.isEditor)
         {
-            #if UNITY_EDITOR
-            //Debug.Log($"Episode Step {_agent.StepCount}");
-            #endif
+            Debug.Log($"Episode Step {_agent.StepCount}");
             var lv = GameObject.FindObjectOfType<PathVisualizer>();
             if (_path != null)
             {
@@ -164,75 +128,30 @@ public class AgentNavMeshWalking : GenericAgent
         }
 
         //Update OrientationCube and DirectionIndicator
-        var position = base._topTransform.position;
+        var position = _topTransform.position;
         _orientationCube.UpdateOrientation(position, _nextPathPoint);
         var cubeForward = _orientationCube.transform.forward;
-        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? base._topTransform.up : base._topTransform.forward;
+        var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? _topTransform.up : _topTransform.forward;
 
-        //// Rewards
+        // Set reward for this step according to mixture of the following elements.
+        // a. Match target speed
+        //This reward will approach 1 if it matches perfectly and approach zero as it deviates
+        var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
+        var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
 
-        /// Walking rewards
-        // // Set reward for this step according to mixture of the following elements.
-        // // a. Match target speed
-        // //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        // var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
-        // var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
+        // b. Rotation alignment with target direction.
+        //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
+        var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
 
-        // // b. Rotation alignment with target direction.
-        // //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        // var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
-
-        // if (float.IsNaN(lookAtTargetReward) ||
-        //     float.IsNaN(matchSpeedReward)) 
-        // {
-        //     Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
-        // }
-        // else
-        // {
-        //     AddReward(matchSpeedReward * lookAtTargetReward);
-        // }
-
-        /// Standup rewards
-        
-        //head position relative to creature height //TODO: Idee: kein konstanter Reward, sondern nur bei Verbesserung seit Episodenbeginn
-        float headHeight = head.transform.position.y;
-        float headDiff = Mathf.Pow(Mathf.Clamp(headHeight / standingHeadHeight, 0, 1), 2);
-
-        if(headHeight > episodeMaxHeadHeight || Mathf.Abs(standingHeadHeight - headHeight) < 0.25f){
-            AddReward(headDiff);
-            episodeMaxHeadHeight = headHeight;
-            //Debug.Log($"Head Height is {headHeight}, initial height was {initialHeadHeight}, standing head height ist {standingHeadHeight}, calculated reward is {headDiff}");
+        if (float.IsNaN(lookAtTargetReward) ||
+            float.IsNaN(matchSpeedReward)) 
+        {
+            Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
         }
-        else if(headHeight < lastUpdateHeadHeight && Mathf.Abs(standingHeadHeight - headHeight) > 0.25f){
-            AddReward(-0.1f); //penalty if creature lowers head again
+        else
+        {
+            AddReward(matchSpeedReward * lookAtTargetReward);
         }
-        lastUpdateHeadHeight = headHeight;
-
-        
-
-        //Idee: Stabilität messen -> wie stark verändert sich die Position der Creature noch? (wenig + gute Head Height = sehr gut (stabiles stehen)). Basierend auf Center of Mass? -> scheint keine sinnvollen Ergebnisse zu liefern
-        // float comDiff = (_initialCenterOfMass - CalculateCenterOfMass(_topTransform, out _)).sqrMagnitude;
-        // Debug.Log($"difference of com is {comDiff}");
-
-        //Idee: Ursprüngliche rigidbody positions und rotations messen und auf Basis der Differenz dazu einen Reward verteilen (Versucht den Ausgangszustand wiederherzustellen), Problem: Creature steht nicht perfekt auf dem Boden -> positions sind in y Richtung leicht falsch, mit etwas Glück ist das aber close enough und die Verbesserung des Rewards reicht trotzdem für einen sinnvollen Trainingsfortschritt
-
-        float topHeightDiff = Mathf.Abs(_topStartingPosition.y - _topTransform.position.y);
-        Vector3 temp = (_topStartingRotation.eulerAngles - _topTransform.rotation.eulerAngles);
-        float topRotationDiff = (new Vector3(temp.x % 360, 0, temp.z % 360)).magnitude;
-
-        if(topHeightDiff < minTopHeightDiff || topHeightDiff < 0.125f){
-            minTopHeightDiff = topHeightDiff;
-            float r = Mathf.Clamp( Mathf.Pow(0.2f, topHeightDiff), 0, 1 );
-            //Debug.Log($"Adding top height reward of {r}");
-            AddReward( r );
-        }
-        if(topRotationDiff < minTopRotationDiff || topRotationDiff < 0.4f){
-            minTopRotationDiff = topRotationDiff;
-            float r = Mathf.Clamp( Mathf.Pow(0.2f, topRotationDiff), 0, 1 );
-            //Debug.Log($"Adding top rotation reward of {r}");
-            AddReward( r );
-        }
-
 
         SwitchModel(DetermineModel);
     }
@@ -243,7 +162,7 @@ public class AgentNavMeshWalking : GenericAgent
         {   
             _timeElapsed = 0;
             var oldPath = _path;
-            var pathValid = NavMesh.CalculatePath(base._topTransform.position, _target.position, NavMesh.AllAreas, _path);
+            var pathValid = NavMesh.CalculatePath(_topTransform.position, _target.position, NavMesh.AllAreas, _path);
             if (!pathValid)
             {
                 _path = oldPath;
@@ -255,7 +174,7 @@ public class AgentNavMeshWalking : GenericAgent
                 _pathCornerIndex = 1;
             }
         }
-        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(base._topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
+        if(_pathCornerIndex < _path.corners.Length - 1 && Vector3.Distance(_topTransform.position, _path.corners[_pathCornerIndex]) < 4f)
         {
             //Debug.Log("Increased path corner index");
             _pathCornerIndex++;

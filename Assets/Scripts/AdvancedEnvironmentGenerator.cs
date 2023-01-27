@@ -146,7 +146,8 @@ public class AdvancedEnvironmentGenerator : GenericEnvironmentGenerator
         if (newCreature.GetComponent<ModelOverrider>() == null) newCreature.AddComponent<ModelOverrider>();
         if (Application.isEditor && newCreature.GetComponent<DebugScript>() == null) newCreature.AddComponent<DebugScript>();
 
-        agentScript.SetTarget(target);
+
+        agentScript._target = target;
     }
 
     private Transform AddTarget(Vector3Int spawnPosition)

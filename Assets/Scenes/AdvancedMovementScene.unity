@@ -350,9 +350,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   NnModels: []
   TerrainObject: {fileID: 0}
-  AgentScriptName: Agent4BStandup
+  AgentScriptName: AgentNavMeshWalking
   CreaturePrefab: {fileID: 0}
-  amountCreatures: 20
+  amountCreatures: 1
   TargetSpeed: 1
   TargetWanderTimer: 30
   TargetWanderRadius: 1500
@@ -371,9 +371,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seed: 1
-  creatureType: 1
+  creatureType: 0
   ContactPenalty: 0
-  ResetOnGroundContactParts: 
+  ResetOnGroundContactParts: 06000000030000000700000005000000090000000a0000000b000000
 --- !u!114 &1841552183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -392,7 +392,7 @@ MonoBehaviour:
   CalculateActionSpace: 1
   ContinuousActionSpace: 293
   DiscreteBranches: 0
-  MaxStep: 1000
+  MaxStep: 0
   ObservationSpace: 263
   TakeActionsBetweenDecisions: 0
   DecisionPeriod: 5

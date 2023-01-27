@@ -6,6 +6,7 @@ using UnityEditor.SceneManagement;
 
 public class TrainingSettingsOverrider : MonoBehaviour{
 
+    #if UNITY_EDITOR
     [SerializeField]
     private TrainingSettings settings;
 
@@ -64,6 +65,7 @@ public class TrainingSettingsOverrider : MonoBehaviour{
     }
 
     public void ResetToDefault() => OverrideSettings(this.defaultSettings);
+    #endif
 }
 
 #if UNITY_EDITOR

@@ -8,7 +8,7 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
-public class AgentNavMeshWalking : GenericAgent
+public class Agent2BStandUp : GenericAgent
 {
     
     private NavMeshPath _path;
@@ -19,7 +19,7 @@ public class AgentNavMeshWalking : GenericAgent
     private float standingHeadHeight;
     private float initialHeadHeight;
     private float episodeMaxHeadHeight;
-
+    private int[] zRotations = new int[] { 0,180 };
     //private GameObject targetBall;
 
     protected override int CalculateNumberContinuousActions()
@@ -37,6 +37,7 @@ public class AgentNavMeshWalking : GenericAgent
         head = this.gameObject.GetComponentsInChildren<Bone>().Where( it => it.category == BoneCategory.Head).First().gameObject;
         standingHeadHeight = head.transform.position.y;
         base.Initialize();
+
         _path = new NavMeshPath();
         _timeElapsed = 1f;
         _nextPathPoint = base._topTransform.position;
@@ -137,7 +138,7 @@ public class AgentNavMeshWalking : GenericAgent
     public void PutCreatureOnSide(){
         if(_topTransform == null) return;
         _topTransform.position = new Vector3(_topTransform.position.x, 0.3f, _topTransform.position.z);
-        _topTransform.rotation = Quaternion.Euler(new Vector3(UnityEngine.Random.Range(-195, -165), UnityEngine.Random.Range(-180, 180), 90));
+        _topTransform.rotation = Quaternion.Euler(new Vector3(0, UnityEngine.Random.Range(-180, 180), zRotations[UnityEngine.Random.Range(0, 2)]));
     }
 
 
@@ -168,31 +169,6 @@ public class AgentNavMeshWalking : GenericAgent
         _orientationCube.UpdateOrientation(position, _nextPathPoint);
         var cubeForward = _orientationCube.transform.forward;
         var forwardDir = _creatureConfig.creatureType == CreatureType.Biped ? base._topTransform.up : base._topTransform.forward;
-
-        //// Rewards
-
-        /// Walking rewards
-        // // Set reward for this step according to mixture of the following elements.
-        // // a. Match target speed
-        // //This reward will approach 1 if it matches perfectly and approach zero as it deviates
-        // var velDeltaMagnitude = Mathf.Clamp(Vector3.Distance(GetAvgVelocityOfCreature(), cubeForward * MTargetWalkingSpeed), 0, MTargetWalkingSpeed);
-        // var matchSpeedReward = Mathf.Pow(1 - Mathf.Pow(velDeltaMagnitude / MTargetWalkingSpeed, 2), 2);
-
-        // // b. Rotation alignment with target direction.
-        // //This reward will approach 1 if it faces the target direction perfectly and approach zero as it deviates
-        // var lookAtTargetReward = (Vector3.Dot(cubeForward, forwardDir) + 1) * 0.5f;
-
-        // if (float.IsNaN(lookAtTargetReward) ||
-        //     float.IsNaN(matchSpeedReward)) 
-        // {
-        //     Debug.LogError($"lookAtTargetReward {float.IsNaN(lookAtTargetReward)} or matchSpeedReward {float.IsNaN(matchSpeedReward)}");
-        // }
-        // else
-        // {
-        //     AddReward(matchSpeedReward * lookAtTargetReward);
-        // }
-
-        /// Standup rewards
         
         //head position relative to creature height //TODO: Idee: kein konstanter Reward, sondern nur bei Verbesserung seit Episodenbeginn
         float headHeight = head.transform.position.y;

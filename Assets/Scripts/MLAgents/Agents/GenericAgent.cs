@@ -104,7 +104,7 @@ public abstract class GenericAgent : Agent
     /// <summary>
     /// Set the walker on the terrain.
     /// </summary>
-    protected void SetWalkerOnGround()
+    protected virtual void SetWalkerOnGround()
     {
         var terrainHeight = _deg.TerrainObject.GetComponent<Terrain>().SampleHeight(_topTransform.position);
         _topTransform.position = new Vector3(_topStartingPosition.x, terrainHeight + _otherBodyPartHeight + YHeightOffset, _topStartingPosition.z); ;

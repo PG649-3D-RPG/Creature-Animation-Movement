@@ -20,7 +20,7 @@ public class Agent4BStandup : GenericAgent
     private float lastUpdateHeadHeight;
     private float minTopRotationDiff;
     private float minTopHeightDiff;
-
+    private float spawnHeight;
 
     protected override int CalculateNumberContinuousActions()
     {
@@ -31,6 +31,21 @@ public class Agent4BStandup : GenericAgent
     {
         head = this.gameObject.GetComponentsInChildren<Bone>().Where( it => it.category == BoneCategory.Head).First().gameObject;
         standingHeadHeight = head.transform.position.y;
+
+        // Calculate maximum body width for putting creature on its side
+        try{
+            var back_parts = this.gameObject.GetComponentsInChildren<Bone>().Where( it => it.category == BoneCategory.Hip || it.category == BoneCategory.Torso );
+            float maxWidth = 0;
+            foreach(var part in back_parts){
+                maxWidth = Mathf.Max(maxWidth, part.gameObject.transform.GetChild(0).transform.localScale.x);
+            }
+            spawnHeight = maxWidth/2 + 0.05f;
+            Debug.Log($"Calculated spawn height as {spawnHeight} from maxWidth {maxWidth}");
+        }
+        catch(Exception){
+            spawnHeight = 0.3f;
+        }
+
         base.Initialize();
         _timeElapsed = 1f;
         _nextPathPoint = base._topTransform.position;
@@ -132,7 +147,7 @@ public class Agent4BStandup : GenericAgent
     /// z rotation is set to 90 or -90 degrees (lay on either side)
     public void PutCreatureOnSide(){
         if(_topTransform == null) return;
-        _topTransform.position = new Vector3(_topTransform.position.x, 0.3f, _topTransform.position.z);
+        _topTransform.position = new Vector3(_topTransform.position.x, spawnHeight, _topTransform.position.z);
         _topTransform.rotation = Quaternion.Euler(new Vector3(UnityEngine.Random.Range(-195, -165), UnityEngine.Random.Range(-180, 180), (Mathf.RoundToInt(UnityEngine.Random.Range(0, 1)) * (-2) + 1) * 90));
     }
 

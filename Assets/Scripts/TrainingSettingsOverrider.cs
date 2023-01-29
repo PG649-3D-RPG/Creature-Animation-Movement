@@ -2,7 +2,9 @@ using UnityEngine;
 using Config;
 using UnityEditor;
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor.SceneManagement;
+#endif
 
 public class TrainingSettingsOverrider : MonoBehaviour{
 

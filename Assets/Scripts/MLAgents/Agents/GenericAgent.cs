@@ -285,12 +285,13 @@ public abstract class GenericAgent : Agent
 
         if (_path.corners.Length == 0 || !isPathValid)
         {
-            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 20, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(_topTransform.position, out var hitIndicator, 50, NavMesh.AllAreas))
             {
                 return hitIndicator.position;
             }
 
-            Debug.LogError("Could not find close NavMesh edge.");
+            Debug.LogWarning("Could not find close NavMesh edge.");
+            return _topTransform.position + _orientationCube.transform.forward;
         }
         
         return _path.corners[_path.corners.Length == 1 ? 0 : 1] + new Vector3(0, 2 * _topStartingPosition.y, 0); 

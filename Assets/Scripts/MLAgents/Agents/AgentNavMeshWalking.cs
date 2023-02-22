@@ -1,11 +1,6 @@
-using System;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
-using UnityEngine.Experimental.Rendering;
-using UnityEngine.Rendering;
 using BodyPart = Unity.MLAgentsExamples.BodyPart;
 
 public class AgentNavMeshWalking : GenericAgent

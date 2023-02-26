@@ -26,6 +26,17 @@ public class DebugScript : MonoBehaviour
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Plus))
+        {
+            Time.timeScale = (float) (Time.timeScale + 0.1);
+            Debug.Log($"Timescale raised to {Time.timeScale}");
+        }
+        if (Input.GetKeyDown(KeyCode.Minus))
+        {
+            Time.timeScale = (float) (Time.timeScale - 0.1);
+            Debug.Log($"Timescale lowered to {Time.timeScale}");
+        }
+
         if (Input.GetKeyDown(KeyCode.R))
         {
             foreach (var agent in _agent)
